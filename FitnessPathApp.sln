@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPathApp", "FitnessPathApp\FitnessPathApp.csproj", "{251AA419-5806-405B-AAC5-C02C4F02AB88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPathApp.API", "FitnessPathApp\FitnessPathApp.API.csproj", "{251AA419-5806-405B-AAC5-C02C4F02AB88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPathApp.BusinessLayer", "FitnessPathApp.BusinessLayer\FitnessPathApp.BusinessLayer.csproj", "{535CF9E7-2377-4815-B991-168C38388CBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPathApp.DomainLayer", "FitnessPathApp.DomainLayer\FitnessPathApp.DomainLayer.csproj", "{B7A9AB81-A48B-4FCA-8A4B-781C1DA66942}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPathApp.PersistanceLayer", "FitnessPathApp.PersistanceLayer\FitnessPathApp.PersistanceLayer.csproj", "{306D4B12-64A0-4EBB-8B20-EA455C7C3E4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{251AA419-5806-405B-AAC5-C02C4F02AB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{251AA419-5806-405B-AAC5-C02C4F02AB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{251AA419-5806-405B-AAC5-C02C4F02AB88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{535CF9E7-2377-4815-B991-168C38388CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{535CF9E7-2377-4815-B991-168C38388CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{535CF9E7-2377-4815-B991-168C38388CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{535CF9E7-2377-4815-B991-168C38388CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7A9AB81-A48B-4FCA-8A4B-781C1DA66942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7A9AB81-A48B-4FCA-8A4B-781C1DA66942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7A9AB81-A48B-4FCA-8A4B-781C1DA66942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7A9AB81-A48B-4FCA-8A4B-781C1DA66942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{306D4B12-64A0-4EBB-8B20-EA455C7C3E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306D4B12-64A0-4EBB-8B20-EA455C7C3E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306D4B12-64A0-4EBB-8B20-EA455C7C3E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306D4B12-64A0-4EBB-8B20-EA455C7C3E4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
