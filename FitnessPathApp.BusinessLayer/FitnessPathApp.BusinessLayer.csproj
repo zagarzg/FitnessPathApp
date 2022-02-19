@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FitnessPathApp.DomainLayer\FitnessPathApp.DomainLayer.csproj" />
+    <ProjectReference Include="..\FitnessPathApp.PersistanceLayer\FitnessPathApp.PersistanceLayer.csproj" />
+  </ItemGroup>
+
 </Project>
