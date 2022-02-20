@@ -1,3 +1,4 @@
+using FitnessPathApp.BusinessLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,8 @@ namespace FitnessPathApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.RegisterBusinessServices();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();

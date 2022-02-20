@@ -10,5 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FitnessPathApp.BusinessLayer\FitnessPathApp.BusinessLayer.csproj" />
+    <ProjectReference Include="..\FitnessPathApp.DomainLayer\FitnessPathApp.DomainLayer.csproj" />
+    <ProjectReference Include="..\FitnessPathApp.PersistanceLayer\FitnessPathApp.PersistanceLayer.csproj" />
+  </ItemGroup>
+
 
 </Project>
