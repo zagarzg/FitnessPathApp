@@ -1,0 +1,52 @@
+﻿using FitnessPathApp.BusinessLayer.Interfaces;
+using FitnessPathApp.DomainLayer.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FitnessPathApp.API.Controllers
+{
+    public class WeightLogController : BaseController
+    {
+        private readonly IWeightLogService _weightLogService;
+
+        public WeightLogController(IWeightLogService weightLogService)
+        {
+            _weightLogService = weightLogService;
+        }
+
+		[HttpGet]
+		public async Task<IActionResult> GetAll()
+		{
+			return Ok(await _weightLogService.GetAll());
+		}
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> Get(Guid id)
+		{
+			return Ok(await _weightLogService.Get(id));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Create([FromBody] WeightLog log)
+		{
+			return Ok(await _weightLogService.Create(log));
+		}
+
+		[HttpPut]
+		public async Task<IActionResult> Update([FromBody] WeightLog log)
+		{
+			await _weightLogService.Update(log);
+			return Ok();
+		}
+
+		[HttpDelete]
+		public async Task<IActionResult> Delete([FromBody] Guid id)
+		{
+			await _weightLogService.Delete(id);
+			return Ok();
+		}
+	}
+}
