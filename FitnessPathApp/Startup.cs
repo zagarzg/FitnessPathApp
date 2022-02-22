@@ -1,5 +1,6 @@
 using FitnessPathApp.BusinessLayer;
 using FitnessPathApp.DomainLayer;
+using FitnessPathApp.PersistanceLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,16 +32,7 @@ namespace FitnessPathApp
             services.AddControllers();
 
             services.RegisterBusinessServices();
-
-            services.AddDbContext<ApplicationDbContext>(o =>
-            {
-                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                o.EnableSensitiveDataLogging();
-                o.EnableDetailedErrors();
-            });
-
-            // Configure context for DI
-            services.AddTransient<ApplicationDbContext>();
+            services.ConfigurePersistanceLayer(Configuration);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
