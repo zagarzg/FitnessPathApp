@@ -1,4 +1,6 @@
 ﻿using FitnessPathApp.DomainLayer;
+using FitnessPathApp.PersistanceLayer.Interfaces;
+using FitnessPathApp.PersistanceLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,8 @@ namespace FitnessPathApp.PersistanceLayer
 
             // Configure context for DI
             services.AddTransient<ApplicationDbContext>();
+
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
         }
     }
 }
