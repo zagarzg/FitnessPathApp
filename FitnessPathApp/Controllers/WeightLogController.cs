@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FitnessPathApp.API.Controllers
@@ -18,34 +19,34 @@ namespace FitnessPathApp.API.Controllers
         }
 
 		[HttpGet]
-		public async Task<IActionResult> GetAll()
+		public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
 		{
-			return Ok(await _weightLogService.GetAll());
+			return Ok(await _weightLogService.GetAll(cancellationToken));
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> Get(Guid id)
+		public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
 		{
-			return Ok(await _weightLogService.Get(id));
+			return Ok(await _weightLogService.Get(id, cancellationToken));
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] WeightLog log)
+		public async Task<IActionResult> Create([FromBody] WeightLog log, CancellationToken cancellationToken)
 		{
-			return Ok(await _weightLogService.Create(log));
+			return Ok(await _weightLogService.Create(log, cancellationToken));
 		}
 
 		[HttpPut]
-		public async Task<IActionResult> Update([FromBody] WeightLog log)
+		public async Task<IActionResult> Update([FromBody] WeightLog log, CancellationToken cancellationToken)
 		{
-			await _weightLogService.Update(log);
+			await _weightLogService.Update(log, cancellationToken);
 			return Ok();
 		}
 
 		[HttpDelete]
-		public async Task<IActionResult> Delete([FromBody] Guid id)
+		public async Task<IActionResult> Delete([FromBody] Guid id, CancellationToken cancellationToken)
 		{
-			await _weightLogService.Delete(id);
+			await _weightLogService.Delete(id, cancellationToken);
 			return Ok();
 		}
 	}
