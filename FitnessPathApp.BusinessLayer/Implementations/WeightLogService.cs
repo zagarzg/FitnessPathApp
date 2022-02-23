@@ -1,37 +1,56 @@
 ﻿using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FitnessPathApp.BusinessLayer.Implementations
 {
     internal class WeightLogService : IWeightLogService
     {
-        public Task<WeightLog> Create(WeightLog log)
+        private readonly IRepository<WeightLog> _repository;
+
+        public WeightLogService(IRepository<WeightLog> repository)
         {
-            throw new NotImplementedException($"Creating {log.Id}");
+            _repository = repository;
         }
 
-        public Task Delete(Guid id)
+        public async Task<WeightLog> Create(WeightLog log, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException($"Deleting {id}");
+            await _repository.Insert(log, cancellationToken);
+            return log;
         }
 
-        public Task<WeightLog> Get(Guid id)
+        public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException($"Getting {id}");
+            await _repository.Delete(id, cancellationToken);
+            return id;
         }
 
-        public Task<IEnumerable<WeightLog>> GetAll()
+        public async Task<WeightLog> Get(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("Getting all");
+            var log = await _repository.Get(
+                filter: dbLog => dbLog.Id == id,
+                cancellationToken: cancellationToken);
+
+            return log;
         }
 
-        public Task Update(WeightLog log)
+        public async Task<IEnumerable<WeightLog>> GetAll(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException($"Updating {log.Id}");
+            var logs = await _repository.GetAll(cancellationToken: cancellationToken);
+
+            return logs;
+        }
+
+        public async Task<WeightLog> Update(WeightLog log, CancellationToken cancellationToken)
+        {
+            await _repository.Update(log, cancellationToken);
+
+            return log;
         }
     }
 }
