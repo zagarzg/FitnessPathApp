@@ -2,16 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FitnessPathApp.BusinessLayer.Interfaces
 {
     public interface IWeightLogService
     {
-        Task<IEnumerable<WeightLog>> GetAll();
-        Task<WeightLog> Get(Guid id);
-        Task<WeightLog> Create(WeightLog log);
-        Task Update(WeightLog log);
-        Task Delete(Guid id);
+        Task<IEnumerable<WeightLog>> GetAll(CancellationToken cancellationToken);
+        Task<WeightLog> Get(Guid id, CancellationToken cancellationToken);
+        Task<WeightLog> Create(WeightLog log, CancellationToken cancellationToken);
+        Task<WeightLog> Update(WeightLog log, CancellationToken cancellationToken);
+        Task<Guid> Delete(Guid id, CancellationToken cancellationToken);
     }
 }
