@@ -6,7 +6,7 @@ namespace FitnessPathApp.DomainLayer.Entities
 {
     public class WeightLog : BaseEntity
     {
-        public string Name { get; set; }
+        public double Value { get; set; }
         public DateTime Date { get; set; }
     }
 }
