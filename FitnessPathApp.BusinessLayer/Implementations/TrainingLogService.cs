@@ -1,6 +1,7 @@
 ﻿using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,6 +33,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
         public async Task<TrainingLog> Get(Guid id, CancellationToken cancellationToken)
         {
             var log = await _repository.Get(
+                include: source => source.Include(log => log.Exercises),
                 filter: dbLog => dbLog.Id == id,
                 cancellationToken: cancellationToken);
 
@@ -40,7 +42,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<IEnumerable<TrainingLog>> GetAll(CancellationToken cancellationToken)
         {
-            var logs = await _repository.GetAll(cancellationToken: cancellationToken);
+            var logs = await _repository.GetAll(
+                include: source => source.Include(log => log.Exercises),
+                cancellationToken: cancellationToken);
 
             return logs;
         }
