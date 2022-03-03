@@ -12,6 +12,7 @@ namespace FitnessPathApp.DomainLayer
         {
             builder.SeedWeightLogs();
             builder.SeedExercises();
+            builder.SeedTrainingLogs();
         }
 
         private static void SeedWeightLogs(this ModelBuilder builder)
@@ -65,7 +66,8 @@ namespace FitnessPathApp.DomainLayer
                     Name = "Bench Press",
                     Weight = 100,
                     Sets = 5,
-                    Reps = 5
+                    Reps = 5,
+                    TrainingLogId = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8")
                 },
                 new Exercise
                 {
@@ -73,7 +75,8 @@ namespace FitnessPathApp.DomainLayer
                     Name = "Squat",
                     Weight = 140,
                     Sets = 5,
-                    Reps = 5
+                    Reps = 5,
+                    TrainingLogId = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8")
                 },
                 new Exercise
                 {
@@ -81,7 +84,8 @@ namespace FitnessPathApp.DomainLayer
                     Name = "Deadlift",
                     Weight = 180,
                     Sets = 3,
-                    Reps = 5
+                    Reps = 5,
+                    TrainingLogId = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8")
                 },
                 new Exercise
                 {
@@ -89,7 +93,8 @@ namespace FitnessPathApp.DomainLayer
                     Name = "Overhead Press",
                     Weight = 60,
                     Sets = 3,
-                    Reps = 8
+                    Reps = 8,
+                    TrainingLogId = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8")
                 },
                 new Exercise
                 {
@@ -97,11 +102,28 @@ namespace FitnessPathApp.DomainLayer
                     Name = "Barbell Row",
                     Weight = 70,
                     Sets = 3,
-                    Reps = 8
+                    Reps = 8,
+                    TrainingLogId = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8")
                 },
             };
 
+            builder.Entity<Exercise>().HasOne(e => e.Log).WithMany(l => l.Exercises).HasForeignKey(e => e.TrainingLogId).IsRequired(false);
             builder.Entity<Exercise>().HasData(exercises);
+        }
+
+        private static void SeedTrainingLogs(this ModelBuilder builder)
+        {
+
+            var logs = new List<TrainingLog>
+            {
+                new TrainingLog
+                {
+                    Id = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
+                    Date = new DateTime(2022, 2, 28),
+                },
+            };
+
+            builder.Entity<TrainingLog>().HasData(logs);
         }
     }
 }
