@@ -10,6 +10,7 @@ namespace FitnessPathApp.DomainLayer.Entities
         public double Weight { get; set; }
         public int Sets { get; set; }
         public int Reps { get; set; }
+        public TrainingLog Log { get; set; }
         public Guid TrainingLogId { get; set; }
     }
 }
