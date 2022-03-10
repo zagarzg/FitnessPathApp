@@ -15,6 +15,7 @@ namespace FitnessPathApp.BusinessLayer
             services.AddTransient<IExerciseService, ExerciseService>();
             services.AddTransient<ITrainingLogService, TrainingLogService>();
             services.AddTransient<IFoodItemService, FoodItemService>();
+            services.AddTransient<IFoodLogService, FoodLogService>();
         }
     }
 }
