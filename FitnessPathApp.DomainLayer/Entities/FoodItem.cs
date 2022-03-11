@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace FitnessPathApp.DomainLayer.Entities
 {
@@ -11,6 +12,9 @@ namespace FitnessPathApp.DomainLayer.Entities
         public int Carbs { get; set; }
         public int Protein { get; set; }
         public int Fat { get; set; }
+
+        [JsonIgnore]
+        public FoodLog Log { get; set; }
         public Guid FoodLogId { get; set; }
     }
 }
