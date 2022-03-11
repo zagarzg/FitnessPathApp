@@ -14,6 +14,7 @@ namespace FitnessPathApp.DomainLayer
             builder.SeedExercises();
             builder.SeedTrainingLogs();
             builder.SeedFoodItems();
+            builder.SeedFoodLogs();
         }
 
         private static void SeedWeightLogs(this ModelBuilder builder)
@@ -164,7 +165,23 @@ namespace FitnessPathApp.DomainLayer
                 },
             };
 
+            builder.Entity<FoodItem>().HasOne(i => i.Log).WithMany(l => l.FoodItems).HasForeignKey(i => i.FoodLogId).IsRequired(false);
             builder.Entity<FoodItem>().HasData(items);
+        }
+
+        private static void SeedFoodLogs(this ModelBuilder builder)
+        {
+
+            var logs = new List<FoodLog>
+            {
+                new FoodLog
+                {
+                    Id = Guid.Parse("da789a67-5481-4ac9-b338-0a9b3c069a1f"),
+                    Date = new DateTime(2022, 2, 28),
+                },
+            };
+
+            builder.Entity<FoodLog>().HasData(logs);
         }
     }
 }
