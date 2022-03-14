@@ -20,6 +20,8 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<User> Create(User user, CancellationToken cancellationToken)
         {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
             await _repository.Insert(user, cancellationToken);
             return user;
         }
