@@ -15,6 +15,23 @@ namespace FitnessPathApp.DomainLayer
             builder.SeedTrainingLogs();
             builder.SeedFoodItems();
             builder.SeedFoodLogs();
+            builder.SeedUsers();
+        }
+
+        private static void SeedUsers(this ModelBuilder builder)
+        {
+            var users = new List<User>
+            {
+                new User
+                {
+                    Id = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
+                    Username = "admin",
+                    Password = BCrypt.Net.BCrypt.HashPassword("admin"),
+                    Email = "admin@hotmail.com"
+                }
+            };
+
+            builder.Entity<User>().HasData(users);
         }
 
         private static void SeedWeightLogs(this ModelBuilder builder)
@@ -27,33 +44,39 @@ namespace FitnessPathApp.DomainLayer
                     Id = Guid.Parse("0faee6ac-1772-4bbe-9990-a7d9a22dd559"),
                     Value = 77.5,
                     Date = new DateTime(2022, 2, 14),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
                 new WeightLog
                 {
                     Id = Guid.Parse("c4714153-23fc-4413-b6dc-7fa230cb8883"),
                     Value = 78,
                     Date = new DateTime(2022, 2, 15),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
                 new WeightLog
                 {
                     Id = Guid.Parse("9d9926f0-ee0b-4cdb-b4bd-c178377d8868"),
                     Value = 77.3,
                     Date = new DateTime(2022, 2, 16),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
                 new WeightLog
                 {
                     Id = Guid.Parse("8514a58d-0edc-46bc-a0c8-bd912b5f5742"),
                     Value = 77.6,
                     Date = new DateTime(2022, 2, 17),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
                 new WeightLog
                 {
                     Id = Guid.Parse("52fce968-8a43-4dbd-ab26-dcf334c149dd"),
                     Value = 77.8,
                     Date = new DateTime(2022, 2, 18),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 }
             };
 
+            builder.Entity<WeightLog>().HasOne(l => l.User).WithMany(u => u.WeightLogs).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<WeightLog>().HasData(logs);
         }
 
@@ -122,9 +145,10 @@ namespace FitnessPathApp.DomainLayer
                 {
                     Id = Guid.Parse("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
                     Date = new DateTime(2022, 2, 28),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
             };
-
+            builder.Entity<TrainingLog>().HasOne(l => l.User).WithMany(u => u.TrainingLogs).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<TrainingLog>().HasData(logs);
         }
 
@@ -178,9 +202,10 @@ namespace FitnessPathApp.DomainLayer
                 {
                     Id = Guid.Parse("da789a67-5481-4ac9-b338-0a9b3c069a1f"),
                     Date = new DateTime(2022, 2, 28),
+                    UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
             };
-
+            builder.Entity<FoodLog>().HasOne(l => l.User).WithMany(u => u.FoodLogs).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<FoodLog>().HasData(logs);
         }
     }
