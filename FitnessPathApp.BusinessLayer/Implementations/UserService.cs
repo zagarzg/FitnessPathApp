@@ -1,6 +1,7 @@
 ﻿using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,7 +44,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<IEnumerable<User>> GetAll(CancellationToken cancellationToken)
         {
-            var users = await _repository.GetAll(cancellationToken: cancellationToken);
+            var users = await _repository.GetAll(
+                include: source =>
+                    source.Include(user => user.WeightLogs)
+                          .Include(user => user.TrainingLogs).ThenInclude(log => log.Exercises)
+                          .Include(user => user.FoodLogs).ThenInclude(log => log.FoodItems),
+                cancellationToken: cancellationToken);
 
             return users;
         }
