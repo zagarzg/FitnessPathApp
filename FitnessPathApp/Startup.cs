@@ -1,3 +1,4 @@
+using FitnessPathApp.API.Middleware;
 using FitnessPathApp.BusinessLayer;
 using FitnessPathApp.DomainLayer;
 using FitnessPathApp.PersistanceLayer;
@@ -70,6 +71,8 @@ namespace FitnessPathApp
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
+
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseStaticFiles();
 
