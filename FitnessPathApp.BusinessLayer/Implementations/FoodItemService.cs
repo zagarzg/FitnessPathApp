@@ -1,6 +1,9 @@
-﻿using FitnessPathApp.BusinessLayer.Interfaces;
+﻿using FitnessPathApp.BusinessLayer.Exceptions;
+using FitnessPathApp.BusinessLayer.Interfaces;
+using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +15,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     public class FoodItemService : IFoodItemService
     {
         private readonly IRepository<FoodItem> _repository;
+        private readonly FoodItemValidator _validator = new FoodItemValidator();
 
         public FoodItemService(IRepository<FoodItem> repository)
         {
@@ -20,14 +24,41 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<FoodItem> Create(FoodItem item, CancellationToken cancellationToken)
         {
-            await _repository.Insert(item, cancellationToken);
-            return item;
+            ValidationResult result = _validator.Validate(item);
+
+            if (!result.IsValid)
+            {
+                ValidationException exception = new ValidationException(nameof(item));
+                foreach (ValidationFailure failure in result.Errors)
+                {
+                    exception._errors.Add(failure.PropertyName, failure.ErrorMessage);
+                }
+                throw exception;
+            }
+
+            try
+            {
+                await _repository.Insert(item, cancellationToken);
+                return item;
+            }
+            catch (Exception e)
+            {
+                throw new CreateException(e);
+            }
+            
         }
 
         public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await _repository.Delete(id, cancellationToken);
-            return id;
+            try
+            {
+                await _repository.Delete(id, cancellationToken);
+                return id;
+            }
+            catch(Exception e)
+            {
+                throw new DeleteException(id, e);
+            }
         }
 
         public async Task<FoodItem> Get(Guid id, CancellationToken cancellationToken)
@@ -35,6 +66,11 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             var item = await _repository.Get(
                 filter: dbItem => dbItem.Id == id,
                 cancellationToken: cancellationToken);
+
+            if(item == null)
+            {
+                throw new NotFoundException(id);
+            }
 
             return item;
         }
@@ -48,9 +84,28 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<FoodItem> Update(FoodItem item, CancellationToken cancellationToken)
         {
-            await _repository.Update(item, cancellationToken);
+            ValidationResult result = _validator.Validate(item);
 
-            return item;
+            if (!result.IsValid)
+            {
+                ValidationException exception = new ValidationException(nameof(item));
+                foreach (ValidationFailure failure in result.Errors)
+                {
+                    exception._errors.Add(failure.PropertyName, failure.ErrorMessage);
+                }
+
+                throw exception;
+            }
+
+            try
+            {
+                await _repository.Update(item, cancellationToken);
+                return item;
+            }
+            catch (Exception e)
+            {
+                throw new UpdateException(item.Id, e);
+            }
         }
     }
 }
