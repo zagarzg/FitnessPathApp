@@ -1,6 +1,9 @@
-﻿using FitnessPathApp.BusinessLayer.Interfaces;
+﻿using FitnessPathApp.BusinessLayer.Exceptions;
+using FitnessPathApp.BusinessLayer.Interfaces;
+using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +16,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class UserService : IUserService
     {
         private readonly IRepository<User> _repository;
+        private readonly UserValidator _validator = new UserValidator();
 
         public UserService(IRepository<User> repository)
         {
@@ -21,16 +25,44 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<User> Create(User user, CancellationToken cancellationToken)
         {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            ValidationResult result = _validator.Validate(user);
 
-            await _repository.Insert(user, cancellationToken);
-            return user;
+            if (!result.IsValid)
+            {
+                ValidationException exception = new ValidationException(nameof(user));
+                foreach (ValidationFailure failure in result.Errors)
+                {
+                    exception._errors.Add(failure.PropertyName, failure.ErrorMessage);
+                }
+                throw exception;
+            }
+
+            try
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+                await _repository.Insert(user, cancellationToken);
+                return user;
+            }
+            catch (Exception e)
+            {
+                throw new CreateException(e);
+            }
+
+            
         }
 
         public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await _repository.Delete(id, cancellationToken);
-            return id;
+            try
+            {
+                await _repository.Delete(id, cancellationToken);
+                return id;
+            }
+            catch (Exception e)
+            {
+                throw new DeleteException(id, e);
+            }
         }
 
         public async Task<User> Get(Guid id, CancellationToken cancellationToken)
@@ -38,6 +70,11 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             var user = await _repository.Get(
                 filter: dbUser => dbUser.Id == id,
                 cancellationToken: cancellationToken);
+
+            if(user == null)
+            {
+                throw new NotFoundException(id);
+            }
 
             return user;
         }
@@ -56,9 +93,28 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<User> Update(User user, CancellationToken cancellationToken)
         {
-            await _repository.Update(user, cancellationToken);
+            ValidationResult result = _validator.Validate(user);
 
-            return user;
+            if (!result.IsValid)
+            {
+                ValidationException exception = new ValidationException(nameof(user));
+                foreach (ValidationFailure failure in result.Errors)
+                {
+                    exception._errors.Add(failure.PropertyName, failure.ErrorMessage);
+                }
+
+                throw exception;
+            }
+
+            try
+            {
+                await _repository.Update(user, cancellationToken);
+                return user;
+            }
+            catch (Exception e)
+            {
+                throw new UpdateException(user.Id, e);
+            }
         }
     }
 }
