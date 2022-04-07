@@ -4,6 +4,7 @@ using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,10 +15,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class WeightLogService : IWeightLogService
     {
         private readonly IRepository<WeightLog> _repository;
+        private readonly ILogger<WeightLogService> _logger;
         private readonly WeightLogValidator _validator = new WeightLogValidator();
-        public WeightLogService(IRepository<WeightLog> repository)
+        public WeightLogService(IRepository<WeightLog> repository, ILogger<WeightLogService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<WeightLog> Create(WeightLog log, CancellationToken cancellationToken)
@@ -37,6 +40,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(log, cancellationToken);
+                _logger.LogInformation($"Weight succesfully inserted. Log id: {log.Id}");
                 return log;
             }
             catch (Exception e)
@@ -50,6 +54,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Delete(id, cancellationToken);
+                _logger.LogInformation($"Weight succesfully deleted. Log id: {id}");
                 return id;
             }
             catch(Exception e)
@@ -70,6 +75,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            _logger.LogInformation($"Weight succesfully fetched. Log id: {id}");
             return log;
         }
 
@@ -98,6 +104,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(log, cancellationToken);
+                _logger.LogInformation($"Weight succesfully updated. Log id: {log.Id}");
                 return log;
             }
             catch (Exception e)
