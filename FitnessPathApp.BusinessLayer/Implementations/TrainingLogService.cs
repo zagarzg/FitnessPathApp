@@ -5,6 +5,7 @@ using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,10 +16,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class TrainingLogService : ITrainingLogService
     {
         private readonly IRepository<TrainingLog> _repository;
+        private readonly ILogger<TrainingLogService> _logger;
         private readonly TrainingLogValidator _validator = new TrainingLogValidator();
-        public TrainingLogService(IRepository<TrainingLog> repository)
+        public TrainingLogService(IRepository<TrainingLog> repository, ILogger<TrainingLogService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<TrainingLog> Create(TrainingLog log, CancellationToken cancellationToken)
@@ -38,6 +41,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(log, cancellationToken);
+                _logger.LogInformation($"Training succesfully inserted. Log id: {log.Id}");
                 return log;
             }
             catch (Exception e)
@@ -51,6 +55,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Delete(id, cancellationToken);
+                _logger.LogInformation($"Training succesfully deleted. Log id: {id}");
                 return id;
             }
             catch (Exception e)
@@ -71,6 +76,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            _logger.LogInformation($"Training succesfully fetched. Log id: {id}");
             return log;
         }
 
@@ -101,6 +107,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(log, cancellationToken);
+                _logger.LogInformation($"Training succesfully updated. Log id: {log.Id}");
                 return log;
             }
             catch (Exception e)
