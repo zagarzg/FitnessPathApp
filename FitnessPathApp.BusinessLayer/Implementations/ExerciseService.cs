@@ -4,6 +4,7 @@ using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,10 +16,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class ExerciseService : IExerciseService
     {
         private readonly IRepository<Exercise> _repository;
+        private readonly ILogger<ExerciseService> _logger;
         private readonly ExerciseValidator _validator = new ExerciseValidator();
-        public ExerciseService(IRepository<Exercise> repository)
+        public ExerciseService(IRepository<Exercise> repository, ILogger<ExerciseService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<Exercise> Create(Exercise exercise, CancellationToken cancellationToken)
@@ -38,6 +41,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(exercise, cancellationToken);
+                _logger.LogInformation($"Exercise succesfully inserted. Exercise id: {exercise.Id}");
                 return exercise;
             }
             catch (Exception e)
@@ -51,6 +55,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Delete(id, cancellationToken);
+                _logger.LogInformation($"Exercise succesfully deleted. Exercise id: {id}");
                 return id;
             }
             catch(Exception e)
@@ -70,6 +75,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            _logger.LogInformation($"Exercise succesfully fetched. Exercise id: {id}");
             return exercise;
         }
 
@@ -98,6 +104,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(exercise, cancellationToken);
+                _logger.LogInformation($"Exercise succesfully updated. Exercise id: {exercise.Id}");
                 return exercise;
             }
             catch (Exception e)
