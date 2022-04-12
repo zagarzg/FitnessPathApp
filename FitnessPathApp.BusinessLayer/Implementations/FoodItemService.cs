@@ -4,6 +4,7 @@ using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,11 +16,13 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     public class FoodItemService : IFoodItemService
     {
         private readonly IRepository<FoodItem> _repository;
+        private readonly ILogger<FoodItemService> _logger;
         private readonly FoodItemValidator _validator = new FoodItemValidator();
 
-        public FoodItemService(IRepository<FoodItem> repository)
+        public FoodItemService(IRepository<FoodItem> repository, ILogger<FoodItemService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<FoodItem> Create(FoodItem item, CancellationToken cancellationToken)
@@ -39,6 +42,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(item, cancellationToken);
+                _logger.LogInformation($"FoodItem succesfully inserted. Log id: {item.Id}");
                 return item;
             }
             catch (Exception e)
@@ -53,6 +57,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Delete(id, cancellationToken);
+                _logger.LogInformation($"FoodItem succesfully deleted. Log id: {id}");
                 return id;
             }
             catch(Exception e)
@@ -72,6 +77,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            _logger.LogInformation($"FoodItem succesfully fetched. Log id: {id}");
             return item;
         }
 
@@ -100,6 +106,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(item, cancellationToken);
+                _logger.LogInformation($"FoodItem succesfully updated. Log id: {item.Id}");
                 return item;
             }
             catch (Exception e)
