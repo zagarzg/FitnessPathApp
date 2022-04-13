@@ -5,6 +5,7 @@ using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,11 +17,13 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class UserService : IUserService
     {
         private readonly IRepository<User> _repository;
+        private readonly ILogger<UserService> _logger;
         private readonly UserValidator _validator = new UserValidator();
 
-        public UserService(IRepository<User> repository)
+        public UserService(IRepository<User> repository, ILogger<UserService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<User> Create(User user, CancellationToken cancellationToken)
@@ -40,16 +43,14 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
                 await _repository.Insert(user, cancellationToken);
+                _logger.LogInformation($"User succesfully inserted. User id: {user.Id}");
                 return user;
             }
             catch (Exception e)
             {
                 throw new CreateException(e);
             }
-
-            
         }
 
         public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken)
@@ -57,6 +58,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Delete(id, cancellationToken);
+                _logger.LogInformation($"User succesfully deleted. User id: {id}");
                 return id;
             }
             catch (Exception e)
@@ -76,6 +78,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            _logger.LogInformation($"User succesfully fetched. User id: {id}");
             return user;
         }
 
@@ -109,6 +112,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(user, cancellationToken);
+                _logger.LogInformation($"User succesfully updated. Log id: {user.Id}");
                 return user;
             }
             catch (Exception e)
