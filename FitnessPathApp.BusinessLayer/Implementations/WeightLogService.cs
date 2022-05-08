@@ -4,6 +4,7 @@ using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,8 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         public async Task<IEnumerable<WeightLog>> GetAll(CancellationToken cancellationToken)
         {
-            var logs = await _repository.GetAll(cancellationToken: cancellationToken);
+            var logs = await _repository.GetAll(
+                cancellationToken: cancellationToken);
 
             return logs;
         }
