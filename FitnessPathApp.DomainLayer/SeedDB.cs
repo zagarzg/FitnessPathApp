@@ -10,12 +10,12 @@ namespace FitnessPathApp.DomainLayer
     {
         public static void Seed(this ModelBuilder builder)
         {
+            builder.SeedUsers();
             builder.SeedWeightLogs();
             builder.SeedExercises();
             builder.SeedTrainingLogs();
             builder.SeedFoodItems();
             builder.SeedFoodLogs();
-            builder.SeedUsers();
         }
 
         private static void SeedUsers(this ModelBuilder builder)
