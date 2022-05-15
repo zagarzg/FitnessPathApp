@@ -55,6 +55,7 @@ namespace FitnessPathApp.API.Middleware
 
             else if (exception is NotFoundException)
             {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 errorDetails.Status = HttpStatusCode.NotFound;
                 errorDetails.Message = "Coud not find entity";
             }
