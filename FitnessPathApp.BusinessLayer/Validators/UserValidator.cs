@@ -1,8 +1,5 @@
 ﻿using FitnessPathApp.DomainLayer.Entities;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FitnessPathApp.BusinessLayer.Validators
 {

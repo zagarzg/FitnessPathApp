@@ -1,9 +1,6 @@
 ﻿using FitnessPathApp.BusinessLayer.Implementations;
 using FitnessPathApp.BusinessLayer.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FitnessPathApp.BusinessLayer
 {
