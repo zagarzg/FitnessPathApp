@@ -1,7 +1,5 @@
 ﻿using FitnessPathApp.DomainLayer.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FitnessPathApp.DomainLayer.Entities
 {
