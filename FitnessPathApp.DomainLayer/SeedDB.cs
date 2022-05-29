@@ -76,7 +76,7 @@ namespace FitnessPathApp.DomainLayer
                 }
             };
 
-            builder.Entity<WeightLog>().HasOne(l => l.User).WithMany(u => u.WeightLogs).HasForeignKey(l => l.UserId).IsRequired(false);
+            builder.Entity<WeightLog>().HasOne(l => l.User).WithMany(u => u.WeightLogs).OnDelete(DeleteBehavior.Cascade).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<WeightLog>().HasData(logs);
         }
 
@@ -132,7 +132,7 @@ namespace FitnessPathApp.DomainLayer
                 },
             };
 
-            builder.Entity<Exercise>().HasOne(e => e.Log).WithMany(l => l.Exercises).HasForeignKey(e => e.TrainingLogId).IsRequired(false);
+            builder.Entity<Exercise>().HasOne(e => e.Log).WithMany(l => l.Exercises).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TrainingLogId).IsRequired(false);
             builder.Entity<Exercise>().HasData(exercises);
         }
 
@@ -148,7 +148,7 @@ namespace FitnessPathApp.DomainLayer
                     UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
             };
-            builder.Entity<TrainingLog>().HasOne(l => l.User).WithMany(u => u.TrainingLogs).HasForeignKey(l => l.UserId).IsRequired(false);
+            builder.Entity<TrainingLog>().HasOne(l => l.User).WithMany(u => u.TrainingLogs).OnDelete(DeleteBehavior.Cascade).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<TrainingLog>().HasData(logs);
         }
 
@@ -189,7 +189,7 @@ namespace FitnessPathApp.DomainLayer
                 },
             };
 
-            builder.Entity<FoodItem>().HasOne(i => i.Log).WithMany(l => l.FoodItems).HasForeignKey(i => i.FoodLogId).IsRequired(false);
+            builder.Entity<FoodItem>().HasOne(i => i.Log).WithMany(l => l.FoodItems).OnDelete(DeleteBehavior.Cascade).HasForeignKey(i => i.FoodLogId).IsRequired(false);
             builder.Entity<FoodItem>().HasData(items);
         }
 
@@ -205,7 +205,7 @@ namespace FitnessPathApp.DomainLayer
                     UserId = Guid.Parse("cd6b8714-4806-4fe6-b28f-90185dbfbdd2")
                 },
             };
-            builder.Entity<FoodLog>().HasOne(l => l.User).WithMany(u => u.FoodLogs).HasForeignKey(l => l.UserId).IsRequired(false);
+            builder.Entity<FoodLog>().HasOne(l => l.User).WithMany(u => u.FoodLogs).OnDelete(DeleteBehavior.Cascade).HasForeignKey(l => l.UserId).IsRequired(false);
             builder.Entity<FoodLog>().HasData(logs);
         }
     }

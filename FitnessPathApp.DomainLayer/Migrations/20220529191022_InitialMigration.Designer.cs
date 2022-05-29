@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPathApp.DomainLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220315201208_DefineUserAndSeed")]
-    partial class DefineUserAndSeed
+    [Migration("20220529191022_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -230,14 +230,14 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Email = "admin@hotmail.com",
-                            Password = "$2b$10$sZciQJmbX9ABJHVGpuUpaufNsMwo7G5GrKrz3uS33.lvdFpeX2AUa",
+                            Password = "$2b$10$/XFgyxjSodEqSpo6boTO3e.ZRjCZD6PXCulOwijIPTFC1AbBT7kU6",
                             Username = "admin"
                         });
                 });
@@ -305,35 +305,40 @@ namespace FitnessPathApp.DomainLayer.Migrations
                 {
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.TrainingLog", "Log")
                         .WithMany("Exercises")
-                        .HasForeignKey("TrainingLogId");
+                        .HasForeignKey("TrainingLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.FoodItem", b =>
                 {
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.FoodLog", "Log")
                         .WithMany("FoodItems")
-                        .HasForeignKey("FoodLogId");
+                        .HasForeignKey("FoodLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.FoodLog", b =>
                 {
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.User", "User")
                         .WithMany("FoodLogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.TrainingLog", b =>
                 {
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.User", "User")
                         .WithMany("TrainingLogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.WeightLog", b =>
                 {
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.User", "User")
                         .WithMany("WeightLogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
