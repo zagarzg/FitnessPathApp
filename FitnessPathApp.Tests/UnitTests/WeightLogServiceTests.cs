@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FitnessPathApp.BusinessLayer.Exceptions;
 
-namespace FitnessPathApp.Tests.BusinessLayer
+namespace FitnessPathApp.Tests.UnitTests
 {
     public class WeightLogServiceTests
     {

@@ -15,7 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FitnessPathApp.Tests.BusinessLayer
+namespace FitnessPathApp.Tests.UnitTests
 {
     public class TrainingLogServiceTests
     {
