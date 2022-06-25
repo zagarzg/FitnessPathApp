@@ -3,7 +3,7 @@ name: ASP.NET Core CI
 on: [push]
 
 jobs:
-  build:
+  build-test:
 
     runs-on: ubuntu-latest
 
@@ -12,9 +12,29 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Install dependencies
       run: dotnet restore
+    - name: Add coverlet tool
+      run: dotnet tool install --global coverlet.console
+    - name: Add reportgenerator tool
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool;
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build
+    - name: Test
+      run: coverlet /home/runner/work/FitnessPathApp/FitnessPathApp/FitnessPathApp.Tests/bin/Debug/net6.0/FitnessPathApp.Tests.dll  --target "dotnet" --targetargs "test --filter FullyQualifiedName!~IntegrationTests  --no-build" --include "[*]FitnessPathApp.BusinessLayer*" --output "./coverage/CodeCoverage/coverage" -f cobertura
+    - name: Copy Coverage To Predictable Location
+      run: cp coverage/**/coverage.cobertura.xml coverage.cobertura.xml
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.2.0
+      with:
+        filename: coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '90 99'
     
