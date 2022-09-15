@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faDumbbell, faWeightScale, faUtensils, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faDumbbell, faWeightScale, faUtensils, faHome, faCog } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 interface ILink {
@@ -20,10 +20,11 @@ export class SideNavComponent {
   faDumbell = faDumbbell;
   faWeightScale = faWeightScale;
   faUtensils = faUtensils;
+  faCog = faCog;
 
   constructor() { }
 
-  public links: Array<ILink> = [
+  public links: ILink[] = [
 
     {
       url:'/home',
@@ -44,6 +45,11 @@ export class SideNavComponent {
       url:'/weightlog',
       icon: faWeightScale,
       title: 'Weight log'
+    },
+    {
+      url:'/settings',
+      icon: faCog,
+      title: 'Settings'
     }
   ]
 

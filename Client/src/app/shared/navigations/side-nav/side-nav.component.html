@@ -4,8 +4,8 @@
     </div>
     <div class="flex flex-col items-center justify-center">
         <a class="logo w-full h-full text-white flex items-center justify-center m-1" *ngFor="let link of links" [routerLink]="link.url" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <li class="flex flex-col items-center justify-center w-full h-16 text-white text-sm font-medium">
-                <fa-icon class="text-lg" [icon]="link.icon"></fa-icon>
+            <li class="flex flex-col items-center justify-center w-full h-16 text-white/[0.6] text-sm font-medium">
+                <fa-icon class="text-xl" [icon]="link.icon"></fa-icon>
                 {{link.title}}
             </li>
         </a>
