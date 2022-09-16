@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { RouterModule } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
-import { SideNavComponent } from './navigations/side-nav/side-nav.component';
+import { MaterialModule } from './material.module';
+
 
 @NgModule({
   declarations: [
-    SideNavComponent,
-    LayoutComponent
   ],
   imports: [
     CommonModule,
-    RouterModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MaterialModule
   ],
-  exports: [LayoutComponent, SideNavComponent]
+  exports: [
+    CommonModule,
+    FontAwesomeModule,
+    MaterialModule
+  ]
 })
 export class SharedModule { }

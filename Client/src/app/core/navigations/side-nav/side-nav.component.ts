@@ -32,17 +32,17 @@ export class SideNavComponent {
       title: 'Home'
     },
     {
-      url:'/traininglog',
+      url:'/training-log',
       icon: faDumbbell,
       title: 'Training log'
     },
     {
-      url:'/foodlog',
+      url:'/food-log',
       icon: faUtensils,
       title: 'Food log'
     },
     {
-      url:'/weightlog',
+      url:'/weight-log',
       icon: faWeightScale,
       title: 'Weight log'
     },
