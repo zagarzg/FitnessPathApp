@@ -1,3 +1,11 @@
+.border-apply {
+    border: 2px solid white;
+
+    li {
+        color: white;
+    }
+}
+
 .active {
-    @apply bg-white/[.12] rounded text-white
+    @apply bg-white/[.12] rounded border-apply #{!important};
 }

@@ -1,0 +1,25 @@
+th {
+    background-color: rgb(17, 24, 39);
+    color: white;
+}
+
+::ng-deep .mat-card {
+    padding: 0 !important;
+}
+
+::ng-deep .mat-calendar-header {
+    background-color: rgb(17, 24, 39);
+    color: white;
+    padding: 2px 2px 0 0 !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+    background-color: rgb(17, 24, 39);
+    color: white;
+}
+
+.special-date {
+    background-color: orange !important;
+    border-radius: 100%;
+  }
+
