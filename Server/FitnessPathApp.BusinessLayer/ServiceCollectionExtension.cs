@@ -1,4 +1,5 @@
-﻿using FitnessPathApp.BusinessLayer.Implementations;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Implementations;
 using FitnessPathApp.BusinessLayer.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,19 @@ namespace FitnessPathApp.BusinessLayer
             services.AddTransient<IFoodItemService, FoodItemService>();
             services.AddTransient<IFoodLogService, FoodLogService>();
             services.AddTransient<IUserService, UserService>();
+        }
+
+        public static void ConfigureAutomapper(this IServiceCollection services)
+        {
+            services.AddSingleton(provider =>
+            {
+                var config = new MapperConfiguration(c =>
+                {
+                    c.AddProfile<Mappings>();
+                });
+
+                return config.CreateMapper();
+            });
         }
     }
 }
