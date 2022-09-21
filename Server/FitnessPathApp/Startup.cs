@@ -37,6 +37,9 @@ namespace FitnessPathApp
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
+
+            //Configure AutoMapper with its mappings
+            services.ConfigureAutomapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
