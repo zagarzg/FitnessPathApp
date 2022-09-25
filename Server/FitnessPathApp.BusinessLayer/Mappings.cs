@@ -9,6 +9,7 @@ namespace FitnessPathApp.BusinessLayer
         public Mappings()
         {
             CreateMap<Exercise, ExerciseDTO>().ReverseMap();
+            CreateMap<TrainingLog, TrainingLogDTO>().ReverseMap();
         }
     }
 }

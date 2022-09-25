@@ -1,4 +1,5 @@
 ﻿using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,10 +9,10 @@ namespace FitnessPathApp.BusinessLayer.Interfaces
 {
     public interface IExerciseService
     {
-        Task<IEnumerable<Exercise>> GetAll(CancellationToken cancellationToken);
-        Task<Exercise> Get(Guid id, CancellationToken cancellationToken);
-        Task<Exercise> Create(Exercise exercise, CancellationToken cancellationToken);
-        Task<Exercise> Update(Exercise exercise, CancellationToken cancellationToken);
+        Task<IEnumerable<ExerciseDTO>> GetAll(CancellationToken cancellationToken);
+        Task<ExerciseDTO> Get(Guid id, CancellationToken cancellationToken);
+        Task<ExerciseDTO> Create(Exercise exercise, CancellationToken cancellationToken);
+        Task<ExerciseDTO> Update(Exercise exercise, CancellationToken cancellationToken);
         Task<Guid> Delete(Guid id, CancellationToken cancellationToken);
     }
 }
