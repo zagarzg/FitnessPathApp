@@ -1,7 +1,9 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -18,15 +20,17 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class ExerciseService : IExerciseService
     {
         private readonly IRepository<Exercise> _repository;
+        private readonly IMapper _mapper;
         private readonly ILogger<ExerciseService> _logger;
         private readonly ExerciseValidator _validator = new ExerciseValidator();
-        public ExerciseService(IRepository<Exercise> repository, ILogger<ExerciseService> logger)
+        public ExerciseService(IRepository<Exercise> repository, ILogger<ExerciseService> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<Exercise> Create(Exercise exercise, CancellationToken cancellationToken)
+        public async Task<ExerciseDTO> Create(Exercise exercise, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(exercise);
 
@@ -43,8 +47,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(exercise, cancellationToken);
+                var mappedExercise = _mapper.Map<ExerciseDTO>(exercise);
                 _logger.LogInformation($"Exercise succesfully inserted. Exercise id: {exercise.Id}");
-                return exercise;
+                return mappedExercise;
             }
             catch (Exception e)
             {
@@ -66,7 +71,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             }
         }
 
-        public async Task<Exercise> Get(Guid id, CancellationToken cancellationToken)
+        public async Task<ExerciseDTO> Get(Guid id, CancellationToken cancellationToken)
         {
             var exercise = await _repository.Get(
                 filter: dbExercise => dbExercise.Id == id,
@@ -77,18 +82,21 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            var mappedExercise = _mapper.Map<ExerciseDTO>(exercise);
             _logger.LogInformation($"Exercise succesfully fetched. Exercise id: {id}");
-            return exercise;
+            return mappedExercise;
         }
 
-        public async Task<IEnumerable<Exercise>> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExerciseDTO>> GetAll(CancellationToken cancellationToken)
         {
             var exercises = await _repository.GetAll(cancellationToken: cancellationToken);
 
-            return exercises;
+            var mappedExercise = _mapper.Map<IEnumerable<ExerciseDTO>>(exercises);
+
+            return mappedExercise;
         }
 
-        public async Task<Exercise> Update(Exercise exercise, CancellationToken cancellationToken)
+        public async Task<ExerciseDTO> Update(Exercise exercise, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(exercise);
 
@@ -106,8 +114,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(exercise, cancellationToken);
+                var mappedExercise = _mapper.Map<ExerciseDTO>(exercise);
                 _logger.LogInformation($"Exercise succesfully updated. Exercise id: {exercise.Id}");
-                return exercise;
+                return mappedExercise;
             }
             catch (Exception e)
             {
