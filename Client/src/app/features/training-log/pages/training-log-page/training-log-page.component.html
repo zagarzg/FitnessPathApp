@@ -5,5 +5,7 @@
         </div>
         <div class="font-light tracking-tight text-secondary">Track your training logs and review performance</div>
     </div>
-    <app-recent-logs-list></app-recent-logs-list>
+    <ng-container *ngIf="(trainingLogs$ | async) as trainingLogs">
+        <app-recent-logs-list [trainingLogs]="trainingLogs" [exercises]="exercises" (selectedDayChangeEvent)="fetchExercises($event)"></app-recent-logs-list>
+    </ng-container>
 </div>
