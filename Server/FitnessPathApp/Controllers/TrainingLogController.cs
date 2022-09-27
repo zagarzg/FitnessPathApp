@@ -22,6 +22,12 @@ namespace FitnessPathApp.API.Controllers
 			return Ok(await _trainingLogService.GetAll(cancellationToken));
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> GetMonthyTrainingLogs([FromQuery] int month, CancellationToken cancellationToken)
+		{
+			return Ok(await _trainingLogService.GetMonthlyTrainingLogs(month, cancellationToken));
+		}
+
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
 		{

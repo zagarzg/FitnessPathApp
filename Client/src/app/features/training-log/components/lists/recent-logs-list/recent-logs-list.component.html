@@ -6,13 +6,18 @@
         </div>
         <div class="flex">
             <mat-card class="w-96 flex flex-col items-end">
-                <mat-calendar [dateClass]="dateClass()" [(selected)]="selected" class="w-full"></mat-calendar>
+                <mat-calendar 
+                    [dateClass]="dateClass()"
+                    [(selected)]="selected"
+                    class="w-full"
+                    (selectedChange)="selectDay()">
+                </mat-calendar>
                 <button mat-stroked-button class="border-red-500 text-red-500 mr-2 mb-2">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
                     DELETE
                 </button>
             </mat-card>
-            <table mat-table [dataSource]="mockLogs" class="mat-elevation-z8 w-full ml-5">
+            <table mat-table [dataSource]="exercises" class="mat-elevation-z8 w-full ml-5">
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">

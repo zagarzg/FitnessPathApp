@@ -101,6 +101,18 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             return mappedLogs;
         }
 
+        public async Task<IEnumerable<TrainingLogDTO>> GetMonthlyTrainingLogs(int month, CancellationToken cancellationToken)
+        {
+            var logs = await _repository.GetAll(
+                filter: source => source.Date.Month == month && source.Date.Year == DateTime.Now.Year,
+                include: source => source.Include(log => log.Exercises),
+                cancellationToken: cancellationToken);
+
+            var mappedLogs = _mapper.Map<IEnumerable<TrainingLogDTO>>(logs);
+
+            return mappedLogs;
+        }
+
         public async Task<TrainingLogDTO> Update(TrainingLog log, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(log);
