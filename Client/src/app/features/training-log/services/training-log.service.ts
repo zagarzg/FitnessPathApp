@@ -14,6 +14,10 @@ export class TrainingLogService {
     return this._http.get<TrainingLog>(`${environment.URL}/TrainingLog/Get/${id}`);
   }
 
+  public deleteTrainingLog(id: string): Observable<any> {
+    return this._http.delete<any>(`${environment.URL}/TrainingLog/Delete/${id}`);
+  }
+
   public getMonthlyTrainingLogs(month: number): Observable<TrainingLog[]> {
     return this._http.get<TrainingLog[]>(`${environment.URL}/TrainingLog/GetMonthyTrainingLogs?month=${month}`);
   }
