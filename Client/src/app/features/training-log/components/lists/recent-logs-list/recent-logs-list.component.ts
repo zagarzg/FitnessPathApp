@@ -14,7 +14,10 @@ export class RecentLogsListComponent {
 
   @Input() trainingLogs!: TrainingLog[];
   @Input() exercises!: Exercise[];
-  @Output() selectedDayChangeEvent = new EventEmitter<string>();
+  @Output() selectedDayChangeEvent = new EventEmitter<string | null>();
+  @Output() deleteTrainingLogEvent = new EventEmitter<string>();
+  @Output() deleteExerciseEvent = new EventEmitter<string>();
+  @Output() addExerciseEvent = new EventEmitter<Exercise>();
 
   displayedColumns = ['name', 'reps', 'sets', 'weight','actions'];
 
@@ -29,7 +32,27 @@ export class RecentLogsListComponent {
 
     if(selectedTrainingLog) {
       this.selectedDayChangeEvent.emit(selectedTrainingLog.id);
+    }
+    else {
+      this.selectedDayChangeEvent.emit(null);
     } 
+  }
+
+  addExercise() {
+    const exercise: Exercise = {
+      id: 'ac06878e-2ccf-4aea-a6cf-e6c8314b650c',
+      name: 'Deadlift',
+      sets: 1,
+      reps: 5,
+      weight: 180,
+      trainingLogId: 'cb31d06e-13da-4ba0-a923-5c062399f3a8'
+    }
+
+    this.addExerciseEvent.emit(exercise);
+  }
+
+  deleteExercise(id: string) {
+    this.deleteExerciseEvent.emit(id);
   }
 
   dateClass() {
@@ -43,7 +66,7 @@ export class RecentLogsListComponent {
 
       const dayNumber: number = date.getDate();
 
-      if (existingTrainingLogs.includes(dayNumber) && date.getMonth() == 8) {
+      if (existingTrainingLogs.includes(dayNumber) && date.getMonth() == 9) {
         return 'bg-green-300 rounded';
       } else {
         return '';

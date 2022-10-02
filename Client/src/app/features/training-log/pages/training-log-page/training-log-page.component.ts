@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Exercise } from '../../models/Exercise';
 import { TrainingLog } from '../../models/TrainingLog';
+import { ExerciseService } from '../../services/exercise.service';
 import { TrainingLogService } from '../../services/training-log.service';
 
 @Component({
@@ -18,15 +19,36 @@ export class TrainingLogPageComponent implements OnInit {
 
   public exercises!: Exercise[];
 
-  constructor(private _trainingLogService: TrainingLogService) { }
+  constructor(
+    private _trainingLogService: TrainingLogService,
+    private _exerciseService: ExerciseService
+  ) { }
 
   ngOnInit(): void {
   }
 
-  fetchExercises(id: string): void {
+  fetchExercises(id: string | null): void {
+    if(!id) {
+      this.exercises = [];
+      return;
+    } 
     this._trainingLogService.getTrainingLog(id).pipe(
-      take(1)
-      ).subscribe( res => this.exercises = res.exercises);
+      take(1))
+      .subscribe( res => this.exercises = res.exercises);
+  }
+
+  onAdd(exercise: Exercise) {
+    this._exerciseService.createExercise(exercise).pipe(
+      take(1))
+      .subscribe(() => {
+        this.exercises = [...this.exercises, exercise]});
+  }
+
+  onDelete(id: string): void {
+    this._exerciseService.deleteExercise(id).pipe(
+      take(1))
+      .subscribe(() => {
+        this.exercises = this.exercises.filter(exercise => exercise.id !== id)});
   }
 
 }

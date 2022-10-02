@@ -3,5 +3,6 @@ export interface Exercise {
     name: string,
     weight: number,
     sets: number,
-    reps: number
+    reps: number,
+    trainingLogId: string
 }
