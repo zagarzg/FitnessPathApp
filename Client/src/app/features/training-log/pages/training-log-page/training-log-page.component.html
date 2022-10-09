@@ -10,8 +10,9 @@
             [trainingLogs]="trainingLogs" 
             [exercises]="exercises" 
             (selectedDayChangeEvent)="fetchExercises($event)"
-            (deleteExerciseEvent)="onDelete($event)"
-            (addExerciseEvent)="onAdd($event)">
+            (addExerciseEvent)="onAdd($event)"
+            (updateExerciseEvent)="onUpdate($event)"
+            (deleteExerciseEvent)="onDelete($event)">
         </app-recent-logs-list>
     </ng-container>
 </div>
