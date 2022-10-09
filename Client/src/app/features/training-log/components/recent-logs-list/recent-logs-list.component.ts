@@ -1,7 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
-import { Exercise } from '../../../models/Exercise';
-import { TrainingLog } from '../../../models/TrainingLog';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { Exercise } from '../../models/Exercise';
+import { TrainingLog } from '../../models/TrainingLog';
+import { ExerciseFormComponent } from '../exercise-form/exercise-form.component';
 
 @Component({
   selector: 'app-recent-logs-list',
@@ -16,12 +20,15 @@ export class RecentLogsListComponent {
   @Input() exercises!: Exercise[];
   @Output() selectedDayChangeEvent = new EventEmitter<string | null>();
   @Output() deleteTrainingLogEvent = new EventEmitter<string>();
-  @Output() deleteExerciseEvent = new EventEmitter<string>();
   @Output() addExerciseEvent = new EventEmitter<Exercise>();
+  @Output() updateExerciseEvent = new EventEmitter<Exercise>();
+  @Output() deleteExerciseEvent = new EventEmitter<string>();
 
   displayedColumns = ['name', 'reps', 'sets', 'weight','actions'];
 
-  constructor() { }
+  // @ViewChild(MatTable, {static: false}) table!: MatTable<Exercise>
+
+  constructor(public dialog: MatDialog) { }
 
   selectDay() {
     const selectedTrainingLog = this.trainingLogs.find( log => 
@@ -39,16 +46,29 @@ export class RecentLogsListComponent {
   }
 
   addExercise() {
-    const exercise: Exercise = {
-      id: 'ac06878e-2ccf-4aea-a6cf-e6c8314b650c',
-      name: 'Deadlift',
-      sets: 1,
-      reps: 5,
-      weight: 180,
-      trainingLogId: 'cb31d06e-13da-4ba0-a923-5c062399f3a8'
-    }
+    const dialogRef = this.dialog.open(ExerciseFormComponent, {
+      width: '400px',
+    });
 
-    this.addExerciseEvent.emit(exercise);
+    dialogRef.afterClosed().subscribe((formData: Exercise) => {
+      this.addExerciseEvent.emit(formData);
+    });
+  }
+
+  updateExercise(exercise: Exercise) {
+    const dialogRef = this.dialog.open(ExerciseFormComponent, {
+      width: '400px',
+      data: {
+        exercise
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((formData: Exercise) => {
+      console.log(`Form data before: ${formData.id}`)
+      formData.id = exercise.id;
+      console.log(`Form data after: ${formData.id}`)
+      this.updateExerciseEvent.emit(formData);
+    });
   }
 
   deleteExercise(id: string) {

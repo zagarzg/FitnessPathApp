@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { faHandshakeSimple } from '@fortawesome/free-solid-svg-icons';
+import { element } from 'protractor';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Exercise } from '../../models/Exercise';
@@ -40,8 +41,18 @@ export class TrainingLogPageComponent implements OnInit {
   onAdd(exercise: Exercise) {
     this._exerciseService.createExercise(exercise).pipe(
       take(1))
-      .subscribe(() => {
-        this.exercises = [...this.exercises, exercise]});
+      .subscribe((result) => {
+        this.exercises = [...this.exercises, result];
+      });
+  }
+
+  onUpdate(exercise: Exercise) {
+    this._exerciseService.updateExercise(exercise).pipe(
+      take(1))
+      .subscribe((result) => {
+        const updatedItems = this.exercises.map(el => el.id === exercise.id ? exercise : el);
+        this.exercises = updatedItems;
+      });
   }
 
   onDelete(id: string): void {
