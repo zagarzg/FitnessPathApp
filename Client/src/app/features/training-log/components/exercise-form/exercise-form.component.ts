@@ -23,10 +23,16 @@ export class ExerciseFormComponent implements OnInit {
       reps: ['', Validators.required],
       sets: ['', Validators.required],
       weight: ['', Validators.required],
-      trainingLogId: ['dea9886e-4b71-40ae-a9ab-5eb94df4bf4d', Validators.required],
+      trainingLogId: ['', Validators.required],
     });
 
-    if(this.data) {
+    if(this.data.trainingLogId) {
+      this.exerciseForm.patchValue({
+        trainingLogId: this.data.trainingLogId
+      });
+    }
+
+    if(this.data.exercise) {
       this.updateMode = true;
       this.exerciseForm.patchValue({
         name: this.data.exercise.name,

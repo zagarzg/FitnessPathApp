@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -106,6 +107,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             var logs = await _repository.GetAll(
                 filter: source => source.Date.Month == month && source.Date.Year == DateTime.Now.Year,
                 include: source => source.Include(log => log.Exercises),
+                orderBy: source => source.OrderBy(log => log.Date),
                 cancellationToken: cancellationToken);
 
             var mappedLogs = _mapper.Map<IEnumerable<TrainingLogDTO>>(logs);

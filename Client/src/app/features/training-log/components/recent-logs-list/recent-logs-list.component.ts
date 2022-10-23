@@ -15,6 +15,7 @@ import { ExerciseFormComponent } from '../exercise-form/exercise-form.component'
 export class RecentLogsListComponent {
 
   selected!: Date | null;
+  selectedTrainingLog: TrainingLog | undefined;
 
   @Input() trainingLogs!: TrainingLog[];
   @Input() exercises!: Exercise[];
@@ -31,14 +32,14 @@ export class RecentLogsListComponent {
   constructor(public dialog: MatDialog) { }
 
   selectDay() {
-    const selectedTrainingLog = this.trainingLogs.find( log => 
+    this.selectedTrainingLog = this.trainingLogs.find( log => 
         new Date(log.date).getDate() === this.selected?.getDate() &&
         new Date(log.date).getMonth() === this.selected?.getMonth() &&
         new Date(log.date).getFullYear() === this.selected.getFullYear()
     )
 
-    if(selectedTrainingLog) {
-      this.selectedDayChangeEvent.emit(selectedTrainingLog.id);
+    if(this.selectedTrainingLog) {
+      this.selectedDayChangeEvent.emit(this.selectedTrainingLog.id);
     }
     else {
       this.selectedDayChangeEvent.emit(null);
@@ -48,6 +49,9 @@ export class RecentLogsListComponent {
   addExercise() {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       width: '400px',
+      data: {
+        trainingLogId: this.selectedTrainingLog?.id
+      }
     });
 
     dialogRef.afterClosed().subscribe((formData: Exercise) => {
