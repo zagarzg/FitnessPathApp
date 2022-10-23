@@ -15,6 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatTableModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonToggleModule
   ],
   exports:  [
     MatButtonModule,
@@ -53,7 +55,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatTableModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonToggleModule
   ]
 })
 export class MaterialModule { }
