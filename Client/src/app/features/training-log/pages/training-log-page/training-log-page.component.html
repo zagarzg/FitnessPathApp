@@ -14,5 +14,7 @@
             (updateExerciseEvent)="onUpdate($event)"
             (deleteExerciseEvent)="onDelete($event)">
         </app-recent-logs-list>
+        <app-training-chart [chartData]="trainingLogs"></app-training-chart>
     </ng-container>
+    
 </div>
