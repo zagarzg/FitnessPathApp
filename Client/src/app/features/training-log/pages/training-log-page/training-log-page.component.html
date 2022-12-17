@@ -1,20 +1,24 @@
 <div class="bg-slate-100 p-5 h-full">
-    <div>
-        <div class="text-3xl font-semibold tracking-tight leading-8">
-            Training Log
-        </div>
-        <div class="font-light tracking-tight text-secondary">Track your training logs and review performance</div>
+  <div>
+    <div class="text-3xl font-semibold tracking-tight leading-8">
+      Training Log
     </div>
-    <ng-container *ngIf="(trainingLogs$ | async) as trainingLogs">
-        <app-recent-logs-list 
-            [trainingLogs]="trainingLogs" 
-            [exercises]="exercises" 
-            (selectedDayChangeEvent)="fetchExercises($event)"
-            (addExerciseEvent)="onAdd($event)"
-            (updateExerciseEvent)="onUpdate($event)"
-            (deleteExerciseEvent)="onDelete($event)">
-        </app-recent-logs-list>
-        <app-training-chart [chartData]="trainingLogs"></app-training-chart>
-    </ng-container>
-    
+    <div class="font-light tracking-tight text-secondary">
+      Track your training logs and review performance
+    </div>
+  </div>
+  <ng-container *ngIf="trainingLogs$ | async as trainingLogs">
+    <div class="flex">
+      <app-recent-logs-list
+        [trainingLogs]="trainingLogs"
+        [exercises]="exercises"
+        (selectedDayChangeEvent)="fetchExercises($event)"
+        (addExerciseEvent)="onAdd($event)"
+        (updateExerciseEvent)="onUpdate($event)"
+        (deleteExerciseEvent)="onDelete($event)"
+      >
+      </app-recent-logs-list>
+      <app-training-chart [chartData]="trainingLogs"></app-training-chart>
+    </div>
+  </ng-container>
 </div>
