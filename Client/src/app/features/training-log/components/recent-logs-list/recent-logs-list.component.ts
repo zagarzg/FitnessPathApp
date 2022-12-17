@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
@@ -10,10 +16,9 @@ import { ExerciseFormComponent } from '../exercise-form/exercise-form.component'
 @Component({
   selector: 'app-recent-logs-list',
   templateUrl: './recent-logs-list.component.html',
-  styleUrls: ['./recent-logs-list.component.scss']
+  styleUrls: ['./recent-logs-list.component.scss'],
 })
 export class RecentLogsListComponent {
-
   selected!: Date | null;
   selectedTrainingLog: TrainingLog | undefined;
 
@@ -25,33 +30,33 @@ export class RecentLogsListComponent {
   @Output() updateExerciseEvent = new EventEmitter<Exercise>();
   @Output() deleteExerciseEvent = new EventEmitter<string>();
 
-  displayedColumns = ['name', 'reps', 'sets', 'weight','actions'];
+  displayedColumns = ['name', 'reps', 'sets', 'weight', 'actions'];
 
   // @ViewChild(MatTable, {static: false}) table!: MatTable<Exercise>
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
 
   selectDay() {
-    this.selectedTrainingLog = this.trainingLogs.find( log => 
+    this.selectedTrainingLog = this.trainingLogs.find(
+      (log) =>
         new Date(log.date).getDate() === this.selected?.getDate() &&
         new Date(log.date).getMonth() === this.selected?.getMonth() &&
         new Date(log.date).getFullYear() === this.selected.getFullYear()
-    )
+    );
 
-    if(this.selectedTrainingLog) {
+    if (this.selectedTrainingLog) {
       this.selectedDayChangeEvent.emit(this.selectedTrainingLog.id);
-    }
-    else {
+    } else {
       this.selectedDayChangeEvent.emit(null);
-    } 
+    }
   }
 
   addExercise() {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       width: '400px',
       data: {
-        trainingLogId: this.selectedTrainingLog?.id
-      }
+        trainingLogId: this.selectedTrainingLog?.id,
+      },
     });
 
     dialogRef.afterClosed().subscribe((formData: Exercise) => {
@@ -63,14 +68,14 @@ export class RecentLogsListComponent {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       width: '400px',
       data: {
-        exercise
-      }
+        exercise,
+      },
     });
 
     dialogRef.afterClosed().subscribe((formData: Exercise) => {
-      console.log(`Form data before: ${formData.id}`)
+      console.log(`Form data before: ${formData.id}`);
       formData.id = exercise.id;
-      console.log(`Form data after: ${formData.id}`)
+      console.log(`Form data after: ${formData.id}`);
       this.updateExerciseEvent.emit(formData);
     });
   }
@@ -81,11 +86,10 @@ export class RecentLogsListComponent {
 
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
-      
-      if(this.trainingLogs == undefined) return '';
+      if (this.trainingLogs == undefined) return '';
 
-      const existingTrainingLogs = this.trainingLogs.map((log:TrainingLog) => { 
-        return new Date(log.date).getDate()
+      const existingTrainingLogs = this.trainingLogs.map((log: TrainingLog) => {
+        return new Date(log.date).getDate();
       });
 
       const dayNumber: number = date.getDate();
@@ -97,5 +101,4 @@ export class RecentLogsListComponent {
       }
     };
   }
-
 }

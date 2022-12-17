@@ -12,54 +12,61 @@ import { TrainingLogService } from '../../services/training-log.service';
 @Component({
   selector: 'app-training-log-page',
   templateUrl: './training-log-page.component.html',
-  styleUrls: ['./training-log-page.component.scss']
+  styleUrls: ['./training-log-page.component.scss'],
 })
 export class TrainingLogPageComponent implements OnInit {
-
-  public trainingLogs$: Observable<TrainingLog[]> = this._trainingLogService.getMonthlyTrainingLogs(new Date(Date.now()).getMonth() + 1);
+  public trainingLogs$: Observable<TrainingLog[]> =
+    this._trainingLogService.getAllTrainingLogs();
 
   public exercises!: Exercise[];
 
   constructor(
     private _trainingLogService: TrainingLogService,
     private _exerciseService: ExerciseService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   fetchExercises(id: string | null): void {
-    if(!id) {
+    if (!id) {
       this.exercises = [];
       return;
-    } 
-    this._trainingLogService.getTrainingLog(id).pipe(
-      take(1))
-      .subscribe( res => this.exercises = res.exercises);
+    }
+    this._trainingLogService
+      .getTrainingLog(id)
+      .pipe(take(1))
+      .subscribe((res) => (this.exercises = res.exercises));
   }
 
   onAdd(exercise: Exercise) {
-    this._exerciseService.createExercise(exercise).pipe(
-      take(1))
+    this._exerciseService
+      .createExercise(exercise)
+      .pipe(take(1))
       .subscribe((result) => {
         this.exercises = [...this.exercises, result];
       });
   }
 
   onUpdate(exercise: Exercise) {
-    this._exerciseService.updateExercise(exercise).pipe(
-      take(1))
+    this._exerciseService
+      .updateExercise(exercise)
+      .pipe(take(1))
       .subscribe((result) => {
-        const updatedItems = this.exercises.map(el => el.id === exercise.id ? exercise : el);
+        const updatedItems = this.exercises.map((el) =>
+          el.id === exercise.id ? exercise : el
+        );
         this.exercises = updatedItems;
       });
   }
 
   onDelete(id: string): void {
-    this._exerciseService.deleteExercise(id).pipe(
-      take(1))
+    this._exerciseService
+      .deleteExercise(id)
+      .pipe(take(1))
       .subscribe(() => {
-        this.exercises = this.exercises.filter(exercise => exercise.id !== id)});
+        this.exercises = this.exercises.filter(
+          (exercise) => exercise.id !== id
+        );
+      });
   }
-
 }
