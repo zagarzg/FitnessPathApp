@@ -23,5 +23,7 @@ namespace FitnessPathApp.PersistanceLayer.DTOs
 
         public int XMax = DateTime.Now.Day;
         public int TickAmount { get; set; }
+
+        public double ProgressPercentage { get; set; }
     }
 }

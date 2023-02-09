@@ -7,6 +7,7 @@ namespace FitnessPathApp.BusinessLayer.Interfaces
 {
     public interface IChartService
     {
-        Task<ChartDataDTO> GetDataByExerciseName(string exerciseName, int month, CancellationToken cancellationToken);
+        Task<ChartDataDTO> GetMonthlyDataByExerciseName(string exerciseName, int month, int year, CancellationToken cancellationToken);
+        Task<ChartDataDTO> GetYearlyDataByExerciseName(string exerciseName, int year, CancellationToken cancellationToken);
     }
 }
