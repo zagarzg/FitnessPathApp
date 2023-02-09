@@ -43,34 +43,138 @@ interface ChartData {
 })
 export class TrainingChartComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions | any>;
+  public chartOptions: Partial<ChartOptions | any> = {};
 
   @Input() chartData!: TrainingLog[];
 
   exercises: string[] = ['Bench', 'CGBP'];
+  months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  years: number[] = [2021, 2022, 2023];
   selectedExercise: string = 'Bench';
+  monthSelected: number = new Date().getMonth() + 1;
+  yearSelected: number = new Date().getFullYear();
+  timeframeSelected: 'Monthly' | 'Yearly' = 'Monthly';
+  progressPercentage: number = 0;
 
   constructor(private _chartService: ChartService) {}
 
   ngOnInit() {
-    this.exerciseChange('Bench');
+    this.exerciseChange(this.selectedExercise);
   }
 
   public exerciseChange(exerciseName: string) {
+    this.selectedExercise = exerciseName;
+
+    if (this.timeframeSelected == 'Yearly') {
+      this._chartService
+        .getYearlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.yearSelected
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    } else {
+      this._chartService
+        .getMonthlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.monthSelected,
+          this.yearSelected
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    }
+  }
+
+  public monthChange(month: number) {
     this._chartService
-      .getChartDataByExerciseName(exerciseName, 10)
+      .getMonthlyChartDataByExerciseName(
+        this.selectedExercise,
+        month,
+        this.yearSelected
+      )
       .pipe(take(1))
-      .subscribe((data) => {
-        console.log(data);
-        this.chartInit(data as any);
+      .subscribe((data: any) => {
+        this.progressPercentage = Math.round(data.progressPercentage);
+        if (data.data) this.chartInit(data as any);
+        else this.chartOptions = {};
       });
+  }
+
+  public yearChange(year: number) {
+    this.yearSelected = year;
+
+    if (this.timeframeSelected == 'Monthly') {
+      this._chartService
+        .getMonthlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.monthSelected,
+          year
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    } else {
+      this._chartService
+        .getYearlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.yearSelected
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    }
+  }
+
+  public onTimeframeChange(value: any) {
+    this.timeframeSelected = value;
+
+    if (this.timeframeSelected == 'Yearly') {
+      this._chartService
+        .getYearlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.yearSelected
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    } else {
+      this._chartService
+        .getMonthlyChartDataByExerciseName(
+          this.selectedExercise,
+          this.monthSelected,
+          this.yearSelected
+        )
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    }
   }
 
   private chartInit(data: any) {
     this.chartOptions = {
       series: [
         {
-          name: 'Bench',
+          name: this.selectedExercise,
           data: data.data,
         },
       ],
@@ -109,15 +213,15 @@ export class TrainingChartComponent implements OnInit {
       xaxis: {
         type: 'category',
         title: {
-          text: 'Timeline',
+          text: this.timeframeSelected == 'Yearly' ? 'Months' : 'Days of month',
         },
         min: 1,
-        max: 26,
-        tickAmount: 25,
+        max: this.timeframeSelected == 'Yearly' ? 12 : 30,
+        tickAmount: this.timeframeSelected == 'Yearly' ? 11 : 29,
       },
       yaxis: {
         title: {
-          text: 'Weight',
+          text: 'Weight (kg)',
         },
         min: data.yMin,
         max: data.yMax,
