@@ -88,14 +88,20 @@ export class RecentLogsListComponent {
     return (date: Date): MatCalendarCellCssClasses => {
       if (this.trainingLogs == undefined) return '';
 
-      const existingTrainingLogs = this.trainingLogs.map((log: TrainingLog) => {
+      let trainingLogsByMonth = this.trainingLogs.filter(
+        (log: TrainingLog) =>
+          new Date(log.date).getFullYear() == date.getFullYear() &&
+          new Date(log.date).getMonth() == date.getMonth()
+      );
+
+      let mappedLogs = trainingLogsByMonth.map((log: TrainingLog) => {
         return new Date(log.date).getDate();
       });
 
       const dayNumber: number = date.getDate();
 
-      if (existingTrainingLogs.includes(dayNumber) && date.getMonth() == 9) {
-        return 'bg-green-300 rounded';
+      if (mappedLogs.includes(dayNumber)) {
+        return 'bg-green-300 rounded-full';
       } else {
         return '';
       }

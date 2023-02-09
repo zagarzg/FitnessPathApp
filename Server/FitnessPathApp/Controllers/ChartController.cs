@@ -15,9 +15,15 @@ namespace FitnessPathApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetChartDataByExerciseName([FromQuery] string exerciseName, [FromQuery] int monthSelected, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetMonthlyChartDataByExerciseName([FromQuery] string exerciseName, [FromQuery] int monthSelected, [FromQuery] int yearSelected, CancellationToken cancellationToken)
         {
-            return Ok(await _chartService.GetDataByExerciseName(exerciseName, monthSelected, cancellationToken));
+            return Ok(await _chartService.GetMonthlyDataByExerciseName(exerciseName, monthSelected, yearSelected, cancellationToken));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetYearlyChartDataByExerciseName([FromQuery] string exerciseName, [FromQuery] int yearSelected, CancellationToken cancellationToken)
+        {
+            return Ok(await _chartService.GetYearlyDataByExerciseName(exerciseName, yearSelected, cancellationToken));
         }
     }
 }

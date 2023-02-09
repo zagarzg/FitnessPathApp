@@ -31,8 +31,4 @@ export class TrainingLogService {
       `${environment.URL}/TrainingLog/GetAll`
     );
   }
-
-  // public getTrainingLogDays(month:number): Observable<number[]> {
-  //   return this._http.get<number[]>(`${environment.URL}/TrainingLog/GetMonthyTrainingLogDates?month=${month}`);
-  // }
 }

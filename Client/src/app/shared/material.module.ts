@@ -18,8 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     MatButtonModule,
     MatCheckboxModule,
@@ -37,9 +36,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatTableModule,
     MatDialogModule,
     MatNativeDateModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
   ],
-  exports:  [
+  exports: [
     MatButtonModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -56,7 +55,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatTableModule,
     MatDialogModule,
     MatNativeDateModule,
-    MatButtonToggleModule
-  ]
+    MatButtonToggleModule,
+  ],
 })
-export class MaterialModule { }
+export class MaterialModule {}

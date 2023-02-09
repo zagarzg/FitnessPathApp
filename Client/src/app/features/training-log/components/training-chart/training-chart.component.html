@@ -11,20 +11,71 @@
           Analytics of your past trainings
         </div>
       </div>
-      <mat-form-field appearance="outline">
-        <mat-label>Exercise</mat-label>
-        <mat-select
-          [(ngModel)]="selectedExercise"
-          (selectionChange)="exerciseChange($event.value)"
+      <mat-button-toggle-group
+        name="fontStyle"
+        aria-label="Font Style"
+        (change)="onTimeframeChange($event.value)"
+      >
+        <mat-button-toggle value="Monthly">Monthly</mat-button-toggle>
+        <mat-button-toggle value="Yearly">Yearly</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="flex flex-col justify-between">
+      <div>
+        <mat-form-field
+          *ngIf="timeframeSelected == 'Monthly'"
+          class="w-24 p-3"
+          appearance="outline"
         >
-          <mat-option *ngFor="let exercise of exercises" [value]="exercise">
-            {{ exercise }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-label>Month</mat-label>
+          <mat-select
+            [(ngModel)]="monthSelected"
+            (selectionChange)="monthChange($event.value)"
+          >
+            <mat-option *ngFor="let month of months" [value]="month">
+              {{ month }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-36 p-3" appearance="outline">
+          <mat-label>Year</mat-label>
+          <mat-select
+            [(ngModel)]="yearSelected"
+            (selectionChange)="yearChange($event.value)"
+          >
+            <mat-option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Exercise</mat-label>
+          <mat-select
+            [(ngModel)]="selectedExercise"
+            (selectionChange)="exerciseChange($event.value)"
+          >
+            <mat-option *ngFor="let exercise of exercises" [value]="exercise">
+              {{ exercise }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex justify-end items-center pr-6">
+        <mat-icon class="mr-1 icon-size-5 text-green-500">trending_up</mat-icon>
+        <div
+          class="font-medium text-base text-secondary leading-none whitespace-nowrap"
+        >
+          <span class="text-green-500">{{ progressPercentage }}%</span>
+          {{
+            timeframeSelected == "Monthly"
+              ? "weight increase this month"
+              : "weight increase this year"
+          }}
+        </div>
+      </div>
     </div>
     <div id="chart" class="p-3">
-      <ng-container *ngIf="chartOptions">
+      <ng-container *ngIf="(chartOptions | json) != '{}'">
         <apx-chart
           [series]="chartOptions.series"
           [chart]="chartOptions.chart"
@@ -39,6 +90,9 @@
           [title]="chartOptions.title"
         ></apx-chart>
       </ng-container>
+      <span *ngIf="(chartOptions | json) == '{}'">
+        No data for given filters
+      </span>
     </div>
   </div>
 </div>
