@@ -61,17 +61,43 @@
         </mat-form-field>
       </div>
       <div class="flex justify-end items-center pr-6">
-        <mat-icon class="mr-1 icon-size-5 text-green-500">trending_up</mat-icon>
         <div
-          class="font-medium text-base text-secondary leading-none whitespace-nowrap"
+          *ngIf="progressPercentage >= 0; then thenBlock; else elseBlock"
+        ></div>
+        <ng-template #thenBlock
+          ><mat-icon
+            *ngIf="progressPercentage >= 0; else elseBlock"
+            class="mr-1 icon-size-5 text-green-500"
+            >trending_up</mat-icon
+          >
+          <div
+            class="font-medium text-base text-secondary leading-none whitespace-nowrap"
+          >
+            <span class="text-green-500">{{ progressPercentage }}%</span>
+            {{
+              timeframeSelected == "Monthly"
+                ? "weight increase this month"
+                : "weight increase this year"
+            }}
+          </div></ng-template
         >
-          <span class="text-green-500">{{ progressPercentage }}%</span>
-          {{
-            timeframeSelected == "Monthly"
-              ? "weight increase this month"
-              : "weight increase this year"
-          }}
-        </div>
+        <ng-template #elseBlock
+          ><mat-icon
+            *ngIf="progressPercentage < 0"
+            class="mr-1 icon-size-5 text-red-500"
+            >trending_down</mat-icon
+          >
+          <div
+            class="font-medium text-base text-secondary leading-none whitespace-nowrap"
+          >
+            <span class="text-red-500">{{ progressPercentage }}%</span>
+            {{
+              timeframeSelected == "Monthly"
+                ? "weight increase this month"
+                : "weight increase this year"
+            }}
+          </div></ng-template
+        >
       </div>
     </div>
     <div id="chart" class="p-3">
