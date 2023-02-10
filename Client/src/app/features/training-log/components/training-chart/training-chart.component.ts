@@ -197,12 +197,12 @@ export class TrainingChartComponent implements OnInit {
           enabled: false,
         },
       },
-      colors: ['#818CF8', '#5CFF5C'],
+      colors: ['#111827', '#5CFF5C'],
       dataLabels: {
         enabled: false,
       },
       fill: {
-        colors: ['#312E81'],
+        colors: ['#111827'],
       },
       stroke: {
         curve: 'straight',
