@@ -1,7 +1,9 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -18,15 +20,17 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     internal class WeightLogService : IWeightLogService
     {
         private readonly IRepository<WeightLog> _repository;
+        private readonly IMapper _mapper;
         private readonly ILogger<WeightLogService> _logger;
         private readonly WeightLogValidator _validator = new WeightLogValidator();
-        public WeightLogService(IRepository<WeightLog> repository, ILogger<WeightLogService> logger)
+        public WeightLogService(IRepository<WeightLog> repository, ILogger<WeightLogService> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<WeightLog> Create(WeightLog log, CancellationToken cancellationToken)
+        public async Task<WeightLogDTO> Create(WeightLog log, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(log);
 
@@ -43,8 +47,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(log, cancellationToken);
+                var mappedWeightLog = _mapper.Map<WeightLogDTO>(log);
                 _logger.LogInformation($"Weight succesfully inserted. Log id: {log.Id}");
-                return log;
+                return mappedWeightLog;
             }
             catch (Exception e)
             {
@@ -67,7 +72,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
         }
 
-        public async Task<WeightLog> Get(Guid id, CancellationToken cancellationToken)
+        public async Task<WeightLogDTO> Get(Guid id, CancellationToken cancellationToken)
         {
             var log = await _repository.Get(
                 filter: dbLog => dbLog.Id == id,
@@ -78,19 +83,22 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            var mappedWeightLog = _mapper.Map<WeightLogDTO>(log);
             _logger.LogInformation($"Weight succesfully fetched. Log id: {id}");
-            return log;
+            return mappedWeightLog;
         }
 
-        public async Task<IEnumerable<WeightLog>> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<WeightLogDTO>> GetAll(CancellationToken cancellationToken)
         {
             var logs = await _repository.GetAll(
                 cancellationToken: cancellationToken);
 
-            return logs;
+            var mappedWeightLogs = _mapper.Map<IEnumerable<WeightLogDTO>>(logs);
+
+            return mappedWeightLogs;
         }
 
-        public async Task<WeightLog> Update(WeightLog log, CancellationToken cancellationToken)
+        public async Task<WeightLogDTO> Update(WeightLog log, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(log);
 
@@ -108,8 +116,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(log, cancellationToken);
+                var mappedWeightLog = _mapper.Map<WeightLogDTO>(log);
                 _logger.LogInformation($"Weight succesfully updated. Log id: {log.Id}");
-                return log;
+                return mappedWeightLog;
             }
             catch (Exception e)
             {
