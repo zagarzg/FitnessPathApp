@@ -7,13 +7,15 @@ import { TrainingLogService } from './training-log/services/training-log.service
 import { ExerciseService } from './training-log/services/exercise.service';
 import { ExerciseFormComponent } from './training-log/components/exercise-form/exercise-form.component';
 import { TrainingChartComponent } from './training-log/components/training-chart/training-chart.component';
+import { WeightLogPageComponent } from './weight-log/pages/weight-log-page/weight-log-page.component';
 
 @NgModule({
   declarations: [
     TrainingLogPageComponent,
     RecentLogsListComponent,
     ExerciseFormComponent,
-    TrainingChartComponent
+    TrainingChartComponent,
+    WeightLogPageComponent
   ],
   imports: [
     CommonModule,
