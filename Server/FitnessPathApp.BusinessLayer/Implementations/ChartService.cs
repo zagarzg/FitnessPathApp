@@ -14,11 +14,14 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 {
     public class ChartService : IChartService
     {
-        private readonly IRepository<TrainingLog> _repository;
+        private readonly IRepository<TrainingLog> _trainingRepository;
+        private readonly IRepository<WeightLog> _weightRepository;
         private readonly ILogger<ChartService> _logger;
-        public ChartService(IRepository<TrainingLog> repository, ILogger<ChartService> logger)
+        public ChartService(IRepository<TrainingLog> trainingRepository, IRepository<WeightLog> weightRepository,
+            ILogger<ChartService> logger)
         {
-            _repository = repository;
+            _weightRepository = weightRepository;
+            _trainingRepository = trainingRepository;
             _logger = logger;
         }
 
@@ -27,7 +30,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
             try
             {
-                var logs = await _repository.GetAll(
+                var logs = await _trainingRepository.GetAll(
                 filter: source => source.Exercises.Count != 0 &&
                                   source.Exercises.Where(exercise => exercise.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year &&
@@ -74,7 +77,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
             try
             {
-                var logs = await _repository.GetAll(
+                var logs = await _trainingRepository.GetAll(
                 filter: source => source.Exercises.Count != 0 &&
                                   source.Exercises.Where(exercise => exercise.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year,
@@ -98,6 +101,51 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                     dataArray.Add(maxObject);
                 }
 
+
+                if (dataArray.Count() > 0)
+                {
+                    var yMin = dataArray.Select(point => point.Y).Min();
+                    var yMax = dataArray.Select(point => point.Y).Max();
+
+                    var progressPercentage = (dataArray.Last().Y - dataArray.First().Y) / dataArray.First().Y * 100;
+
+                    int tickAmount = (int)((yMax - yMin) / 2.5);
+
+                    ChartDataDTO chartData = new ChartDataDTO
+                    {
+                        Data = dataArray,
+                        YMax = yMax,
+                        YMin = yMin,
+                        TickAmount = tickAmount,
+                        ProgressPercentage = progressPercentage
+                    };
+
+                    return chartData;
+                }
+
+                return new ChartDataDTO();
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("No data by given filters");
+            }
+
+        }
+
+        public async Task<ChartDataDTO> GetMonthlyWeightChangeData(int month, int year, CancellationToken cancellationToken)
+        {
+
+            try
+            {
+                var logs = await _weightRepository.GetAll(
+                filter: source => 
+                                  source.Date.Year == year &&
+                                  source.Date.Month == month,
+                orderBy: source => source.OrderBy(log => log.Date),
+                cancellationToken: cancellationToken);
+
+                var dataArray = logs.Select(log => new ChartPoint { Y = log.Value, X = log.Date.Day });
 
                 if (dataArray.Count() > 0)
                 {

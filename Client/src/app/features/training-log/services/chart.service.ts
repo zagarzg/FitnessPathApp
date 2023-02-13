@@ -11,11 +11,11 @@ export class ChartService {
 
   public getMonthlyChartDataByExerciseName(
     exerciseName: string,
-    month: number,
+    monthSelected: number,
     yearSelected: number
   ): Observable<{ y: number; x: number }[]> {
     return this._http.get<{ y: number; x: number }[]>(
-      `${environment.URL}/Chart/GetMonthlyChartDataByExerciseName?monthSelected=${month}&exerciseName=${exerciseName}&yearSelected=${yearSelected}`
+      `${environment.URL}/Chart/GetMonthlyChartDataByExerciseName?monthSelected=${monthSelected}&exerciseName=${exerciseName}&yearSelected=${yearSelected}`
     );
   }
 
@@ -25,6 +25,15 @@ export class ChartService {
   ): Observable<{ y: number; x: number }[]> {
     return this._http.get<{ y: number; x: number }[]>(
       `${environment.URL}/Chart/GetYearlyChartDataByExerciseName?exerciseName=${exerciseName}&yearSelected=${yearSelected}`
+    );
+  }
+
+  public getMonthlyWeightChangeData(
+    monthSelected: number,
+    yearSelected: number
+  ): Observable<{ y: number; x: number }[]> {
+    return this._http.get<{ y: number; x: number }[]>(
+      `${environment.URL}/Chart/GetMonthlyWeightChangeData?monthSelected=${monthSelected}&yearSelected=${yearSelected}`
     );
   }
 }
