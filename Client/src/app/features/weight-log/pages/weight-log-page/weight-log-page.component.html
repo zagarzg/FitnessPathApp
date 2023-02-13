@@ -7,4 +7,15 @@
       Track your weight changes
     </div>
   </div>
+  <ng-container *ngIf="weightLogs$ | async as weightLogs">
+    <div class="flex">
+      <app-weight-log-list
+        [weightLogs]="weightLogs"
+        (selectedDayChangeEvent)="onGet($event)"
+        (addWeightLogEvent)="onAdd($event)"
+        (deleteWeightLogEvent)="onDelete($event)"
+      >
+      </app-weight-log-list>
+    </div>
+  </ng-container>
 </div>

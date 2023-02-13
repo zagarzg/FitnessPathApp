@@ -8,6 +8,7 @@ import { ExerciseService } from './training-log/services/exercise.service';
 import { ExerciseFormComponent } from './training-log/components/exercise-form/exercise-form.component';
 import { TrainingChartComponent } from './training-log/components/training-chart/training-chart.component';
 import { WeightLogPageComponent } from './weight-log/pages/weight-log-page/weight-log-page.component';
+import { WeightLogListComponent } from './weight-log/components/weight-log-list/weight-log-list.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { WeightLogPageComponent } from './weight-log/pages/weight-log-page/weigh
     RecentLogsListComponent,
     ExerciseFormComponent,
     TrainingChartComponent,
-    WeightLogPageComponent
+    WeightLogPageComponent,
+    WeightLogListComponent
   ],
   imports: [
     CommonModule,
