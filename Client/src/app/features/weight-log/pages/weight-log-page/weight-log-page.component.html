@@ -16,6 +16,7 @@
         (deleteWeightLogEvent)="onDelete($event)"
       >
       </app-weight-log-list>
+      <app-weight-chart [chartData]="weightLogs$ | async"></app-weight-chart>
     </div>
   </ng-container>
 </div>
