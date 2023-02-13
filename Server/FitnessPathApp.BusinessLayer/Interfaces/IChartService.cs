@@ -11,5 +11,6 @@ namespace FitnessPathApp.BusinessLayer.Interfaces
         Task<ChartDataDTO> GetYearlyDataByExerciseName(string exerciseName, int year, CancellationToken cancellationToken);
 
         Task<ChartDataDTO> GetMonthlyWeightChangeData(int month, int year, CancellationToken cancellationToken);
+        Task<ChartDataDTO> GetYearlyWeightChangeData(int year, CancellationToken cancellationToken);
     }
 }
