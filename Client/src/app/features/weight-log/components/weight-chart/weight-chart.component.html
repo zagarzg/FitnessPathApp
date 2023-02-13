@@ -43,6 +43,9 @@
             [(ngModel)]="yearSelected"
             (selectionChange)="yearChange($event.value)"
           >
+            <mat-option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>

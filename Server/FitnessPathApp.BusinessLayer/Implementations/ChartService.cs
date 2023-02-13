@@ -177,5 +177,63 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             }
 
         }
+
+        public async Task<ChartDataDTO> GetYearlyWeightChangeData(int year, CancellationToken cancellationToken)
+        {
+            {
+
+                try
+                {
+                    var logs = await _weightRepository.GetAll(
+                    filter: source =>
+                                      source.Date.Year == year,
+                    orderBy: source => source.OrderBy(log => log.Date),
+                    cancellationToken: cancellationToken);
+
+                    var logsGroupedByMonth = logs.AsQueryable().GroupBy(log => new { Month = log.Date.Month }).ToDictionary(g => g.ToList()[0].Date.Month, g => g.ToList()).Values;
+                    var dataArray = new List<ChartPoint>();
+
+                    foreach (var log in logsGroupedByMonth)
+                    {
+                        var month = log.First().Date.Month;
+
+                        var maxWeight = log.Select(log => log.Value).Max();
+
+                        var maxObject = new ChartPoint { Y = maxWeight, X = month };
+
+                        dataArray.Add(maxObject);
+                    }
+
+                    if (dataArray.Count() > 0)
+                    {
+                        var yMin = dataArray.Select(point => point.Y).Min();
+                        var yMax = dataArray.Select(point => point.Y).Max();
+
+                        var progressPercentage = (dataArray.Last().Y - dataArray.First().Y) / dataArray.First().Y * 100;
+
+                        int tickAmount = (int)((yMax - yMin) / 2.5);
+
+                        ChartDataDTO chartData = new ChartDataDTO
+                        {
+                            Data = dataArray,
+                            YMax = yMax,
+                            YMin = yMin,
+                            TickAmount = tickAmount,
+                            ProgressPercentage = progressPercentage
+                        };
+
+                        return chartData;
+                    }
+
+                    return new ChartDataDTO();
+
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("No data by given filters");
+                }
+
+            }
+        }
     }
 }

@@ -72,63 +72,49 @@ export class WeightChartComponent implements OnInit {
   }
 
   public yearChange(year: number) {
-    // this.yearSelected = year;
-    // if (this.timeframeSelected == 'Monthly') {
-    //   this._chartService
-    //     .getMonthlyChartDataByExerciseName(
-    //       this.selectedExercise,
-    //       this.monthSelected,
-    //       year
-    //     )
-    //     .pipe(take(1))
-    //     .subscribe((data: any) => {
-    //       this.progressPercentage = Math.round(data.progressPercentage);
-    //       if (data.data) this.chartInit(data as any);
-    //       else this.chartOptions = {};
-    //     });
-    // } else {
-    //   this._chartService
-    //     .getYearlyChartDataByExerciseName(
-    //       this.selectedExercise,
-    //       this.yearSelected
-    //     )
-    //     .pipe(take(1))
-    //     .subscribe((data: any) => {
-    //       this.progressPercentage = Math.round(data.progressPercentage);
-    //       if (data.data) this.chartInit(data as any);
-    //       else this.chartOptions = {};
-    //     });
-    // }
+    this.yearSelected = year;
+    if (this.timeframeSelected == 'Monthly') {
+      this._chartService
+        .getMonthlyWeightChangeData(this.monthSelected, year)
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    } else {
+      this._chartService
+        .getYearlyWeightChangeData(this.yearSelected)
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    }
   }
 
   public onTimeframeChange(value: any) {
-    // this.timeframeSelected = value;
-    // if (this.timeframeSelected == 'Yearly') {
-    //   this._chartService
-    //     .getYearlyChartDataByExerciseName(
-    //       this.selectedExercise,
-    //       this.yearSelected
-    //     )
-    //     .pipe(take(1))
-    //     .subscribe((data: any) => {
-    //       this.progressPercentage = Math.round(data.progressPercentage);
-    //       if (data.data) this.chartInit(data as any);
-    //       else this.chartOptions = {};
-    //     });
-    // } else {
-    //   this._chartService
-    //     .getMonthlyChartDataByExerciseName(
-    //       this.selectedExercise,
-    //       this.monthSelected,
-    //       this.yearSelected
-    //     )
-    //     .pipe(take(1))
-    //     .subscribe((data: any) => {
-    //       this.progressPercentage = Math.round(data.progressPercentage);
-    //       if (data.data) this.chartInit(data as any);
-    //       else this.chartOptions = {};
-    //     });
-    // }
+    this.timeframeSelected = value;
+    if (this.timeframeSelected == 'Yearly') {
+      this._chartService
+        .getYearlyWeightChangeData(this.yearSelected)
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    } else {
+      this._chartService
+        .getMonthlyWeightChangeData(this.monthSelected, this.yearSelected)
+        .pipe(take(1))
+        .subscribe((data: any) => {
+          this.progressPercentage = Math.round(data.progressPercentage);
+          if (data.data) this.chartInit(data as any);
+          else this.chartOptions = {};
+        });
+    }
   }
 
   private chartInit(data: any) {

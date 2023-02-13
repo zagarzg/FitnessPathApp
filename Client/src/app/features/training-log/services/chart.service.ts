@@ -36,4 +36,12 @@ export class ChartService {
       `${environment.URL}/Chart/GetMonthlyWeightChangeData?monthSelected=${monthSelected}&yearSelected=${yearSelected}`
     );
   }
+
+  public getYearlyWeightChangeData(
+    yearSelected: number
+  ): Observable<{ y: number; x: number }[]> {
+    return this._http.get<{ y: number; x: number }[]>(
+      `${environment.URL}/Chart/GetYearlyWeightChangeData?yearSelected=${yearSelected}`
+    );
+  }
 }
