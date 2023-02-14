@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { WeightLog } from '../../models/WeightLog';
+import { WeightLogFormComponent } from '../weight-log-form/weight-log-form.component';
 
 @Component({
   selector: 'app-weight-log-list',
@@ -40,7 +41,16 @@ export class WeightLogListComponent implements OnInit {
   }
 
   addWeightLog() {
-    this.addWeightLogEvent.emit();
+    const dialogRef = this.dialog.open(WeightLogFormComponent, {
+      width: '400px',
+      data: {
+        trainingLogId: this.selectedWeightLog?.id,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((formData: WeightLog) => {
+      this.addWeightLogEvent.emit(formData);
+    });
   }
 
   deleteWeightLog(id: string) {
