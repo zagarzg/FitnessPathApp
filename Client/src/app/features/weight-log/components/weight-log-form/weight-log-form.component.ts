@@ -15,29 +15,29 @@ export class WeightLogFormComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<WeightLogFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      date: Date | null;
+      weightLogId: string | undefined;
+    }
   ) {}
 
   ngOnInit(): void {
     this.weightLogForm = this._formBuilder.group({
-      weight: ['', Validators.required],
+      date: ['', Validators.required],
+      value: ['', Validators.required],
     });
 
     if (this.data.weightLogId) {
       this.weightLogForm.patchValue({
+        date: this.data.date,
         weightLogId: this.data.weightLogId,
-      });
-    }
-
-    if (this.data.exercise) {
-      this.updateMode = true;
-      this.weightLogForm.patchValue({
-        weight: this.data.exercise.weight,
       });
     }
   }
 
   onSubmit(form: FormGroup) {
+    form.value.date = this.data.date;
     this.dialogRef.close(form.value as WeightLog);
   }
 }
