@@ -11,12 +11,14 @@
     <div class="flex">
       <app-weight-log-list
         [weightLogs]="weightLogs"
+        [selectedDate]="selectedDate"
+        [selectedWeightLog]="selectedWeightLog"
         (selectedDayChangeEvent)="onGet($event)"
         (addWeightLogEvent)="onAdd($event)"
         (deleteWeightLogEvent)="onDelete($event)"
       >
       </app-weight-log-list>
-      <app-weight-chart [chartData]="weightLogs$ | async"></app-weight-chart>
+      <app-weight-chart [chartData]="weightLogs"></app-weight-chart>
     </div>
   </ng-container>
 </div>

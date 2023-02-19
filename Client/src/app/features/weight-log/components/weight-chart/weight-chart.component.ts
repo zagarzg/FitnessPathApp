@@ -64,7 +64,6 @@ export class WeightChartComponent implements OnInit {
       .getMonthlyWeightChangeData(month, this.yearSelected)
       .pipe(take(1))
       .subscribe((data: any) => {
-        console.log(data);
         this.progressPercentage = Math.round(data.progressPercentage);
         if (data.data) this.chartInit(data as any);
         else this.chartOptions = {};

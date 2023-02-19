@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,6 +12,21 @@ export class WeightLogService {
 
   public getWeightLog(id: string): Observable<WeightLog> {
     return this._http.get<WeightLog>(`${environment.URL}/WeightLog/Get/${id}`);
+  }
+
+  public createWeightLog(formData: WeightLog): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+
+    formData.userId = environment.USER_ID;
+    formData.date.setHours(6);
+
+    return this._http.post<any>(
+      `${environment.URL}/WeightLog/Create`,
+      formData,
+      httpOptions
+    );
   }
 
   public deleteWeightLog(id: string): Observable<any> {
