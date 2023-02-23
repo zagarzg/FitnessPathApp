@@ -42,6 +42,18 @@
           <button
             *ngIf="selectedWeightLog != undefined"
             mat-stroked-button
+            class="border-yellow-500 text-yellow-500 w-90 ml-2 mr-2 mb-2"
+            (click)="updateWeightLog()"
+          >
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="edit"
+            ></mat-icon>
+          </button>
+          <button
+            *ngIf="selectedWeightLog != undefined"
+            mat-stroked-button
             class="border-red-500 text-red-500 w-90 ml-2 mr-2 mb-2"
             (click)="deleteWeightLog(selectedWeightLog.id)"
           >

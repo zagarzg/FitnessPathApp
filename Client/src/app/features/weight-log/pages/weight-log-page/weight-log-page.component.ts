@@ -49,6 +49,20 @@ export class WeightLogPageComponent implements OnInit {
       });
   }
 
+  onUpdate(log: WeightLog) {
+    this._weightLogService
+      .updateWeightLog(log)
+      .pipe(take(1))
+      .subscribe((_) => {
+        const logIndex = this.logs.findIndex((obj) => obj.id == log.id);
+        this.logs[logIndex] = log;
+        this.weightLogsSubject$.next(this.logs);
+        this.selectedDate = log.date;
+        this.selectedWeightLog = log;
+        this.chartComponent.monthChange(2);
+      });
+  }
+
   onGet(log: WeightLog | null) {
     this.selectedWeightLog = log ? log : undefined;
     this.selectedDate = log ? log.date : null;
