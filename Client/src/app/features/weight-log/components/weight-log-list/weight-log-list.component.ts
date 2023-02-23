@@ -72,6 +72,21 @@ export class WeightLogListComponent implements OnInit, OnChanges {
     });
   }
 
+  updateWeightLog() {
+    const dialogRef = this.dialog.open(WeightLogFormComponent, {
+      width: '400px',
+      data: {
+        date: this.selectedDate,
+        weightLogId: this.selectedWeightLog?.id,
+        value: this.selectedWeightLog?.value,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((formData: WeightLog) => {
+      this.updateWeightLogEvent.emit(formData);
+    });
+  }
+
   deleteWeightLog(id: string) {
     this.deleteWeightLogEvent.emit(id);
   }
