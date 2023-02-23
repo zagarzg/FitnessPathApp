@@ -29,6 +29,20 @@ export class WeightLogService {
     );
   }
 
+  public updateWeightLog(formData: WeightLog): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+
+    formData.userId = environment.USER_ID;
+
+    return this._http.put<any>(
+      `${environment.URL}/WeightLog/Update`,
+      formData,
+      httpOptions
+    );
+  }
+
   public deleteWeightLog(id: string): Observable<any> {
     return this._http.delete<any>(`${environment.URL}/WeightLog/Delete/${id}`);
   }
