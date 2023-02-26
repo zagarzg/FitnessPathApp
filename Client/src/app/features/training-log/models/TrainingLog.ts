@@ -1,7 +1,8 @@
-import { Exercise } from "./Exercise";
+import { Exercise } from './Exercise';
 
 export interface TrainingLog {
-    id: string,
-    date: Date,
-    exercises: Exercise[]
+  id: string | null;
+  date: Date;
+  exercises: Exercise[];
+  userId: string;
 }

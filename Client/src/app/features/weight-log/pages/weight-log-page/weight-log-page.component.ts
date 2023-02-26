@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { WeightChartComponent } from '../../components/weight-chart/weight-chart.component';
 import { WeightLogListComponent } from '../../components/weight-log-list/weight-log-list.component';
@@ -13,7 +13,8 @@ import { WeightLogService } from '../../services/weight-log.service';
 })
 export class WeightLogPageComponent implements OnInit {
   private logs: WeightLog[] = [];
-  private weightLogsSubject$: Subject<WeightLog[]> = new Subject<WeightLog[]>();
+  private weightLogsSubject$: BehaviorSubject<WeightLog[]> =
+    new BehaviorSubject<WeightLog[]>([]);
   public weightLogs$: Observable<WeightLog[]> =
     this.weightLogsSubject$.asObservable();
 
@@ -40,9 +41,8 @@ export class WeightLogPageComponent implements OnInit {
       .createWeightLog(log)
       .pipe(take(1))
       .subscribe((log) => {
-        this.logs = [...this.logs, log];
-        // this.logs.push(log);
-        this.weightLogsSubject$.next(this.logs);
+        const updatedLogs = [...this.weightLogsSubject$.value, log];
+        this.weightLogsSubject$.next(updatedLogs);
         this.selectedDate = log.date;
         this.selectedWeightLog = log;
         this.chartComponent.monthChange(2);
@@ -73,8 +73,10 @@ export class WeightLogPageComponent implements OnInit {
       .deleteWeightLog(id)
       .pipe(take(1))
       .subscribe((_) => {
-        this.logs = this.logs.filter((log) => log.id !== id);
-        this.weightLogsSubject$.next(this.logs);
+        const updatedLogs = this.weightLogsSubject$.value.filter(
+          (obj) => obj.id !== id
+        );
+        this.weightLogsSubject$.next(updatedLogs);
         this.selectedWeightLog = undefined;
         this.chartComponent.monthChange(2);
       });

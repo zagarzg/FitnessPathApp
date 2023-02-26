@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TrainingLog } from '../models/TrainingLog';
@@ -11,6 +11,21 @@ export class TrainingLogService {
   public getTrainingLog(id: string): Observable<TrainingLog> {
     return this._http.get<TrainingLog>(
       `${environment.URL}/TrainingLog/Get/${id}`
+    );
+  }
+
+  public createTrainingLog(formData: TrainingLog): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+
+    formData.userId = environment.USER_ID;
+    formData.date.setHours(6);
+
+    return this._http.post<any>(
+      `${environment.URL}/TrainingLog/Create`,
+      formData,
+      httpOptions
     );
   }
 

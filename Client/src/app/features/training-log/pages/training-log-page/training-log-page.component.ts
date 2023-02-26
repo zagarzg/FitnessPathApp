@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { faHandshakeSimple } from '@fortawesome/free-solid-svg-icons';
-import { element } from 'protractor';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take, switchMap } from 'rxjs/operators';
+import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
 import { Exercise } from '../../models/Exercise';
 import { TrainingLog } from '../../models/TrainingLog';
 import { ExerciseService } from '../../services/exercise.service';
@@ -15,36 +13,79 @@ import { TrainingLogService } from '../../services/training-log.service';
   styleUrls: ['./training-log-page.component.scss'],
 })
 export class TrainingLogPageComponent implements OnInit {
+  private trainingLogsSubject$: BehaviorSubject<TrainingLog[]> =
+    new BehaviorSubject<TrainingLog[]>([]);
   public trainingLogs$: Observable<TrainingLog[]> =
-    this._trainingLogService.getAllTrainingLogs();
+    this.trainingLogsSubject$.asObservable();
 
   public exercises!: Exercise[];
+  public selectedDate!: Date | null;
+
+  @ViewChild(TrainingChartComponent) chartComponent!: TrainingChartComponent;
 
   constructor(
     private _trainingLogService: TrainingLogService,
     private _exerciseService: ExerciseService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('NgOnInit of page');
+    this._trainingLogService
+      .getAllTrainingLogs()
+      .pipe(take(1))
+      .subscribe((logs) => {
+        this.trainingLogsSubject$.next(logs);
+      });
+  }
 
-  fetchExercises(id: string | null): void {
-    if (!id) {
+  fetchExercises(
+    selectDayObject: { trainingLogId: string | null; date: Date | null } | null
+  ): void {
+    this.selectedDate = selectDayObject!.date;
+
+    if (!selectDayObject!.trainingLogId) {
       this.exercises = [];
       return;
     }
     this._trainingLogService
-      .getTrainingLog(id)
+      .getTrainingLog(selectDayObject!.trainingLogId)
       .pipe(take(1))
       .subscribe((res) => (this.exercises = res.exercises));
   }
 
   onAdd(exercise: Exercise) {
-    this._exerciseService
-      .createExercise(exercise)
-      .pipe(take(1))
-      .subscribe((result) => {
-        this.exercises = [...this.exercises, result];
-      });
+    if (exercise.trainingLogId === '') {
+      const trainingLog = {
+        id: '00000000-0000-0000-0000-000000000000',
+        date: this.selectedDate!,
+        exercises: [],
+        userId: '',
+      };
+      this._trainingLogService
+        .createTrainingLog(trainingLog)
+        .pipe(
+          switchMap((trainingLog): any => {
+            exercise.trainingLogId = trainingLog.id;
+            const updatedLogs = [
+              ...this.trainingLogsSubject$.value,
+              trainingLog,
+            ];
+            this.trainingLogsSubject$.next(updatedLogs);
+            return this._exerciseService.createExercise(exercise).pipe(take(1));
+          })
+        )
+        .subscribe((result: any): any => {
+          this.exercises = [...this.exercises, result];
+          this.chartComponent.monthChange(2);
+        });
+    } else {
+      this._exerciseService
+        .createExercise(exercise)
+        .pipe(take(1))
+        .subscribe((result) => {
+          this.exercises = [...this.exercises, result];
+        });
+    }
   }
 
   onUpdate(exercise: Exercise) {
