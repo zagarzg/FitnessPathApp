@@ -8,17 +8,19 @@
     </div>
   </div>
   <ng-container *ngIf="trainingLogs$ | async as trainingLogs">
-    <div class="flex">
-      <app-recent-logs-list
-        [trainingLogs]="trainingLogs"
-        [exercises]="exercises"
-        (selectedDayChangeEvent)="fetchExercises($event)"
-        (addExerciseEvent)="onAdd($event)"
-        (updateExerciseEvent)="onUpdate($event)"
-        (deleteExerciseEvent)="onDelete($event)"
-      >
-      </app-recent-logs-list>
-      <app-training-chart [chartData]="trainingLogs"></app-training-chart>
+    <div *ngIf="trainingLogs?.length !== 0">
+      <div class="flex">
+        <app-recent-logs-list
+          [trainingLogs]="trainingLogs"
+          [exercises]="exercises"
+          (selectedDayChangeEvent)="fetchExercises($event)"
+          (addExerciseEvent)="onAdd($event)"
+          (updateExerciseEvent)="onUpdate($event)"
+          (deleteExerciseEvent)="onDelete($event)"
+        >
+        </app-recent-logs-list>
+        <app-training-chart [chartData]="trainingLogs"></app-training-chart>
+      </div>
     </div>
   </ng-container>
 </div>

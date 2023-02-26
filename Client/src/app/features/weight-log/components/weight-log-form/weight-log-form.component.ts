@@ -23,7 +23,6 @@ export class WeightLogFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(`WeightLogId: ${this.data.weightLogId}`);
     this.weightLogForm = this._formBuilder.group({
       id: ['', Validators.nullValidator],
       date: ['', Validators.required],
