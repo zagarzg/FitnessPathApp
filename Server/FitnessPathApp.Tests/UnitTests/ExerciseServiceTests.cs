@@ -1,6 +1,8 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Implementations;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,6 +18,16 @@ namespace FitnessPathApp.Tests.UnitTests
 {
     public class ExerciseServiceTests
     {
+        private static Mapper _mapper;
+
+        public ExerciseServiceTests()
+        {
+            var mapperConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Exercise, ExerciseDTO>();
+            });
+            _mapper = new Mapper(mapperConfig);
+        }
+
         [Fact]
         public async Task GetAll_TwoExercisesInDb_GetsBoth()
         {
@@ -54,13 +66,13 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = (await service.GetAll(CancellationToken.None)).ToList();
 
             // ASSERT
-            Assert.IsType<List<Exercise>>(result);
+            Assert.IsType<List<ExerciseDTO>>(result);
             Assert.Equal(exercises[0].Id, result[0].Id);
             Assert.Equal(exercises[1].Id, result[1].Id);
 
@@ -113,14 +125,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Get(id, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<Exercise>(result);
-            Assert.Equal(exercises[1], result);
+            Assert.IsType<ExerciseDTO>(result);
+            Assert.Equal(exercises[1].Id, result.Id);
 
             repository.Verify(x => x.Get(
                     dbLog => dbLog.Id == id,
@@ -175,7 +187,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<NotFoundException>(() => service.Get(exerciseId, CancellationToken.None));
@@ -214,13 +226,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Create(exercise, CancellationToken.None);
+            Console.WriteLine(result);
 
             // ASSERT
-            Assert.IsType<Exercise>(result);
+            Assert.IsType<ExerciseDTO>(result);
             Assert.Equal(exercise.Id, result.Id);
             repository.Verify(x => x.Insert(
                     It.IsAny<Exercise>(),
@@ -255,7 +268,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<CreateException>(() => service.Create(exercise, CancellationToken.None));
@@ -293,7 +306,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(async () => await service.Create(exercise, CancellationToken.None));
@@ -323,7 +336,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository.Object, logger);
+            var service = new ExerciseService(repository.Object, logger, mapper: _mapper);
 
             // ACT
             await service.Delete(exerciseId, CancellationToken.None);
@@ -354,7 +367,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository.Object, logger);
+            var service = new ExerciseService(repository.Object, logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<DeleteException>(async () => await service.Delete(exerciseId, CancellationToken.None));
@@ -390,14 +403,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Update(exercise, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<Exercise>(result);
-            Assert.Equal(exercise, result);
+            Assert.IsType<ExerciseDTO>(result);
+            Assert.Equal(exercise.Id, result.Id);
             repository.Verify(x => x.Update(
                     It.IsAny<Exercise>(),
                     CancellationToken.None)
@@ -431,7 +444,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<UpdateException>(async () => await service.Update(exercise, CancellationToken.None));
@@ -469,7 +482,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<ExerciseService>();
 
-            var service = new ExerciseService(repository: repository.Object, logger: logger);
+            var service = new ExerciseService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(() => service.Update(exercise, CancellationToken.None));

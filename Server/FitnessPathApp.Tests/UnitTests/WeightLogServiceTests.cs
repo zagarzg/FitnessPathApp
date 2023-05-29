@@ -1,6 +1,8 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Implementations;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,6 +18,16 @@ namespace FitnessPathApp.Tests.UnitTests
 {
     public class WeightLogServiceTests
     {
+        private static Mapper _mapper;
+
+        public WeightLogServiceTests()
+        {
+            var mapperConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<WeightLog, WeightLogDTO>();
+            });
+            _mapper = new Mapper(mapperConfig);
+        }
+
         [Fact]
         public async Task GetAll_TwoWeightLogsInDb_GetsBoth()
         {
@@ -46,13 +58,13 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = (await service.GetAll(CancellationToken.None)).ToList();
 
             // ASSERT
-            Assert.IsType<List<WeightLog>>(result);
+            Assert.IsType<List<WeightLogDTO>>(result);
             Assert.Equal(logs[0].Id, result[0].Id);
             Assert.Equal(logs[1].Id, result[1].Id);
 
@@ -97,14 +109,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Get(id, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<WeightLog>(result);
-            Assert.Equal(logs[1], result);
+            Assert.IsType<WeightLogDTO>(result);
+            Assert.Equal(logs[1].Id, result.Id);
 
             repository.Verify(x => x.Get(
                     dbLog => dbLog.Id == id,
@@ -151,7 +163,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<NotFoundException>(() => service.Get(logId, CancellationToken.None));
@@ -188,13 +200,13 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Create(log, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<WeightLog>(result);
+            Assert.IsType<WeightLogDTO>(result);
             Assert.Equal(log.Id, result.Id);
             repository.Verify(x => x.Insert(
                     It.IsAny<WeightLog>(),
@@ -227,7 +239,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<CreateException>(() => service.Create(log, CancellationToken.None));
@@ -263,7 +275,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(async () => await service.Create(log, CancellationToken.None));
@@ -293,7 +305,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository.Object, logger);
+            var service = new WeightLogService(repository.Object, logger, mapper: _mapper);
 
             // ACT
             await service.Delete(logId, CancellationToken.None);
@@ -324,7 +336,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository.Object, logger);
+            var service = new WeightLogService(repository.Object, logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<DeleteException>(async () => await service.Delete(logId, CancellationToken.None));
@@ -358,14 +370,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Update(log, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<WeightLog>(result);
-            Assert.Equal(log, result);
+            Assert.IsType<WeightLogDTO>(result);
+            Assert.Equal(log.Id, result.Id);
             repository.Verify(x => x.Update(
                     It.IsAny<WeightLog>(),
                     CancellationToken.None)
@@ -397,7 +409,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<UpdateException>(async () => await service.Update(log, CancellationToken.None));
@@ -433,7 +445,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<WeightLogService>();
 
-            var service = new WeightLogService(repository: repository.Object, logger: logger);
+            var service = new WeightLogService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(() => service.Update(log, CancellationToken.None));
