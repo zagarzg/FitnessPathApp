@@ -1,7 +1,9 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Interfaces;
 using FitnessPathApp.BusinessLayer.Validators;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -18,16 +20,18 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     public class FoodItemService : IFoodItemService
     {
         private readonly IRepository<FoodItem> _repository;
+        private readonly IMapper _mapper;
         private readonly ILogger<FoodItemService> _logger;
         private readonly FoodItemValidator _validator = new FoodItemValidator();
 
-        public FoodItemService(IRepository<FoodItem> repository, ILogger<FoodItemService> logger)
+        public FoodItemService(IRepository<FoodItem> repository, ILogger<FoodItemService> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<FoodItem> Create(FoodItem item, CancellationToken cancellationToken)
+        public async Task<FoodItemDTO> Create(FoodItem item, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(item);
 
@@ -44,8 +48,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(item, cancellationToken);
+                var mappedFoodItem = _mapper.Map<FoodItemDTO>(item);
                 _logger.LogInformation($"FoodItem succesfully inserted. Log id: {item.Id}");
-                return item;
+                return mappedFoodItem;
             }
             catch (Exception e)
             {
@@ -68,7 +73,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             }
         }
 
-        public async Task<FoodItem> Get(Guid id, CancellationToken cancellationToken)
+        public async Task<FoodItemDTO> Get(Guid id, CancellationToken cancellationToken)
         {
             var item = await _repository.Get(
                 filter: dbItem => dbItem.Id == id,
@@ -79,18 +84,21 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            var mappedFoodItem = _mapper.Map<FoodItemDTO>(item);
             _logger.LogInformation($"FoodItem succesfully fetched. Log id: {id}");
-            return item;
+            return mappedFoodItem;
         }
 
-        public async Task<IEnumerable<FoodItem>> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<FoodItemDTO>> GetAll(CancellationToken cancellationToken)
         {
             var items = await _repository.GetAll(cancellationToken: cancellationToken);
 
-            return items;
+            var mappedFoodItems = _mapper.Map<IEnumerable<FoodItemDTO>>(items);
+
+            return mappedFoodItems;
         }
 
-        public async Task<FoodItem> Update(FoodItem item, CancellationToken cancellationToken)
+        public async Task<FoodItemDTO> Update(FoodItem item, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(item);
 
@@ -108,8 +116,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(item, cancellationToken);
+                var mappedFoodItem = _mapper.Map<FoodItemDTO>(item);
                 _logger.LogInformation($"FoodItem succesfully updated. Log id: {item.Id}");
-                return item;
+                return mappedFoodItem;
             }
             catch (Exception e)
             {
