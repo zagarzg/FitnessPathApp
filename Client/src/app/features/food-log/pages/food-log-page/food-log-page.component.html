@@ -4,5 +4,17 @@
     <div class="font-light tracking-tight text-secondary">
       Track your food intake
     </div>
+    <ng-container *ngIf="foodLogs$ | async as foodLogs">
+      <div *ngIf="foodLogs?.length !== 0">
+        <div class="flex">
+          <app-food-log-list
+            [foodLogs]="foodLogs"
+            [foodItems]="foodItems"
+            (selectedDayChangeEvent)="fetchFoodItems($event)"
+          >
+          </app-food-log-list>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>
