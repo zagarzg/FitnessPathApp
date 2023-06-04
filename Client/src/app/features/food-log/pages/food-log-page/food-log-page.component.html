@@ -11,6 +11,9 @@
             [foodLogs]="foodLogs"
             [foodItems]="foodItems"
             (selectedDayChangeEvent)="fetchFoodItems($event)"
+            (addFoodItemEvent)="onAdd($event)"
+            (updateFoodItemEvent)="onUpdate($event)"
+            (deleteFoodItemEvent)="onDelete($event)"
           >
           </app-food-log-list>
         </div>
