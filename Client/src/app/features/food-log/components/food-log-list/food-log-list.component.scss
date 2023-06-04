@@ -1,0 +1,60 @@
+th {
+  background-color: rgb(17, 24, 39);
+  color: white;
+}
+
+::ng-deep .mat-card {
+  padding: 0 !important;
+}
+
+::ng-deep .mat-calendar-header {
+  background-color: rgb(17, 24, 39);
+  color: white;
+  padding: 2px 2px 0 0 !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: rgb(17, 24, 39);
+  color: white;
+}
+
+.special-date {
+  background-color: orange !important;
+  border-radius: 100%;
+}
+
+.exercise-tile {
+  padding: 0.5rem !important;
+  margin: 5px 20px;
+  border: 1px solid #111827;
+  position: relative;
+}
+
+.close-x {
+  position: absolute;
+  float: right;
+  background: rgb(255, 30, 30);
+  color: #fff;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  border-radius: 2rem;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chip {
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  margin: 0 10px;
+
+  cursor: pointer;
+}
+
+.chip.primary {
+  background: #2f4058;
+  color: whitesmoke;
+}
