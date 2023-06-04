@@ -1,0 +1,75 @@
+<div class="flex flex-auto flex-wrap">
+  <div class="flex flex-col w-full">
+    <div class="p-6 bg-gray-900">
+      <div
+        class="mr-4 text-white text-lg font-medium tracking-tight leading-6 truncate"
+      >
+        {{ updateMode ? "Update Food Intake" : "Add Food Intake" }}
+      </div>
+      <div class="text-white font-light">Provide nutrition details</div>
+    </div>
+    <form
+      class="p-6"
+      [formGroup]="foodItemForm"
+      (ngSubmit)="onSubmit(foodItemForm)"
+    >
+      <!-- Name -->
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name" formControlName="name" />
+      </mat-form-field>
+
+      <!-- SKU and Barcode -->
+      <div class="flex">
+        <mat-form-field class="w-1/4 pr-2" appearance="outline">
+          <mat-label>Carbs</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Carbs"
+            formControlName="carbs"
+          />
+        </mat-form-field>
+        <mat-form-field class="w-1/4 pl-2" appearance="outline">
+          <mat-label>Protein</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Protein"
+            formControlName="protein"
+          />
+        </mat-form-field>
+        <mat-form-field class="w-1/4 pl-2" appearance="outline">
+          <mat-label>Fat</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Fat"
+            formControlName="fat"
+          />
+        </mat-form-field>
+        <mat-form-field class="w-1/4 pl-2" appearance="outline">
+          <mat-label>Calories</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Calories"
+            formControlName="calories"
+          />
+        </mat-form-field>
+      </div>
+      <button
+        mat-raised-button
+        class="bg-gray-900 text-white w-full"
+        type="submit"
+      >
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Example home icon"
+          [fontIcon]="updateMode == true ? 'edit' : 'add'"
+        ></mat-icon>
+        {{ updateMode ? "Update Food Intake" : "Add Food Intake" }}
+      </button>
+    </form>
+  </div>
+</div>

@@ -47,13 +47,19 @@
             <span class="chip primary">{{ foodItem.protein }}P</span>
             <span class="chip primary">{{ foodItem.fat }}F</span>
             <span class="chip primary">{{ foodItem.calories }}Cal</span>
-            <button class="close-x">X</button>
+            <button class="close-x" (click)="deleteFoodItem(foodItem.id)">
+              X
+            </button>
           </div>
         </mat-card>
         <span *ngIf="foodItems?.length == 0" class="m-3">
           No meals logged for this day
         </span>
-        <button mat-raised-button class="bg-primary text-white m-3">
+        <button
+          mat-raised-button
+          class="bg-primary text-white m-3"
+          (click)="addFoodItem()"
+        >
           <mat-icon
             aria-hidden="false"
             aria-label="Example home icon"

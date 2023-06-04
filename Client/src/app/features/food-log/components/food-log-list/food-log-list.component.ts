@@ -15,6 +15,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { FoodItem } from '../../models/FoodItem';
 import { FoodLog } from '../../models/FoodLog';
+import { FoodItemFormComponent } from '../food-item-form/food-item-form.component';
 
 @Component({
   selector: 'app-food-log-list',
@@ -69,38 +70,36 @@ export class FoodLogListComponent implements OnChanges {
     }
   }
 
-  // addFoodLog() {
-  //   const dialogRef = this.dialog.open(ExerciseFormComponent, {
-  //     width: '400px',
-  //     data: {
-  //       trainingLogId: this.selectedTrainingLog?.id,
-  //     },
-  //   });
+  addFoodItem() {
+    const dialogRef = this.dialog.open(FoodItemFormComponent, {
+      width: '500px',
+      data: {
+        foodLogId: this.selectedFoodLog?.id,
+      },
+    });
 
-  //   dialogRef.afterClosed().subscribe((formData: Exercise) => {
-  //     this.addExerciseEvent.emit(formData);
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe((formData: FoodItem) => {
+      this.addFoodItemEvent.emit(formData);
+    });
+  }
 
-  // updateExercise(exercise: Exercise) {
-  //   const dialogRef = this.dialog.open(ExerciseFormComponent, {
-  //     width: '400px',
-  //     data: {
-  //       exercise,
-  //     },
-  //   });
+  updateFoodItem(foodItem: FoodItem) {
+    const dialogRef = this.dialog.open(FoodItemFormComponent, {
+      width: '400px',
+      data: {
+        foodItem,
+      },
+    });
 
-  //   dialogRef.afterClosed().subscribe((formData: Exercise) => {
-  //     console.log(`Form data before: ${formData.id}`);
-  //     formData.id = exercise.id;
-  //     console.log(`Form data after: ${formData.id}`);
-  //     this.updateExerciseEvent.emit(formData);
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe((formData: FoodItem) => {
+      formData.id = foodItem.id;
+      this.updateFoodItemEvent.emit(formData);
+    });
+  }
 
-  // deleteExercise(id: string) {
-  //   this.deleteExerciseEvent.emit(id);
-  // }
+  deleteFoodItem(id: string) {
+    this.deleteFoodItemEvent.emit(id);
+  }
 
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
