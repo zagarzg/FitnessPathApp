@@ -5,4 +5,5 @@ export interface FoodItem {
   carbs: number;
   protein: number;
   fat: string;
+  foodLogId: string;
 }
