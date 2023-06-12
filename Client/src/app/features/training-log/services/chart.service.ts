@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { FoodItem } from '../../food-log/models/FoodItem';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +44,21 @@ export class ChartService {
     return this._http.get<{ y: number; x: number }[]>(
       `${environment.URL}/Chart/GetYearlyWeightChangeData?yearSelected=${yearSelected}`
     );
+  }
+
+  public calculateFoodChartData(foodItems: FoodItem[]) {
+    let carbs = 0;
+    let protein = 0;
+    let fat = 0;
+    let calories = 0;
+
+    foodItems.forEach((item) => {
+      carbs += item.carbs;
+      protein += item.protein;
+      fat += item.fat;
+      calories += item.calories;
+    });
+
+    return [carbs, protein, fat, calories];
   }
 }
