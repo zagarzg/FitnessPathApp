@@ -14,6 +14,7 @@ import { WeightLogFormComponent } from './weight-log/components/weight-log-form/
 import { FoodLogPageComponent } from './food-log/pages/food-log-page/food-log-page.component';
 import { FoodLogListComponent } from './food-log/components/food-log-list/food-log-list.component';
 import { FoodItemFormComponent } from './food-log/components/food-item-form/food-item-form.component';
+import { FoodChartComponent } from './food-log/components/food-chart/food-chart.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FoodItemFormComponent } from './food-log/components/food-item-form/food
     WeightLogFormComponent,
     FoodLogPageComponent,
     FoodLogListComponent,
-    FoodItemFormComponent
+    FoodItemFormComponent,
+    FoodChartComponent
   ],
   imports: [
     CommonModule,
