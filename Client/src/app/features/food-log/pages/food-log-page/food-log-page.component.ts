@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
+import { ChartService } from 'src/app/features/training-log/services/chart.service';
 import { FoodItem } from '../../models/FoodItem';
 import { FoodLog } from '../../models/FoodLog';
 import { FoodItemService } from '../../services/food-item.service';
@@ -21,9 +22,12 @@ export class FoodLogPageComponent implements OnInit {
   public foodItems!: FoodItem[];
   public selectedDate!: Date | null;
 
+  public chartData!: number[];
+
   constructor(
     private _foodLogService: FoodLogService,
-    private _foodItemService: FoodItemService
+    private _foodItemService: FoodItemService,
+    private _chartService: ChartService
   ) {}
 
   ngOnInit(): void {
@@ -43,12 +47,19 @@ export class FoodLogPageComponent implements OnInit {
 
     if (!selectDayObject!.foodLogId) {
       this.foodItems = [];
+      this.chartData = [];
+
       return;
     }
     this._foodLogService
       .getFoodLog(selectDayObject!.foodLogId)
       .pipe(take(1))
-      .subscribe((res) => (this.foodItems = res.foodItems));
+      .subscribe((res) => {
+        this.foodItems = res.foodItems;
+        this.chartData = this._chartService.calculateFoodChartData(
+          this.foodItems
+        );
+      });
   }
 
   onAdd(foodItem: FoodItem) {
@@ -71,7 +82,9 @@ export class FoodLogPageComponent implements OnInit {
         )
         .subscribe((result: any): any => {
           this.foodItems = [...this.foodItems, result];
-          // this.chartComponent.monthChange(2);
+          this.chartData = this._chartService.calculateFoodChartData(
+            this.foodItems
+          );
         });
     } else {
       this._foodItemService
@@ -92,6 +105,9 @@ export class FoodLogPageComponent implements OnInit {
           el.id === foodItem.id ? foodItem : el
         );
         this.foodItems = updatedItems;
+        this.chartData = this._chartService.calculateFoodChartData(
+          this.foodItems
+        );
       });
   }
 
@@ -102,6 +118,9 @@ export class FoodLogPageComponent implements OnInit {
       .subscribe(() => {
         this.foodItems = this.foodItems.filter(
           (foodItem) => foodItem.id !== id
+        );
+        this.chartData = this._chartService.calculateFoodChartData(
+          this.foodItems
         );
       });
   }
