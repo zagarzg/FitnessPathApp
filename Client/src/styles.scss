@@ -6,6 +6,11 @@
 // @import "tailwindcss/components";
 // @import "tailwindcss/utilities";
 
+:root {
+  --bg: rgb(30 41 59 / 1);
+  --primary: #2196f3;
+}
+
 * {
   margin: 0;
 }
@@ -17,5 +22,5 @@ body {
 }
 
 .bg-primary {
-  background-color: #111827;
+  background-color: var(--primary);
 }

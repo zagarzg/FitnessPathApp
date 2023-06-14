@@ -1,0 +1,20 @@
+<div #navigation class="navigation">
+  <!-- <div #menuToggle class="menuToggle" (click)="onMenuToggle()">
+  </div> -->
+  <span class="logo"
+    ><img src="../../../../assets/images/fitness-logo.jpg" alt="Logo"
+  /></span>
+  <ul #navigationList>
+    <li
+      class="list"
+      *ngFor="let link of links"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a [routerLink]="link.url">
+        <span class="icon"><fa-icon [icon]="link.icon"></fa-icon></span>
+        <span class="text">{{ link.title }}</span>
+      </a>
+    </li>
+  </ul>
+</div>
