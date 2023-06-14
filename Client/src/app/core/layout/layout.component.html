@@ -1,10 +1,12 @@
-<div class="flex flex-column h-full">
-  <app-side-nav></app-side-nav>
-  <div class="w-full h-full">
+<div class="flex w-full h-full bg-slate-800">
+  <!-- <app-side-nav></app-side-nav> -->
+  <app-curved-outside-bar></app-curved-outside-bar>
+  <div class="flex flex-col w-full h-full">
     <div
-      class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden"
+      class="self-end rounded-bl-2xl flex flex-0 items-center justify-end w-1/2 h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-white dark:bg-transparent print:hidden"
     >
-      Header
+      <p>Welcome Matija</p>
+      <span>Profile</span>
     </div>
     <router-outlet></router-outlet>
   </div>
