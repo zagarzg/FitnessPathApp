@@ -31,7 +31,6 @@ export class FoodLogPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('NgOnInit of page');
     this._foodLogService
       .getAllFoodLogs()
       .pipe(take(1))
