@@ -1,5 +1,5 @@
 th {
-  background-color: rgb(17, 24, 39);
+  background-color: var(--primary) !important;
   color: white;
 }
 
@@ -8,13 +8,13 @@ th {
 }
 
 ::ng-deep .mat-calendar-header {
-  background-color: rgb(17, 24, 39);
+  background-color: var(--primary) !important;
   color: white;
   padding: 2px 2px 0 0 !important;
 }
 
 ::ng-deep .mat-calendar-body-selected {
-  background-color: rgb(17, 24, 39);
+  background-color: var(--primary) !important;
   color: white;
 }
 
@@ -26,7 +26,7 @@ th {
 .exercise-tile {
   padding: 0.5rem !important;
   margin: 5px 20px;
-  border: 1px solid #111827;
+  border: 1px solid var(--primary);
   position: relative;
 }
 
