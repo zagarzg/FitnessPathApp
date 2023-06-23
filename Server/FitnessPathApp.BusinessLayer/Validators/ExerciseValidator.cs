@@ -7,10 +7,6 @@ namespace FitnessPathApp.BusinessLayer.Validators
     {
         public ExerciseValidator()
         {
-            RuleFor(e => e.Name)
-                .NotEmpty()
-                .WithMessage("Exercise name must be set");
-
             RuleFor(e => e.Weight)
                 .NotEmpty()
                 .WithMessage("Exercise weight must be set")

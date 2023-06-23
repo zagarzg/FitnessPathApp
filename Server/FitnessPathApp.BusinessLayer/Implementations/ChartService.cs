@@ -32,7 +32,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             {
                 var logs = await _trainingRepository.GetAll(
                 filter: source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == exerciseName).ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year &&
                                   source.Date.Month == month,
                 include: source => source.Include(log => log.Exercises),
@@ -79,7 +79,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             {
                 var logs = await _trainingRepository.GetAll(
                 filter: source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == exerciseName).ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year,
                 include: source => source.Include(log => log.Exercises),
                 orderBy: source => source.OrderBy(log => log.Date),
@@ -91,7 +91,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
                 foreach(var log in logsGroupedByMonth)
                 {
-                    var exercise = log.Select(log => log.Exercises.Where(log => log.Name == exerciseName).ToList());
+                    var exercise = log.Select(log => log.Exercises.Where(log => log.ExerciseChoice.Name == exerciseName).ToList());
                     var month = log.First().Date.Month;
 
                     var maxWeight = exercise.Select(exercises => exercises[0].Weight).Max();

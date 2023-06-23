@@ -11,6 +11,11 @@ namespace FitnessPathApp.DomainLayer
     {
         public DbSet<User> Users{ get; set; }
         public DbSet<WeightLog> WeightLogs { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<ExerciseChoice> ExerciseChoices { get; set; }
+        public DbSet<TrainingLog> TrainingLogs { get; set; }
+        public DbSet<FoodItem> FoodItems { get; set; }
+        public DbSet<FoodLog> FoodLogs { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
