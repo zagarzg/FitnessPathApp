@@ -10,6 +10,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FitnessPathApp.BusinessLayer.Exceptions;
+using AutoMapper;
+using FitnessPathApp.PersistanceLayer.DTOs;
 
 [assembly: InternalsVisibleTo("FitnessPathApp.Tests")]
 
@@ -18,17 +20,18 @@ namespace FitnessPathApp.BusinessLayer.Implementations
     public class ExerciseChoiceService : IExerciseChoiceService
     {
         private readonly IRepository<ExerciseChoice> _repository;
+        private readonly IMapper _mapper;
         private readonly ILogger<ExerciseChoiceService> _logger;
         private readonly ExerciseChoiceValidator _validator = new ExerciseChoiceValidator();
 
-        public ExerciseChoiceService(IRepository<ExerciseChoice> repository, ILogger<ExerciseChoiceService> logger, ExerciseChoiceValidator validator)
+        public ExerciseChoiceService(IRepository<ExerciseChoice> repository, ILogger<ExerciseChoiceService> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
-            _validator = validator;
+            _mapper = mapper;
         }
 
-        public async Task<ExerciseChoice> Create(ExerciseChoice exerciseChoice, CancellationToken cancellationToken)
+        public async Task<ExerciseChoiceDTO> Create(ExerciseChoice exerciseChoice, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(exerciseChoice);
 
@@ -45,8 +48,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Insert(exerciseChoice, cancellationToken);
+                var mappedExerciseChoice = _mapper.Map<ExerciseChoiceDTO>(exerciseChoice);
                 _logger.LogInformation($"Exercise choice succesfully inserted. Choice id: {exerciseChoice.Id}");
-                return exerciseChoice;
+                return mappedExerciseChoice;
             }
             catch (Exception e)
             {
@@ -68,7 +72,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             }
         }
 
-        public async Task<ExerciseChoice> Get(Guid id, CancellationToken cancellationToken)
+        public async Task<ExerciseChoiceDTO> Get(Guid id, CancellationToken cancellationToken)
         {
             var exerciseChoice = await _repository.Get(
                 filter: dbExercise => dbExercise.Id == id,
@@ -79,18 +83,21 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 throw new NotFoundException(id);
             }
 
+            var mappedExerciseChoice = _mapper.Map<ExerciseChoiceDTO>(exerciseChoice);
             _logger.LogInformation($"Exercise choice succesfully fetched. Choice id: {id}");
-            return exerciseChoice;
+            return mappedExerciseChoice;
         }
 
-        public async Task<IEnumerable<ExerciseChoice>> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExerciseChoiceDTO>> GetAll(CancellationToken cancellationToken)
         {
             var exerciseChoices = await _repository.GetAll(cancellationToken: cancellationToken);
 
-            return exerciseChoices;
+            var mappedExercise = _mapper.Map<IEnumerable<ExerciseChoiceDTO>>(exerciseChoices);
+
+            return mappedExercise;
         }
 
-        public async Task<ExerciseChoice> Update(ExerciseChoice exerciseChoice, CancellationToken cancellationToken)
+        public async Task<ExerciseChoiceDTO> Update(ExerciseChoice exerciseChoice, CancellationToken cancellationToken)
         {
             ValidationResult result = _validator.Validate(exerciseChoice);
 
@@ -108,8 +115,9 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             try
             {
                 await _repository.Update(exerciseChoice, cancellationToken);
+                var mappedExerciseChoice = _mapper.Map<ExerciseChoiceDTO>(exerciseChoice);
                 _logger.LogInformation($"Exercise choice succesfully updated. Choice id: {exerciseChoice.Id}");
-                return exerciseChoice;
+                return mappedExerciseChoice;
             }
             catch (Exception e)
             {
