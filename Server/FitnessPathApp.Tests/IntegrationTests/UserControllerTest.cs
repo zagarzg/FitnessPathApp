@@ -24,7 +24,7 @@ namespace FitnessPathApp.Tests.IntegrationTests
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<User>>(content);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]

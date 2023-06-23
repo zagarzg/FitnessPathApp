@@ -1,6 +1,8 @@
-﻿using FitnessPathApp.BusinessLayer.Exceptions;
+﻿using AutoMapper;
+using FitnessPathApp.BusinessLayer.Exceptions;
 using FitnessPathApp.BusinessLayer.Implementations;
 using FitnessPathApp.DomainLayer.Entities;
+using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,6 +18,15 @@ namespace FitnessPathApp.Tests.UnitTests
 {
     public class FoodItemServiceTests
     {
+        private static Mapper _mapper;
+
+        public FoodItemServiceTests()
+        {
+            var mapperConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<FoodItem, FoodItemDTO>();
+            });
+            _mapper = new Mapper(mapperConfig);
+        }
         [Fact]
         public async Task GetAll_TwoFoodItemsInDb_GetsBoth()
         {
@@ -56,7 +67,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = (await service.GetAll(CancellationToken.None)).ToList();
@@ -117,14 +128,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Get(id, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<FoodItem>(result);
-            Assert.Equal(items[1], result);
+            Assert.IsType<FoodItemDTO>(result);
+            Assert.Equal(items[1].Id, result.Id);
 
             repository.Verify(x => x.Get(
                     dbLog => dbLog.Id == id,
@@ -181,7 +192,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<NotFoundException>(() => service.Get(itemId, CancellationToken.None));
@@ -221,7 +232,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Create(item, CancellationToken.None);
@@ -263,7 +274,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<CreateException>(() => service.Create(item, CancellationToken.None));
@@ -302,7 +313,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(async () => await service.Create(item, CancellationToken.None));
@@ -332,7 +343,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository.Object, logger);
+            var service = new FoodItemService(repository.Object, logger, mapper: _mapper);
 
             // ACT
             await service.Delete(itemId, CancellationToken.None);
@@ -363,7 +374,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository.Object, logger);
+            var service = new FoodItemService(repository.Object, logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<DeleteException>(async () => await service.Delete(itemId, CancellationToken.None));
@@ -400,14 +411,14 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT
             var result = await service.Update(item, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<FoodItem>(result);
-            Assert.Equal(item, result);
+            Assert.IsType<FoodItemDTO>(result);
+            Assert.Equal(item.Id, result.Id);
             repository.Verify(x => x.Update(
                     It.IsAny<FoodItem>(),
                     CancellationToken.None)
@@ -442,7 +453,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<UpdateException>(async () => await service.Update(item, CancellationToken.None));
@@ -481,7 +492,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             var logger = new NullLogger<FoodItemService>();
 
-            var service = new FoodItemService(repository: repository.Object, logger: logger);
+            var service = new FoodItemService(repository: repository.Object, logger: logger, mapper: _mapper);
 
             // ACT/ASSERT
             await Assert.ThrowsAsync<ValidationException>(() => service.Update(item, CancellationToken.None));
