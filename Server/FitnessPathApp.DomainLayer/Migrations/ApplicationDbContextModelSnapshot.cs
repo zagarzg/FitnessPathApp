@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace FitnessPathApp.DomainLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
@@ -15,9 +17,10 @@ namespace FitnessPathApp.DomainLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.22")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.Exercise", b =>
                 {
@@ -25,8 +28,8 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("ExerciseChoiceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Reps")
                         .HasColumnType("int");
@@ -42,15 +45,17 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExerciseChoiceId");
+
                     b.HasIndex("TrainingLogId");
 
-                    b.ToTable("Exercise");
+                    b.ToTable("Exercises");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("82a61b04-1cda-4045-abb5-0c1596f9aa36"),
-                            Name = "Bench Press",
+                            ExerciseChoiceId = new Guid("3e165f3d-f9fa-4e27-a5b9-05d3b938d8eb"),
                             Reps = 5,
                             Sets = 5,
                             TrainingLogId = new Guid("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
@@ -59,7 +64,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("46aa1ca5-4670-4a38-a840-96204dd0b3a2"),
-                            Name = "Squat",
+                            ExerciseChoiceId = new Guid("bde86a6d-9a37-420d-93ca-60d7b02dc7c4"),
                             Reps = 5,
                             Sets = 5,
                             TrainingLogId = new Guid("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
@@ -68,7 +73,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("853172d8-26ca-4de1-acc0-b28d753c328f"),
-                            Name = "Deadlift",
+                            ExerciseChoiceId = new Guid("c1769344-dd80-41fe-bbfc-a16df832929b"),
                             Reps = 5,
                             Sets = 3,
                             TrainingLogId = new Guid("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
@@ -77,7 +82,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("9d9d6825-98ba-47cf-b137-2f6431a047ca"),
-                            Name = "Overhead Press",
+                            ExerciseChoiceId = new Guid("c328e92b-33ff-4863-9397-d53424ca3f5c"),
                             Reps = 8,
                             Sets = 3,
                             TrainingLogId = new Guid("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
@@ -86,11 +91,64 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("e937cea5-99db-4068-96a2-c75fde51df74"),
-                            Name = "Barbell Row",
+                            ExerciseChoiceId = new Guid("c328e92b-33ff-4863-9397-d53424ca3f5c"),
                             Reps = 8,
                             Sets = 3,
                             TrainingLogId = new Guid("cb31d06e-13da-4ba0-a923-5c062399f3a8"),
                             Weight = 70.0
+                        });
+                });
+
+            modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.ExerciseChoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ExerciseType")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExerciseChoices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3e165f3d-f9fa-4e27-a5b9-05d3b938d8eb"),
+                            ExerciseType = 0,
+                            IsFavorite = true,
+                            Name = "Bench Press"
+                        },
+                        new
+                        {
+                            Id = new Guid("bde86a6d-9a37-420d-93ca-60d7b02dc7c4"),
+                            ExerciseType = 0,
+                            IsFavorite = true,
+                            Name = "Squat"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1769344-dd80-41fe-bbfc-a16df832929b"),
+                            ExerciseType = 0,
+                            IsFavorite = true,
+                            Name = "Deadlift"
+                        },
+                        new
+                        {
+                            Id = new Guid("c328e92b-33ff-4863-9397-d53424ca3f5c"),
+                            ExerciseType = 0,
+                            IsFavorite = true,
+                            Name = "Overhead Press"
                         });
                 });
 
@@ -122,7 +180,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
                     b.HasIndex("FoodLogId");
 
-                    b.ToTable("FoodItem");
+                    b.ToTable("FoodItems");
 
                     b.HasData(
                         new
@@ -173,7 +231,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FoodLog");
+                    b.ToTable("FoodLogs");
 
                     b.HasData(
                         new
@@ -200,7 +258,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TrainingLog");
+                    b.ToTable("TrainingLogs");
 
                     b.HasData(
                         new
@@ -235,7 +293,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         {
                             Id = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Email = "admin@hotmail.com",
-                            Password = "$2b$10$/XFgyxjSodEqSpo6boTO3e.ZRjCZD6PXCulOwijIPTFC1AbBT7kU6",
+                            Password = "$2b$10$5.eynkHdHLVnxUx34/VK4u3ejx6pQlhpk8iRhW4zd7rDxChhYaYUi",
                             Username = "admin"
                         });
                 });
@@ -265,35 +323,35 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("0faee6ac-1772-4bbe-9990-a7d9a22dd559"),
-                            Date = new DateTime(2022, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Value = 77.5
                         },
                         new
                         {
                             Id = new Guid("c4714153-23fc-4413-b6dc-7fa230cb8883"),
-                            Date = new DateTime(2022, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Value = 78.0
                         },
                         new
                         {
                             Id = new Guid("9d9926f0-ee0b-4cdb-b4bd-c178377d8868"),
-                            Date = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Value = 77.299999999999997
                         },
                         new
                         {
                             Id = new Guid("8514a58d-0edc-46bc-a0c8-bd912b5f5742"),
-                            Date = new DateTime(2022, 2, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Value = 77.599999999999994
                         },
                         new
                         {
                             Id = new Guid("52fce968-8a43-4dbd-ab26-dcf334c149dd"),
-                            Date = new DateTime(2022, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserId = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Value = 77.799999999999997
                         });
@@ -301,10 +359,18 @@ namespace FitnessPathApp.DomainLayer.Migrations
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.Exercise", b =>
                 {
+                    b.HasOne("FitnessPathApp.DomainLayer.Entities.ExerciseChoice", "ExerciseChoice")
+                        .WithMany("Exercises")
+                        .HasForeignKey("ExerciseChoiceId");
+
                     b.HasOne("FitnessPathApp.DomainLayer.Entities.TrainingLog", "Log")
                         .WithMany("Exercises")
                         .HasForeignKey("TrainingLogId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("ExerciseChoice");
+
+                    b.Navigation("Log");
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.FoodItem", b =>
@@ -313,6 +379,8 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         .WithMany("FoodItems")
                         .HasForeignKey("FoodLogId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Log");
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.FoodLog", b =>
@@ -321,6 +389,8 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         .WithMany("FoodLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.TrainingLog", b =>
@@ -329,6 +399,8 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         .WithMany("TrainingLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.WeightLog", b =>
@@ -337,6 +409,32 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         .WithMany("WeightLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.ExerciseChoice", b =>
+                {
+                    b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.FoodLog", b =>
+                {
+                    b.Navigation("FoodItems");
+                });
+
+            modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.TrainingLog", b =>
+                {
+                    b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("FitnessPathApp.DomainLayer.Entities.User", b =>
+                {
+                    b.Navigation("FoodLogs");
+
+                    b.Navigation("TrainingLogs");
+
+                    b.Navigation("WeightLogs");
                 });
 #pragma warning restore 612, 618
         }
