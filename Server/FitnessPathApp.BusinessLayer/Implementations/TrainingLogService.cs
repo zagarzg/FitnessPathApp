@@ -76,7 +76,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
         public async Task<TrainingLogDTO> Get(Guid id, CancellationToken cancellationToken)
         {
             var log = await _repository.Get(
-                include: source => source.Include(log => log.Exercises),
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
                 filter: dbLog => dbLog.Id == id,
                 cancellationToken: cancellationToken);
 
@@ -94,7 +94,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
         public async Task<IEnumerable<TrainingLogDTO>> GetAll(CancellationToken cancellationToken)
         {
             var logs = await _repository.GetAll(
-                include: source => source.Include(log => log.Exercises),
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
                 cancellationToken: cancellationToken);
 
             var mappedLogs = _mapper.Map<IEnumerable<TrainingLogDTO>>(logs);

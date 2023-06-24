@@ -11,7 +11,7 @@ namespace FitnessPathApp.DomainLayer.Entities
         [JsonIgnore]
         public TrainingLog Log { get; set; }
         public Guid TrainingLogId { get; set; }
-        public ExerciseChoice ExerciseChoice { get; set; }
+        public virtual ExerciseChoice ExerciseChoice { get; set; }
         public Guid ExerciseChoiceId { get; set; }
     }
 }

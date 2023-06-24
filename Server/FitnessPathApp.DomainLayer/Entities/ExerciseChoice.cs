@@ -15,7 +15,7 @@ namespace FitnessPathApp.DomainLayer.Entities
         public ExerciseType ExerciseType { get; set; }
         public byte[] ImageData { get; set; }
         public bool IsFavorite { get; set; }
-        public ICollection<Exercise> Exercises { get; set; }
+        public virtual ICollection<Exercise> Exercises { get; set; }
 
     }
 }
