@@ -15,6 +15,8 @@ import { FoodLogPageComponent } from './food-log/pages/food-log-page/food-log-pa
 import { FoodLogListComponent } from './food-log/components/food-log-list/food-log-list.component';
 import { FoodItemFormComponent } from './food-log/components/food-item-form/food-item-form.component';
 import { FoodChartComponent } from './food-log/components/food-chart/food-chart.component';
+import { ExerciseChoiceService } from './training-log/services/exercise-choice.service';
+import { WeightLogService } from './weight-log/services/weight-log.service';
 
 @NgModule({
   declarations: [
@@ -29,18 +31,15 @@ import { FoodChartComponent } from './food-log/components/food-chart/food-chart.
     FoodLogPageComponent,
     FoodLogListComponent,
     FoodItemFormComponent,
-    FoodChartComponent
+    FoodChartComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule
-  ],
-  exports: [
-    TrainingLogPageComponent
-  ],
+  imports: [CommonModule, SharedModule],
+  exports: [TrainingLogPageComponent],
   providers: [
     TrainingLogService,
-    ExerciseService
-  ]
+    ExerciseService,
+    ExerciseChoiceService,
+    WeightLogService,
+  ],
 })
-export class FeaturesModule { }
+export class FeaturesModule {}

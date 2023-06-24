@@ -41,7 +41,7 @@
           class="exercise-tile flex justify-between items-center"
           *ngFor="let exercise of exercises"
         >
-          <span>{{ exercise.name }}</span>
+          <span>{{ exercise.exerciseChoice?.name }}</span>
           <div>
             <span class="chip primary"
               >{{ exercise.sets }}x{{ exercise.reps }}</span

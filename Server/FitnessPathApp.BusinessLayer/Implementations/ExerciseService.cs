@@ -6,6 +6,7 @@ using FitnessPathApp.DomainLayer.Entities;
 using FitnessPathApp.PersistanceLayer.DTOs;
 using FitnessPathApp.PersistanceLayer.Interfaces;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
 
             try
             {
+                var exerciseChoice = exercise.ExerciseChoice;
+                // Assign null to ExerciseChoice property or you get FK constraint error
+                exercise.ExerciseChoice = null;
                 await _repository.Insert(exercise, cancellationToken);
+                // Reassign ExerciseChoice property
+                exercise.ExerciseChoice = exerciseChoice;
                 var mappedExercise = _mapper.Map<ExerciseDTO>(exercise);
                 _logger.LogInformation($"Exercise succesfully inserted. Exercise id: {exercise.Id}");
                 return mappedExercise;
