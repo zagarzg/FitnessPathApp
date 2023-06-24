@@ -1,3 +1,73 @@
 ::ng-deep .mat-dialog-container {
-    padding: 0 !important;
+  padding: 0 !important;
+}
+
+.exercise-container {
+  display: flex;
+  flex-direction: column;
+  height: 370px;
+  width: 380px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.exercise-card {
+  width: 20rem;
+  padding: 1rem !important;
+  margin: 0.5rem !important;
+  border: 2px solid var(--primary);
+  transition: transform 250ms;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.exercise-card:hover {
+  cursor: pointer;
+  transform: translateX(20px);
+}
+
+.selected {
+  background-color: var(--primary);
+  color: white;
+  outline: solid 3px white;
+  outline-offset: -7px;
+}
+
+.cancel-icon {
+  color: white;
+}
+
+.filter-cancel .material-icons {
+  font-size: medium !important;
+}
+
+.mat-icon {
+  height: 40px;
+  width: 40px;
+}
+
+.material-icons {
+  font-size: 40px;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: var(--primary) !important;
+}
+
+::ng-deep
+  .mat-form-field-appearance-outline.mat-focused
+  .mat-form-field-outline-thick {
+  /*change color of underline*/
+  border-color: var(--primary) !important;
+}
+
+::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: var(--primary) !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: var(--primary) !important;
 }

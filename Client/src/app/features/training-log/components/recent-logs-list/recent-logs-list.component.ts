@@ -71,7 +71,6 @@ export class RecentLogsListComponent implements OnChanges {
 
   addExercise() {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
-      width: '400px',
       data: {
         trainingLogId: this.selectedTrainingLog?.id,
       },
