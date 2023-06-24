@@ -8,7 +8,7 @@ namespace FitnessPathApp.PersistanceLayer.DTOs
         public Guid Id { get; set; }
         public string Name { get; set; }
         public ExerciseType ExerciseType { get; set; }
-        public byte[] ImageData { get; set; }
+        public string ImageData { get; set; }
         public bool IsFavorite { get; set; }
     }
 }
