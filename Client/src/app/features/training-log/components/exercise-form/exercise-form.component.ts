@@ -20,7 +20,10 @@ export class ExerciseFormComponent implements OnInit {
   updateMode: boolean = false;
 
   availableExercises: any = [];
-  selectedExercise: { id: string; image: string } = { id: '', image: '' };
+  selectedExercise: { id: string; image: string | null } = {
+    id: '',
+    image: '',
+  };
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -32,6 +35,7 @@ export class ExerciseFormComponent implements OnInit {
   ngOnInit(): void {
     this.exerciseChoiceService.getAllExerciseChoices().subscribe((choices) => {
       this.availableExercises = choices;
+      console.log(this.availableExercises);
     });
 
     this.exerciseForm = this._formBuilder.group({
@@ -66,8 +70,9 @@ export class ExerciseFormComponent implements OnInit {
     );
     this.selectedExercise = {
       id: exerciseId,
-      image: 'data:image/jpeg;base64,' + exerciseChoice.imageData,
+      image: exerciseChoice.imageUrl,
     };
+    console.log(this.selectedExercise);
   }
 
   onSubmit(form: FormGroup) {
