@@ -6,7 +6,7 @@ export enum ExerciseType {
 export interface ExerciseChoice {
   id: string;
   name: string;
-  imageData: string | null;
+  imageUrl: string | null;
   exerciseType: ExerciseType;
   isFavorite: boolean;
 }
