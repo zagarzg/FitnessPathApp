@@ -376,14 +376,14 @@ namespace FitnessPathApp.DomainLayer
                 Id = Guid.Parse("1c4e0b57-e66a-4604-960b-122c396b1574"),
                     Name = "Weighted Dips",
                     ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/04/weighted-dips.gif",
-                    ExerciseType = ExerciseType.Accessory,
+                    ExerciseType = ExerciseType.Compound,
                     IsFavorite = true,
                 },
                       new ExerciseChoice{
                 Id = Guid.Parse("846df523-dc1d-4206-917c-7b289e156ccc"),
                     Name = "Dips",
                     ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/01/chest-dip-movement.gif",
-                    ExerciseType = ExerciseType.Accessory,
+                    ExerciseType = ExerciseType.Compound,
                     IsFavorite = true,
                 },
         };

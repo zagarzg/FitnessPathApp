@@ -1,6 +1,6 @@
 export enum ExerciseType {
-  Compound,
-  Accessory,
+  Compound = 1,
+  Accessory = 2,
 }
 
 export interface ExerciseChoice {

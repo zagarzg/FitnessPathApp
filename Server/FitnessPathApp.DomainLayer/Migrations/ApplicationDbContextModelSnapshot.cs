@@ -125,7 +125,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("3e165f3d-f9fa-4e27-a5b9-05d3b938d8eb"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/04/barbell-bench-press.gif",
                             IsFavorite = true,
                             Name = "Bench Press"
@@ -133,7 +133,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("bde86a6d-9a37-420d-93ca-60d7b02dc7c4"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/barbell-full-squat.gif",
                             IsFavorite = true,
                             Name = "Squat"
@@ -141,7 +141,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("c1769344-dd80-41fe-bbfc-a16df832929b"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/02/barbell-deadlift-movement.gif",
                             IsFavorite = true,
                             Name = "Deadlift"
@@ -149,7 +149,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("c328e92b-33ff-4863-9397-d53424ca3f5c"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/04/military-press.gif",
                             IsFavorite = true,
                             Name = "Overhead Press"
@@ -157,7 +157,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("0b9a334e-0849-4a54-91bd-e6789bcab11c"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/08/barbell-bent-over-row.gif",
                             IsFavorite = true,
                             Name = "Barbell Row"
@@ -165,7 +165,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("e86748e9-9203-41a2-bdf3-12c9a0b24560"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/06/barbell-romanian-deadlift-movement.gif",
                             IsFavorite = true,
                             Name = "Romanian Deadlift"
@@ -173,7 +173,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("032c5827-77d7-4f38-a205-2aea3a215005"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2021/11/dumbbell-romanian-deadlift.gif",
                             IsFavorite = true,
                             Name = "Dumbell Romanian Deadlift"
@@ -181,7 +181,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("5020ad9b-2a1f-4634-99a6-f89b65b46ab4"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/11/straight-leg-deadlift.gif",
                             IsFavorite = true,
                             Name = "Stiff Leg Deadlift"
@@ -189,7 +189,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("8ef4878b-2aa6-4319-bd84-abda5148fba2"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/11/pull-up.gif",
                             IsFavorite = true,
                             Name = "Pullup"
@@ -197,7 +197,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("7b548a27-ecdf-4f15-b485-8f57e456d3f5"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/09/chin-ups.gif",
                             IsFavorite = true,
                             Name = "Chinup"
@@ -205,7 +205,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("dd5a8953-4e8b-48c1-973a-741faaece2f7"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2023/03/neutral-grip-pull-ups-shoulder-width.gif",
                             IsFavorite = true,
                             Name = "Neutral Grip Pullup"
@@ -213,7 +213,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("0c12a6c5-d47e-431c-91b0-8e8d9a6fa83a"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/08/cable-seated-row.gif",
                             IsFavorite = true,
                             Name = "Cable Row"
@@ -221,7 +221,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("2e1c74ce-d121-4832-8530-d045b717c4e7"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/08/wide-grip-lat-pulldown.gif",
                             IsFavorite = true,
                             Name = "Lat Pulldown"
@@ -229,7 +229,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("f856276a-e2ab-4158-bf50-0075197b7a16"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2021/10/single-arm-dumbbell-row.gif",
                             IsFavorite = true,
                             Name = "One Arm Dumbell Row"
@@ -237,7 +237,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("1cea4155-1b12-4fec-9d31-1c91c3f6fb60"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/10/dumbbell-shoulder-press.gif",
                             IsFavorite = true,
                             Name = "Dumbell Shoulder Press"
@@ -245,7 +245,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("a9bfc5a4-8666-47f0-ab14-929345675627"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/10/incline-dumbbell-curl.gif",
                             IsFavorite = true,
                             Name = "Incline Dumbell Curl"
@@ -253,7 +253,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("dcc607b0-0573-4ba5-b00f-7db3525a8e04"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/dumbbell-bicep-curl.gif",
                             IsFavorite = true,
                             Name = "Dumbell Bicep Curl"
@@ -261,7 +261,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("23af1cfe-de80-4a25-98f3-9de67f64cf36"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/ez-bar-preacher-curl.gif",
                             IsFavorite = true,
                             Name = "Ez Preacher Curl"
@@ -269,7 +269,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("f8e9dcb1-3269-4b40-8a91-b5cc6c18211e"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/04/dumbbell-hammer-curl.gif",
                             IsFavorite = true,
                             Name = "Dumbell Hammer Curl"
@@ -277,7 +277,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("44eb78e8-1353-41e2-ba3d-0b93c4c66af5"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/dumbbell-concentration-curl.gif",
                             IsFavorite = true,
                             Name = "Dumbell Concentration Curl"
@@ -285,7 +285,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("9e78421c-e5f8-4040-a0fd-8a12454b03bc"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2023/02/ez-bar-bicep-curl.gif",
                             IsFavorite = true,
                             Name = "Ez Bar Curl"
@@ -293,7 +293,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("828ac5f9-1936-4194-a462-e83163f12162"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/05/barbell-curl.gif",
                             IsFavorite = true,
                             Name = "Barbell Curl"
@@ -301,7 +301,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("c1258b52-4e63-4aa7-a075-a16f4a460357"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/08/dumbbell-chest-fly-muscles.gif",
                             IsFavorite = true,
                             Name = "Dumbell Chest Fly"
@@ -309,7 +309,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("82f28e0d-b7cf-4c9a-98b9-9b757b31212c"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/09/dumbbell-chest-press.gif",
                             IsFavorite = true,
                             Name = "Dumbell Chest Press"
@@ -317,7 +317,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("be5d2cee-e898-4b3a-8386-ea39fda3622e"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/09/dumbbell-incline-chest-press.gif",
                             IsFavorite = true,
                             Name = "Dumbell Incline Press"
@@ -325,7 +325,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("4e24fd67-6d30-433b-a604-d01ad90ef54e"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/05/incline-barbell-bench-press.gif",
                             IsFavorite = true,
                             Name = "Incline Bench Press"
@@ -333,7 +333,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("5c9d00b3-8095-4a75-8d83-98d5132d4db3"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/01/close-grip-bench-press-movement.gif",
                             IsFavorite = true,
                             Name = "Close Grip Bench Press"
@@ -341,7 +341,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("4e47994a-3b58-47b6-b4ac-424a6686cd36"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/08/flat-bench-skull-crusher.gif",
                             IsFavorite = true,
                             Name = "Skullcrusher"
@@ -349,7 +349,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("4f6cfebb-012b-45df-a565-ae3939d74d26"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2021/08/diamond-push-up.gif",
                             IsFavorite = true,
                             Name = "Diamond Pushup"
@@ -357,7 +357,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("e006abf7-da50-4530-a93d-8683fed79d43"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/11/push-up.gif",
                             IsFavorite = true,
                             Name = "Pushup"
@@ -365,7 +365,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("a847047f-4af5-444e-a81e-ebacd4097aae"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://fitnessprogramer.com/wp-content/uploads/2021/05/Dumbbell-Bulgarian-Split-Squat.gif",
                             IsFavorite = true,
                             Name = "Bulgarian Split Squat"
@@ -373,7 +373,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("60669c8a-df74-4e95-a9ce-c9b7e0be40ab"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/01/dumbbell-lunges.gif",
                             IsFavorite = true,
                             Name = "Lunges"
@@ -381,7 +381,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("d6350d47-6274-47be-a43c-ecdf29cf7390"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/tricep-overhead-extensions.gif",
                             IsFavorite = true,
                             Name = "Triceps Overhead Extension"
@@ -389,7 +389,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("c3449838-8c95-400a-823f-f06e49618269"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2021/10/cable-tricep-pushdown.gif",
                             IsFavorite = true,
                             Name = "Cable Triceps Pushdown"
@@ -397,7 +397,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("1b5889fa-484c-4a55-8df7-7b38415762c2"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/03/dumbbell-lateral-raise.gif",
                             IsFavorite = true,
                             Name = "Dumbell Lateral Raise"
@@ -405,7 +405,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("2607d5fe-bcb6-48e7-a2ed-6ff0693f2361"),
-                            ExerciseType = 0,
+                            ExerciseType = 1,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/09/barbell-hip-thrust.gif",
                             IsFavorite = true,
                             Name = "Hipthrust"
@@ -413,7 +413,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("dd4d5068-0311-4189-b7a4-237bf43306fb"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/10/barbell-reverse-curl.gif",
                             IsFavorite = true,
                             Name = "Barbell Reverse Curl"
@@ -421,7 +421,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("46102532-02a6-4e62-b35b-bcea221b77c1"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank-movement.gif",
                             IsFavorite = true,
                             Name = "Plank"
@@ -429,7 +429,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("18522a6b-c3c0-454e-bc25-d145fb69d0ad"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/05/decline-sit-up.gif",
                             IsFavorite = true,
                             Name = "Decline Situp"
@@ -437,7 +437,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         new
                         {
                             Id = new Guid("a34f4863-35ee-4baf-86c8-d2a678bc1776"),
-                            ExerciseType = 1,
+                            ExerciseType = 2,
                             ImageUrl = "https://www.inspireusafoundation.org/wp-content/uploads/2022/06/hanging-leg-raise-movement.gif",
                             IsFavorite = true,
                             Name = "Hanging Leg Raises"
@@ -601,7 +601,7 @@ namespace FitnessPathApp.DomainLayer.Migrations
                         {
                             Id = new Guid("cd6b8714-4806-4fe6-b28f-90185dbfbdd2"),
                             Email = "admin@hotmail.com",
-                            Password = "$2b$10$t9XhfU8BGm0p5aanlYBqN.hpZhlAoI4F0MPRnDnOQuewQTjmHo.a6",
+                            Password = "$2b$10$UDdxSGgMvqr.4oKUSsx.O.lDqO4whg8zEfocSTf/DdhNsqU9VlV2q",
                             Username = "admin"
                         });
                 });
