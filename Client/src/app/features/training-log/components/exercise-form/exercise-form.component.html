@@ -13,15 +13,44 @@
         <mat-icon class="cancel-icon">cancel</mat-icon>
       </button>
     </div>
-    <div class="flex">
+    <div class="flex pb-2">
       <div class="flex flex-col mt-6 pl-3">
         <mat-form-field class="example-form-field pl-3">
           <mat-label>Filter Exercises</mat-label>
-          <input matInput type="text" />
-          <button matSuffix mat-icon-button aria-label="Clear">
+          <input
+            #filterInput
+            matInput
+            type="text"
+            (keyup)="applyFilter($event)"
+          />
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clearFilter()"
+          >
             <mat-icon class="filter-cancel">close</mat-icon>
           </button>
         </mat-form-field>
+        <div class="ml-4 mb-2">
+          <mat-chip-list aria-label="Filter Selection">
+            <mat-chip
+              [selected]="selectedChip === 'Compound'"
+              (click)="selectFilterChip('Compound')"
+              >Compound</mat-chip
+            >
+            <mat-chip
+              [selected]="selectedChip === 'Accessory'"
+              (click)="selectFilterChip('Accessory')"
+              >Accessory</mat-chip
+            >
+            <mat-chip
+              [selected]="selectedChip === 'Favorite'"
+              (click)="selectFilterChip('Favorite')"
+              >Favorite</mat-chip
+            >
+          </mat-chip-list>
+        </div>
         <div class="exercise-container">
           <mat-card
             [ngClass]="
@@ -29,10 +58,18 @@
                 ? 'exercise-card selected'
                 : 'exercise-card'
             "
-            *ngFor="let exercise of availableExercises"
+            *ngFor="let exercise of dataSource"
             (click)="onExerciseChange(exercise.id)"
           >
-            <mat-card-content>{{ exercise.name }}</mat-card-content>
+            <mat-card-content>{{ exercise.name }} </mat-card-content>
+            <button (click)="toggleFavorite(exercise.id)">
+              <mat-icon *ngIf="exercise.isFavorite; else elseBlock"
+                >favorite</mat-icon
+              >
+              <ng-template #elseBlock>
+                <mat-icon>favorite_border</mat-icon>
+              </ng-template>
+            </button>
           </mat-card>
         </div>
       </div>

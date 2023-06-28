@@ -5,15 +5,18 @@
 .exercise-container {
   display: flex;
   flex-direction: column;
-  height: 370px;
+  height: 340px;
   width: 380px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .exercise-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 20rem;
-  padding: 1rem !important;
+  padding: 0.725rem !important;
   margin: 0.5rem !important;
   border: 2px solid var(--primary);
   transition: transform 250ms;
@@ -39,6 +42,38 @@
 
 .filter-cancel .material-icons {
   font-size: medium !important;
+}
+
+.mat-chip:hover {
+  cursor: pointer;
+}
+
+.mat-chip-selected {
+  background-color: var(--primary) !important;
+  color: #fff;
+}
+
+.mat-chip.mat-standard-chip:after {
+  background: none !important;
+}
+
+.mat-card .mat-icon {
+  height: 25px;
+  width: 25px;
+  color: red;
+}
+
+.mat-card .material-icons {
+  font-size: 25px;
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.mat-card button {
+  font-size: 0% !important;
+  line-height: 0% !important;
 }
 
 .mat-icon {
