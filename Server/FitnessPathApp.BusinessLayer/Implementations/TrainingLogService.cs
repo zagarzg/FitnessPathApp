@@ -106,7 +106,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
         {
             var logs = await _repository.GetAll(
                 filter: source => source.Date.Month == month && source.Date.Year == DateTime.Now.Year,
-                include: source => source.Include(log => log.Exercises),
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
                 orderBy: source => source.OrderBy(log => log.Date),
                 cancellationToken: cancellationToken);
 

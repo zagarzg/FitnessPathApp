@@ -14,6 +14,12 @@ export class ExerciseChoiceService {
     );
   }
 
+  public getAllExerciseNames(): Observable<string[]> {
+    return this._http.get<string[]>(
+      `${environment.URL}/ExerciseChoice/GetAllNames`
+    );
+  }
+
   public createExerciseChoice(
     formData: ExerciseChoice
   ): Observable<ExerciseChoice> {

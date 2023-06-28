@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using FitnessPathApp.BusinessLayer.Exceptions;
 using AutoMapper;
 using FitnessPathApp.PersistanceLayer.DTOs;
+using System.Linq;
 
 [assembly: InternalsVisibleTo("FitnessPathApp.Tests")]
 
@@ -123,6 +124,12 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             {
                 throw new UpdateException(exerciseChoice.Id, e);
             }
+        }
+
+        public async Task<IEnumerable<string>> GetAllNames(CancellationToken cancellationToken)
+        {
+            var exerciseChoices = await _repository.GetAll(cancellationToken: cancellationToken);
+            return exerciseChoices.Select(exerciseChoice => exerciseChoice.Name);
         }
     }
 }

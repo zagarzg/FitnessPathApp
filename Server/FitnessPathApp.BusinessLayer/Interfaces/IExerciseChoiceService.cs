@@ -11,6 +11,7 @@ namespace FitnessPathApp.BusinessLayer.Interfaces
     {
         Task<IEnumerable<ExerciseChoiceDTO>> GetAll(CancellationToken cancellationToken);
         Task<ExerciseChoiceDTO> Get(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<string>> GetAllNames(CancellationToken cancellationToken);
         Task<ExerciseChoiceDTO> Create(ExerciseChoice exerciseChoice, CancellationToken cancellationToken);
         Task<ExerciseChoiceDTO> Update(ExerciseChoice exerciseChoice, CancellationToken cancellationToken);
         Task<Guid> Delete(Guid id, CancellationToken cancellationToken);
