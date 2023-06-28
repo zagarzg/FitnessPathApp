@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { take } from 'rxjs/operators';
 import { ExerciseChoice, ExerciseType } from '../../models/ExerciseChoice';
 import { ExerciseChoiceService } from '../../services/exercise-choice.service';
 
@@ -15,28 +16,34 @@ import { ExerciseChoiceService } from '../../services/exercise-choice.service';
   styleUrls: ['./exercise-form.component.scss'],
 })
 export class ExerciseFormComponent implements OnInit {
+  @ViewChild('filterInput') filterInput: any;
   exerciseType = ExerciseType;
   exerciseForm!: FormGroup;
   updateMode: boolean = false;
+  selectedChip: string = '';
 
-  availableExercises: any = [];
+  availableExercises: ExerciseChoice[] = [];
+  dataSource: ExerciseChoice[] = [];
   selectedExercise: { id: string; image: string | null } = {
     id: '',
     image: '',
   };
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private _formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<ExerciseFormComponent>,
-    private exerciseChoiceService: ExerciseChoiceService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private exerciseChoiceService: ExerciseChoiceService
   ) {}
 
   ngOnInit(): void {
-    this.exerciseChoiceService.getAllExerciseChoices().subscribe((choices) => {
-      this.availableExercises = choices;
-      console.log(this.availableExercises);
-    });
+    this.exerciseChoiceService
+      .getAllExerciseChoices()
+      .pipe(take(1))
+      .subscribe((choices) => {
+        this.availableExercises = choices;
+        this.dataSource = this.availableExercises;
+      });
 
     this.exerciseForm = this._formBuilder.group({
       reps: ['', Validators.required],
@@ -64,15 +71,18 @@ export class ExerciseFormComponent implements OnInit {
   }
 
   onExerciseChange(exerciseId: string) {
-    console.log(exerciseId);
-    let exerciseChoice: ExerciseChoice = this.availableExercises.find(
-      (exercise: ExerciseChoice) => exercise.id === exerciseId
-    );
-    this.selectedExercise = {
-      id: exerciseId,
-      image: exerciseChoice.imageUrl,
-    };
-    console.log(this.selectedExercise);
+    let exerciseChoice: ExerciseChoice | undefined =
+      this.availableExercises.find(
+        (exercise: ExerciseChoice) => exercise.id === exerciseId
+      );
+
+    if (exerciseChoice !== undefined) {
+      this.selectedExercise = {
+        id: exerciseId,
+        image: exerciseChoice.imageUrl,
+      };
+      this.exerciseForm.controls.exerciseChoiceId.setValue(exerciseId);
+    }
   }
 
   onSubmit(form: FormGroup) {
@@ -81,6 +91,62 @@ export class ExerciseFormComponent implements OnInit {
     );
     form.addControl('exerciseChoice', new FormControl(exerciseChoice));
     this.dialogRef.close(form.value);
+  }
+
+  applyFilter(filterEvent: any) {
+    this.dataSource = this.availableExercises.filter(
+      (exercise: ExerciseChoice) =>
+        exercise.name.toLowerCase().includes(filterEvent.target.value)
+    );
+  }
+
+  clearFilter() {
+    this.filterInput.nativeElement.value = '';
+    this.dataSource = this.availableExercises;
+  }
+
+  selectFilterChip(chip: string) {
+    switch (chip) {
+      case this.selectedChip:
+        this.selectedChip = '';
+        this.dataSource = this.availableExercises;
+        break;
+      case 'Compound':
+        this.selectedChip = chip;
+
+        this.dataSource = this.availableExercises.filter(
+          (exercise: ExerciseChoice) =>
+            exercise.exerciseType === this.exerciseType.Compound
+        );
+        break;
+      case 'Accessory':
+        this.selectedChip = chip;
+
+        this.dataSource = this.availableExercises.filter(
+          (exercise: ExerciseChoice) =>
+            exercise.exerciseType === this.exerciseType.Accessory
+        );
+        break;
+      case 'Favorite':
+        this.selectedChip = chip;
+
+        this.dataSource = this.availableExercises.filter(
+          (exercise: ExerciseChoice) => exercise.isFavorite === true
+        );
+        break;
+      default:
+    }
+  }
+
+  toggleFavorite(id: string) {
+    let exerciseIndex = this.availableExercises.findIndex(
+      (exercise: ExerciseChoice) => exercise.id === id
+    );
+    let exerciseChoice = this.availableExercises[exerciseIndex];
+
+    exerciseChoice.isFavorite = !exerciseChoice.isFavorite;
+    this.exerciseChoiceService.updateExerciseChoice(exerciseChoice).subscribe();
+    this.dataSource = this.availableExercises;
   }
 
   onDialogClose() {

@@ -6,8 +6,8 @@ namespace FitnessPathApp.DomainLayer.Entities
 {
     public enum ExerciseType
     {
-        Compound,
-        Accessory
+        Compound = 1,
+        Accessory = 2
     }
     public class ExerciseChoice : BaseEntity
     {
