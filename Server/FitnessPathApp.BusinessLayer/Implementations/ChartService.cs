@@ -35,7 +35,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                                   source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year &&
                                   source.Date.Month == month,
-                include: source => source.Include(log => log.Exercises),
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
                 orderBy: source => source.OrderBy(log => log.Date),
                 cancellationToken: cancellationToken);
 
@@ -81,7 +81,7 @@ namespace FitnessPathApp.BusinessLayer.Implementations
                 filter: source => source.Exercises.Count != 0 &&
                                   source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == exerciseName).ToList().Count != 0 &&
                                   source.Date.Year == year,
-                include: source => source.Include(log => log.Exercises),
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
                 orderBy: source => source.OrderBy(log => log.Date),
                 cancellationToken: cancellationToken); ;
 

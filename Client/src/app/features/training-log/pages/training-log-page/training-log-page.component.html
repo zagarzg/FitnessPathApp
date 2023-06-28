@@ -19,7 +19,10 @@
           (deleteExerciseEvent)="onDelete($event)"
         >
         </app-recent-logs-list>
-        <app-training-chart [chartData]="trainingLogs"></app-training-chart>
+        <app-training-chart
+          [chartData]="trainingLogs"
+          [exercises]="exerciseNames"
+        ></app-training-chart>
       </div>
     </div>
   </ng-container>

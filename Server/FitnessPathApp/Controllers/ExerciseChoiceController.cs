@@ -28,6 +28,12 @@ namespace FitnessPathApp.API.Controllers
             return Ok(await _exerciseChoiceService.Get(id, cancellationToken));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllNames(CancellationToken cancellationToken)
+        {
+            return Ok(await _exerciseChoiceService.GetAllNames(cancellationToken));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ExerciseChoice exerciseChoice, CancellationToken cancellationToken)
         {

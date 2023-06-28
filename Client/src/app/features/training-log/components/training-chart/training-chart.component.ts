@@ -46,11 +46,11 @@ export class TrainingChartComponent implements OnInit {
   public chartOptions: Partial<ChartOptions | any> = {};
 
   @Input() chartData!: TrainingLog[];
+  @Input() exercises!: string[];
 
-  exercises: string[] = ['Bench', 'CGBP'];
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   years: number[] = [2021, 2022, 2023];
-  selectedExercise: string = 'Bench';
+  selectedExercise: string = 'Bench Press';
   monthSelected: number = new Date().getMonth() + 1;
   yearSelected: number = new Date().getFullYear();
   timeframeSelected: 'Monthly' | 'Yearly' = 'Monthly';
