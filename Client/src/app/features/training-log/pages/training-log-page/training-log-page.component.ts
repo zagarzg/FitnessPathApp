@@ -4,6 +4,7 @@ import { take, switchMap } from 'rxjs/operators';
 import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
 import { Exercise } from '../../models/Exercise';
 import { TrainingLog } from '../../models/TrainingLog';
+import { ExerciseChoiceService } from '../../services/exercise-choice.service';
 import { ExerciseService } from '../../services/exercise.service';
 import { TrainingLogService } from '../../services/training-log.service';
 
@@ -19,17 +20,24 @@ export class TrainingLogPageComponent implements OnInit {
     this.trainingLogsSubject$.asObservable();
 
   public exercises!: Exercise[];
+  public exerciseNames!: string[];
   public selectedDate!: Date | null;
 
   @ViewChild(TrainingChartComponent) chartComponent!: TrainingChartComponent;
 
   constructor(
     private _trainingLogService: TrainingLogService,
-    private _exerciseService: ExerciseService
+    private _exerciseService: ExerciseService,
+    private _exerciseChoiceService: ExerciseChoiceService
   ) {}
 
   ngOnInit(): void {
-    console.log('NgOnInit of page');
+    this._exerciseChoiceService
+      .getAllExerciseNames()
+      .pipe(take(1))
+      .subscribe((exerciseNames) => {
+        this.exerciseNames = exerciseNames;
+      });
     this._trainingLogService
       .getAllTrainingLogs()
       .pipe(take(1))
