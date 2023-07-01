@@ -58,3 +58,16 @@ th {
   background: #2f4058;
   color: whitesmoke;
 }
+
+::ng-deep .logged-day {
+  box-shadow: inset 0 -5px 5px -5px var(--primary);
+  border-bottom: 3px solid var(--primary) !important;
+}
+
+.exercise-container {
+  max-height: 21rem;
+}
+
+.card-header {
+  border-bottom: 2px solid var(--primary);
+}

@@ -25,6 +25,22 @@ body {
   background-color: var(--primary);
 }
 
+.bg-danger {
+  background-color: #ff2442;
+}
+
+.bg-warning {
+  background-color: #ffb830;
+}
+
+.b-primary {
+  border-color: var(--primary);
+}
+
+.color-primary {
+  color: var(--primary);
+}
+
 ::-webkit-scrollbar {
   background-color: #f1f1f1;
 }
