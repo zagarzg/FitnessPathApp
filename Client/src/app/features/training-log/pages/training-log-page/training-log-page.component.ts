@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
 import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
 import { Exercise } from '../../models/Exercise';
@@ -22,6 +22,7 @@ export class TrainingLogPageComponent implements OnInit {
   public exercises!: Exercise[];
   public exerciseNames!: string[];
   public selectedDate!: Date | null;
+  public selectedTrainingLogId!: string | null;
 
   @ViewChild(TrainingChartComponent) chartComponent!: TrainingChartComponent;
 
@@ -58,7 +59,10 @@ export class TrainingLogPageComponent implements OnInit {
     this._trainingLogService
       .getTrainingLog(selectDayObject!.trainingLogId)
       .pipe(take(1))
-      .subscribe((res) => (this.exercises = res.exercises));
+      .subscribe((res) => {
+        this.selectedTrainingLogId = res.id;
+        this.exercises = res.exercises;
+      });
   }
 
   onAdd(exercise: Exercise) {
@@ -79,12 +83,13 @@ export class TrainingLogPageComponent implements OnInit {
               trainingLog,
             ];
             this.trainingLogsSubject$.next(updatedLogs);
+            this.selectedTrainingLogId = trainingLog.id;
             return this._exerciseService.createExercise(exercise).pipe(take(1));
           })
         )
         .subscribe((result: any): any => {
           this.exercises = [...this.exercises, result];
-          this.chartComponent.monthChange(2);
+          this.chartComponent.monthChange(trainingLog.date.getMonth() + 1);
         });
     } else {
       this._exerciseService
@@ -92,6 +97,7 @@ export class TrainingLogPageComponent implements OnInit {
         .pipe(take(1))
         .subscribe((result) => {
           this.exercises = [...this.exercises, result];
+          this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
         });
     }
   }
@@ -105,17 +111,34 @@ export class TrainingLogPageComponent implements OnInit {
           el.id === exercise.id ? exercise : el
         );
         this.exercises = updatedItems;
+        this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
       });
   }
 
   onDelete(id: string): void {
     this._exerciseService
       .deleteExercise(id)
-      .pipe(take(1))
+      .pipe(
+        switchMap(() => {
+          this.exercises = this.exercises.filter(
+            (exercise) => exercise.id !== id
+          );
+          this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
+          if (this.exercises.length === 0) {
+            return this._trainingLogService.deleteTrainingLog(
+              this.selectedTrainingLogId!
+            );
+          } else {
+            return EMPTY;
+          }
+        })
+      )
       .subscribe(() => {
-        this.exercises = this.exercises.filter(
-          (exercise) => exercise.id !== id
+        const updatedTrainingLogs = this.trainingLogsSubject$.value.filter(
+          (log: TrainingLog) => log.id !== this.selectedTrainingLogId
         );
+        this.selectedTrainingLogId = '';
+        this.trainingLogsSubject$.next(updatedTrainingLogs);
       });
   }
 }

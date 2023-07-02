@@ -81,24 +81,25 @@ export class RecentLogsListComponent implements OnChanges {
     });
   }
 
-  updateExercise(exercise: Exercise) {
+  updateExercise(exercise: any) {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
-      width: '400px',
       data: {
-        exercise,
+        exercise: exercise,
+        trainingLogId: this.selectedTrainingLog?.id,
       },
     });
 
     dialogRef.afterClosed().subscribe((formData: Exercise) => {
-      console.log(`Form data before: ${formData.id}`);
       formData.id = exercise.id;
-      console.log(`Form data after: ${formData.id}`);
       this.updateExerciseEvent.emit(formData);
     });
   }
 
-  deleteExercise(id: string) {
+  deleteExercise(id: any) {
     this.deleteExerciseEvent.emit(id);
+    this.exercises = this.exercises.filter(
+      (exercise: Exercise) => exercise.id !== id
+    );
   }
 
   dateClass() {
@@ -118,7 +119,7 @@ export class RecentLogsListComponent implements OnChanges {
       const dayNumber: number = date.getDate();
 
       if (mappedLogs.includes(dayNumber)) {
-        return 'bg-green-300 rounded-full';
+        return 'logged-day rounded-full';
       } else {
         return '';
       }

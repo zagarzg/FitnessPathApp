@@ -51,6 +51,7 @@ export class ExerciseFormComponent implements OnInit {
       weight: ['', Validators.required],
       trainingLogId: ['', Validators.required],
       exerciseChoiceId: ['', Validators.required],
+      exerciseChoice: [{}, Validators.required],
     });
 
     if (this.data.trainingLogId) {
@@ -62,11 +63,21 @@ export class ExerciseFormComponent implements OnInit {
     if (this.data.exercise) {
       this.updateMode = true;
       this.exerciseForm.patchValue({
-        exerciseChoiceId: this.data.exerciseChoiceId,
         reps: this.data.exercise.reps,
         sets: this.data.exercise.sets,
         weight: this.data.exercise.weight,
       });
+      // Setting form controls like this is neccesarry since group patchValue does not work
+      this.exerciseForm.controls.exerciseChoice.setValue(
+        this.data.exercise.exerciseChoice
+      );
+      this.exerciseForm.controls.exerciseChoiceId.setValue(
+        this.data.exercise.exerciseChoice.id
+      );
+      this.selectedExercise = {
+        id: this.data.exercise.exerciseChoiceId,
+        image: this.data.exercise.exerciseChoice.imageUrl,
+      };
     }
   }
 
@@ -89,7 +100,7 @@ export class ExerciseFormComponent implements OnInit {
     let exerciseChoice = this.availableExercises.find(
       (exercise: ExerciseChoice) => exercise.id === form.value.exerciseChoiceId
     );
-    form.addControl('exerciseChoice', new FormControl(exerciseChoice));
+    form.controls.exerciseChoice.setValue(exerciseChoice);
     this.dialogRef.close(form.value);
   }
 

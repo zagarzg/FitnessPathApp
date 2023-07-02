@@ -2,7 +2,7 @@
   <div
     class="xl:col-span-1 flex flex-col flex-auto bg-white drop-shadow-md rounded-2xl overflow-hidden"
   >
-    <div class="p-6">
+    <div class="p-6 card-header">
       <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">
         Recent Logs
       </div>
@@ -22,7 +22,7 @@
         <button
           *ngIf="selectedTrainingLog != undefined"
           mat-stroked-button
-          class="border-red-500 text-red-500 w-80 ml-2 mr-2 mb-2"
+          class="border-red-500 text-red-500 w-80 ml-2 mt-2 mb-2"
         >
           <mat-icon
             aria-hidden="false"
@@ -31,28 +31,24 @@
           ></mat-icon>
         </button>
       </mat-card>
-      <div class="flex flex-col mat-elevation-z8 w-full">
+      <div class="flex flex-col w-full">
         <div
-          class="m-4 mt-8 text-lg font-medium tracking-tight leading-6 truncate border-solid border-b border-black"
+          class="color-primary m-4 mt-8 text-lg font-medium tracking-tight leading-6 truncate border-solid border-b b-primary"
         >
           Exercises
         </div>
-        <mat-card
-          class="exercise-tile flex justify-between items-center"
-          *ngFor="let exercise of exercises"
+        <div
+          class="exercise-container flex justify-center flex-wrap overflow-auto"
         >
-          <span>{{ exercise.exerciseChoice?.name }}</span>
-          <div>
-            <span class="chip primary"
-              >{{ exercise.sets }}x{{ exercise.reps }}</span
-            >
-            <span class="chip primary">{{ exercise.weight }}kg</span>
-            <button class="close-x" (click)="deleteExercise(exercise.id)">
-              X
-            </button>
-          </div>
-        </mat-card>
-        <span *ngIf="exercises?.length == 0" class="m-3">
+          <app-exercise-tile
+            *ngFor="let exercise of exercises"
+            [exercise]="exercise"
+            (deleteExerciseEvent)="deleteExercise($event)"
+            (updateExerciseEvent)="updateExercise($event)"
+          ></app-exercise-tile>
+        </div>
+
+        <span *ngIf="exercises?.length == 0" class="m-3 italic">
           No exercises logged for this day
         </span>
         <button
