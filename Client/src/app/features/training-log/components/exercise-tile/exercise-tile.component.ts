@@ -15,7 +15,6 @@ export class ExerciseTileComponent {
 
   exerciseDelete() {
     this.deleteExerciseEvent.emit(this.exercise.id);
-    console.log('From Tile', this.exercise.id);
   }
 
   exerciseUpdate() {

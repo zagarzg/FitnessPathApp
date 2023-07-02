@@ -90,9 +90,7 @@ export class RecentLogsListComponent implements OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((formData: Exercise) => {
-      console.log(`Form data before: ${formData.id}`);
       formData.id = exercise.id;
-      console.log(`Form data after: ${formData.id}`);
       this.updateExerciseEvent.emit(formData);
     });
   }

@@ -124,7 +124,7 @@
           [title]="chartOptions.title"
         ></apx-chart>
       </ng-container>
-      <span *ngIf="(chartOptions | json) == '{}'">
+      <span *ngIf="(chartOptions | json) == '{}'" class="italic">
         No data for given filters
       </span>
     </div>
