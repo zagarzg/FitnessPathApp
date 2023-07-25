@@ -30,7 +30,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("b91474ad-0825-4f0e-8532-96a724978e91"),
-                            Name = "Bench Press",
+                            ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                             Weight = 100,
                             Sets = 5,
                             Reps = 5,
@@ -47,7 +55,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("fea76b9c-9c6f-4664-83ca-417609733c54"),
-                            Name = "Bench Press",
+                            ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                             Weight = 120,
                             Sets = 5,
                             Reps = 5,
@@ -62,7 +78,7 @@ namespace FitnessPathApp.Tests.UnitTests
             trainingRepository.Setup(x =>
                 x.GetAll(
                     source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == "Bench Press").ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == "Deadlift").ToList().Count != 0 &&
                                   source.Date.Year == 2022 &&
                                   source.Date.Month == 9,
                     It.IsAny<Func<IQueryable<TrainingLog>, IQueryable<TrainingLog>>>(),
@@ -91,7 +107,7 @@ namespace FitnessPathApp.Tests.UnitTests
             } };
 
             // ACT
-            var result = (await service.GetMonthlyDataByExerciseName("Bench Press", 9, 2022, CancellationToken.None));
+            var result = (await service.GetMonthlyDataByExerciseName("Deadlift", 9, 2022, CancellationToken.None));
             var expectedResult = new ChartDataDTO
             {
                 Data = dataArray,
@@ -109,7 +125,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             trainingRepository.Verify(x => x.GetAll(
                     source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == "Bench Press").ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == "Deadlift").ToList().Count != 0 &&
                                   source.Date.Year == 2022 &&
                                   source.Date.Month == 9,
                     It.IsAny<Func<IQueryable<TrainingLog>, IQueryable<TrainingLog>>>(),
@@ -135,7 +151,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("b91474ad-0825-4f0e-8532-96a724978e91"),
-                            Name = "Bench Press",
+                            ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                             Weight = 100,
                             Sets = 5,
                             Reps = 5,
@@ -152,7 +176,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("fea76b9c-9c6f-4664-83ca-417609733c54"),
-                            Name = "Bench Press",
+                            ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                             Weight = 120,
                             Sets = 5,
                             Reps = 5,
@@ -167,7 +199,7 @@ namespace FitnessPathApp.Tests.UnitTests
             trainingRepository.Setup(x =>
                 x.GetAll(
                     source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == "Bench Press").ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == "Deadlift").ToList().Count != 0 &&
                                   source.Date.Year == 2022,
                     It.IsAny<Func<IQueryable<TrainingLog>, IQueryable<TrainingLog>>>(),
                     It.IsAny<Func<IQueryable<TrainingLog>, IIncludableQueryable<TrainingLog, object>>>(),
@@ -195,7 +227,7 @@ namespace FitnessPathApp.Tests.UnitTests
             } };
 
             // ACT
-            var result = (await service.GetYearlyDataByExerciseName("Bench Press", 2022, CancellationToken.None));
+            var result = (await service.GetYearlyDataByExerciseName("Deadlift", 2022, CancellationToken.None));
             var expectedResult = new ChartDataDTO
             {
                 Data = dataArray,
@@ -213,7 +245,7 @@ namespace FitnessPathApp.Tests.UnitTests
 
             trainingRepository.Verify(x => x.GetAll(
                     source => source.Exercises.Count != 0 &&
-                                  source.Exercises.Where(exercise => exercise.Name == "Bench Press").ToList().Count != 0 &&
+                                  source.Exercises.Where(exercise => exercise.ExerciseChoice.Name == "Deadlift").ToList().Count != 0 &&
                                   source.Date.Year == 2022,
                     It.IsAny<Func<IQueryable<TrainingLog>, IQueryable<TrainingLog>>>(),
                     It.IsAny<Func<IQueryable<TrainingLog>, IIncludableQueryable<TrainingLog, object>>>(),

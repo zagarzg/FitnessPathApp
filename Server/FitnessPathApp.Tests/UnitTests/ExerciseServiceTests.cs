@@ -24,6 +24,7 @@ namespace FitnessPathApp.Tests.UnitTests
         {
             var mapperConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Exercise, ExerciseDTO>();
+                cfg.CreateMap<ExerciseChoice, ExerciseChoiceDTO>();
             });
             _mapper = new Mapper(mapperConfig);
         }
@@ -36,7 +37,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                    Name = "Bench Press",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 100,
                     Sets = 5,
                     Reps = 5,
@@ -45,7 +54,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("d386146c-06ac-4325-82fa-11721ecb1d4b"),
-                    Name = "Squat",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 140,
                     Sets = 3,
                     Reps = 5,
@@ -94,7 +111,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                    Name = "Bench Press",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 100,
                     Sets = 5,
                     Reps = 5,
@@ -103,7 +128,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("d386146c-06ac-4325-82fa-11721ecb1d4b"),
-                    Name = "Squat",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 140,
                     Sets = 3,
                     Reps = 5,
@@ -153,7 +186,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                    Name = "Bench Press",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 100,
                     Sets = 5,
                     Reps = 5,
@@ -162,7 +203,15 @@ namespace FitnessPathApp.Tests.UnitTests
                 new Exercise()
                 {
                     Id = Guid.Parse("d386146c-06ac-4325-82fa-11721ecb1d4b"),
-                    Name = "Squat",
+                    ExerciseChoice = new ExerciseChoice()
+                    {
+                        Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                        Name = "Deadlift",
+                        ExerciseType = ExerciseType.Compound,
+                        ImageUrl = "Deadlift Image",
+                        IsFavorite = true,
+                        Exercises = new List<Exercise>()
+                    },
                     Weight = 140,
                     Sets = 3,
                     Reps = 5,
@@ -209,7 +258,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = 100,
                 Sets = 5,
                 Reps = 5,
@@ -249,7 +306,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = 100,
                 Sets = 5,
                 Reps = 5,
@@ -287,7 +352,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = -30,
                 Sets = 5,
                 Reps = 5,
@@ -386,7 +459,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = 100,
                 Sets = 5,
                 Reps = 5,
@@ -425,7 +506,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = 100,
                 Sets = 5,
                 Reps = 5,
@@ -463,7 +552,15 @@ namespace FitnessPathApp.Tests.UnitTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
-                Name = "Bench Press",
+                ExerciseChoice = new ExerciseChoice()
+                {
+                    Id = Guid.Parse("0ee5c293-b77d-442f-a13a-5e36ce4d12ef"),
+                    Name = "Deadlift",
+                    ExerciseType = ExerciseType.Compound,
+                    ImageUrl = "Deadlift Image",
+                    IsFavorite = true,
+                    Exercises = new List<Exercise>()
+                },
                 Weight = -30,
                 Sets = 5,
                 Reps = 5,
