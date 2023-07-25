@@ -24,6 +24,7 @@ namespace FitnessPathApp.Tests.UnitTests
         {
             var mapperConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<FoodLog, FoodLogDTO>();
+                cfg.CreateMap<FoodItem, FoodItemDTO>();
             });
             _mapper = new Mapper(mapperConfig);
         }
@@ -86,7 +87,7 @@ namespace FitnessPathApp.Tests.UnitTests
             var result = (await service.GetAll(CancellationToken.None)).ToList();
 
             // ASSERT
-            Assert.IsType<List<FoodLog>>(result);
+            Assert.IsType<List<FoodLogDTO>>(result);
             Assert.Equal(2, result[0].FoodItems.Count);
             Assert.Equal(logs[0].Id, result[0].Id);
             Assert.Equal(logs[1].Id, result[1].Id);
@@ -274,7 +275,7 @@ namespace FitnessPathApp.Tests.UnitTests
             var result = await service.Create(log, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<FoodLog>(result);
+            Assert.IsType<FoodLogDTO>(result);
             Assert.Equal(log.Id, result.Id);
             repository.Verify(x => x.Insert(
                     It.IsAny<FoodLog>(),

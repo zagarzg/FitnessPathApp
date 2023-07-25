@@ -73,7 +73,7 @@ namespace FitnessPathApp.Tests.UnitTests
             var result = (await service.GetAll(CancellationToken.None)).ToList();
 
             // ASSERT
-            Assert.IsType<List<FoodItem>>(result);
+            Assert.IsType<List<FoodItemDTO>>(result);
             Assert.Equal(items[0].Id, result[0].Id);
             Assert.Equal(items[1].Id, result[1].Id);
 
@@ -238,7 +238,7 @@ namespace FitnessPathApp.Tests.UnitTests
             var result = await service.Create(item, CancellationToken.None);
 
             // ASSERT
-            Assert.IsType<FoodItem>(result);
+            Assert.IsType<FoodItemDTO>(result);
             Assert.Equal(item.Id, result.Id);
             repository.Verify(x => x.Insert(
                     It.IsAny<FoodItem>(),

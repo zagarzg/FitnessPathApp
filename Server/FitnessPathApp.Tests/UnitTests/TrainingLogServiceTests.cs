@@ -25,6 +25,7 @@ namespace FitnessPathApp.Tests.UnitTests
             var mapperConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<TrainingLog, TrainingLogDTO>();
                 cfg.CreateMap<Exercise, ExerciseDTO>();
+                cfg.CreateMap<ExerciseChoice, ExerciseChoiceDTO>();
             });
             _mapper = new Mapper(mapperConfig);
         }
@@ -42,7 +43,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("b91474ad-0825-4f0e-8532-96a724978e91"),
-                            Name = "Bench Press",
+                            ExerciseChoice = new ExerciseChoice()
+                            {
+                                Id = Guid.Parse("47b176a6-535f-447b-9f09-86465f07967a"),
+                                Name = "Bench Press",
+                                ExerciseType = ExerciseType.Compound,
+                                ImageUrl = "Bench Press Image",
+                                IsFavorite = true,
+                                Exercises = new List<Exercise>()
+                            },
                             Weight = 100,
                             Sets = 5,
                             Reps = 5,
@@ -51,7 +60,15 @@ namespace FitnessPathApp.Tests.UnitTests
                         new Exercise()
                         {
                             Id = Guid.Parse("9d51724a-03c2-4c07-a4f9-5759613eeb85"),
-                            Name = "Squat",
+                            ExerciseChoice = new ExerciseChoice()
+                            {
+                                Id = Guid.Parse("d386146c-06ac-4325-82fa-11721ecb1d4b"),
+                                Name = "Squat",
+                                ExerciseType = ExerciseType.Compound,
+                                ImageUrl = "Squat Image",
+                                IsFavorite = true,
+                                Exercises = new List<Exercise>()
+                            },
                             Weight = 140,
                             Sets = 3,
                             Reps = 5,
