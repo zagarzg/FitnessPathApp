@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -12,6 +13,7 @@ import {
   MatCalendarCellCssClasses,
 } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { addAnimation, deleteAnimation } from 'src/app/shared/animations';
 import { Exercise } from '../../models/Exercise';
 import { TrainingLog } from '../../models/TrainingLog';
 import { ExerciseFormComponent } from '../exercise-form/exercise-form.component';
@@ -20,10 +22,12 @@ import { ExerciseFormComponent } from '../exercise-form/exercise-form.component'
   selector: 'app-recent-logs-list',
   templateUrl: './recent-logs-list.component.html',
   styleUrls: ['./recent-logs-list.component.scss'],
+  animations: [addAnimation, deleteAnimation],
 })
 export class RecentLogsListComponent implements OnChanges {
   selectedTrainingLog: TrainingLog | undefined;
   selectedDate!: Date | null;
+  isLoadingList: boolean = false;
 
   @Input() trainingLogs!: TrainingLog[];
   @Input() exercises!: Exercise[];
@@ -39,7 +43,10 @@ export class RecentLogsListComponent implements OnChanges {
 
   displayedColumns = ['name', 'reps', 'sets', 'weight', 'actions'];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     let logsChange = changes['trainingLogs'];
@@ -49,6 +56,7 @@ export class RecentLogsListComponent implements OnChanges {
   }
 
   selectDay() {
+    this.handleAnimations(true);
     this.selectedTrainingLog = this.trainingLogs.find(
       (log) =>
         new Date(log.date).getDate() === this.selectedDate?.getDate() &&
@@ -70,6 +78,7 @@ export class RecentLogsListComponent implements OnChanges {
   }
 
   addExercise() {
+    this.handleAnimations(false);
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       data: {
         trainingLogId: this.selectedTrainingLog?.id,
@@ -96,10 +105,16 @@ export class RecentLogsListComponent implements OnChanges {
   }
 
   deleteExercise(id: any) {
+    this.handleAnimations(false);
     this.deleteExerciseEvent.emit(id);
     this.exercises = this.exercises.filter(
       (exercise: Exercise) => exercise.id !== id
     );
+  }
+
+  handleAnimations(isLoadingList: boolean) {
+    this.isLoadingList = isLoadingList;
+    this.changeDetector.detectChanges();
   }
 
   dateClass() {

@@ -37,10 +37,11 @@
         >
           Exercises
         </div>
-        <div
-          class="exercise-container flex justify-center flex-wrap overflow-auto"
-        >
+        <div class="exercise-container flex justify-center flex-wrap">
           <app-exercise-tile
+            @addTile
+            @deleteTile
+            [@.disabled]="isLoadingList"
             *ngFor="let exercise of exercises"
             [exercise]="exercise"
             (deleteExerciseEvent)="deleteExercise($event)"
