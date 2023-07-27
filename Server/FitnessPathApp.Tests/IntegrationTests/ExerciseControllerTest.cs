@@ -49,7 +49,7 @@ namespace FitnessPathApp.Tests.IntegrationTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("4bd80afd-c63c-4c05-8d4a-42977ba40733"),
-                Name = "Incline press",
+                ExerciseChoiceId = Guid.Parse("3E165F3D-F9FA-4E27-A5B9-05D3B938D8EB"),
                 Weight = 120,
                 Sets = 3,
                 Reps = 8,
@@ -80,7 +80,7 @@ namespace FitnessPathApp.Tests.IntegrationTests
             var exercise = new Exercise()
             {
                 Id = Guid.Parse("46aa1ca5-4670-4a38-a840-96204dd0b3a2"),
-                Name = "Squat",
+                ExerciseChoiceId = Guid.Parse("3E165F3D-F9FA-4E27-A5B9-05D3B938D8EB"),
                 Weight = 180,
                 Sets = 5,
                 Reps = 5,
