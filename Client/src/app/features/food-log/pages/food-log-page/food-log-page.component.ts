@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/features/training-log/services/chart.service';
@@ -27,7 +28,8 @@ export class FoodLogPageComponent implements OnInit {
   constructor(
     private _foodLogService: FoodLogService,
     private _foodItemService: FoodItemService,
-    private _chartService: ChartService
+    private _chartService: ChartService,
+    private _toasterService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +93,10 @@ export class FoodLogPageComponent implements OnInit {
         .pipe(take(1))
         .subscribe((result) => {
           this.foodItems = [...this.foodItems, result];
+          this._toasterService.success("Meal successfully added!");
+          this.chartData = this._chartService.calculateFoodChartData(
+            this.foodItems
+          );
         });
     }
   }
@@ -104,6 +110,7 @@ export class FoodLogPageComponent implements OnInit {
           el.id === foodItem.id ? foodItem : el
         );
         this.foodItems = updatedItems;
+        this._toasterService.success("Meal successfully updated!");
         this.chartData = this._chartService.calculateFoodChartData(
           this.foodItems
         );
@@ -118,6 +125,7 @@ export class FoodLogPageComponent implements OnInit {
         this.foodItems = this.foodItems.filter(
           (foodItem) => foodItem.id !== id
         );
+        this._toasterService.success("Meal successfully deleted!");
         this.chartData = this._chartService.calculateFoodChartData(
           this.foodItems
         );

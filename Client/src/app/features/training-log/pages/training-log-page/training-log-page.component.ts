@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
 import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
@@ -29,7 +30,8 @@ export class TrainingLogPageComponent implements OnInit {
   constructor(
     private _trainingLogService: TrainingLogService,
     private _exerciseService: ExerciseService,
-    private _exerciseChoiceService: ExerciseChoiceService
+    private _exerciseChoiceService: ExerciseChoiceService,
+    private _toasterService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +99,7 @@ export class TrainingLogPageComponent implements OnInit {
         .pipe(take(1))
         .subscribe((result) => {
           this.exercises = [...this.exercises, result];
+          this._toasterService.success("Exercise successfully created!");
           this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
         });
     }
@@ -111,6 +114,7 @@ export class TrainingLogPageComponent implements OnInit {
           el.id === exercise.id ? exercise : el
         );
         this.exercises = updatedItems;
+        this._toasterService.success(`Exercise successfully updated!`);
         this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
       });
   }
@@ -123,6 +127,7 @@ export class TrainingLogPageComponent implements OnInit {
           this.exercises = this.exercises.filter(
             (exercise) => exercise.id !== id
           );
+          this._toasterService.success("Exercise successfully deleted!");
           this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
           if (this.exercises.length === 0) {
             return this._trainingLogService.deleteTrainingLog(

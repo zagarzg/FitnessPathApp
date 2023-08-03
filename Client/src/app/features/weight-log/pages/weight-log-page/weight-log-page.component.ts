@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { WeightChartComponent } from '../../components/weight-chart/weight-chart.component';
@@ -24,7 +25,7 @@ export class WeightLogPageComponent implements OnInit {
   @ViewChild(WeightLogListComponent) listComponent!: WeightLogListComponent;
   @ViewChild(WeightChartComponent) chartComponent!: WeightChartComponent;
 
-  constructor(private _weightLogService: WeightLogService) {}
+  constructor(private _weightLogService: WeightLogService, private _toasterService: ToastrService) {}
 
   ngOnInit(): void {
     this._weightLogService
@@ -45,6 +46,7 @@ export class WeightLogPageComponent implements OnInit {
         this.weightLogsSubject$.next(updatedLogs);
         this.selectedDate = log.date;
         this.selectedWeightLog = log;
+        this._toasterService.success("Weight log successfully added!");
         this.chartComponent.monthChange(2);
       });
   }
@@ -59,6 +61,7 @@ export class WeightLogPageComponent implements OnInit {
         this.weightLogsSubject$.next(this.logs);
         this.selectedDate = log.date;
         this.selectedWeightLog = log;
+        this._toasterService.success("Weight log successfully updated!");
         this.chartComponent.monthChange(2);
       });
   }
@@ -78,6 +81,7 @@ export class WeightLogPageComponent implements OnInit {
         );
         this.weightLogsSubject$.next(updatedLogs);
         this.selectedWeightLog = undefined;
+        this._toasterService.success("Weight log successfully deleted!");
         this.chartComponent.monthChange(2);
       });
   }
