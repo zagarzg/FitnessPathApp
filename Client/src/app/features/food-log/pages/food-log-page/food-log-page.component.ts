@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
 import { ChartService } from 'src/app/features/training-log/services/chart.service';
+import { DeleteConfirmationDialogComponent } from 'src/app/shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { FoodItem } from '../../models/FoodItem';
 import { FoodLog } from '../../models/FoodLog';
 import { FoodItemService } from '../../services/food-item.service';
@@ -29,7 +31,8 @@ export class FoodLogPageComponent implements OnInit {
     private _foodLogService: FoodLogService,
     private _foodItemService: FoodItemService,
     private _chartService: ChartService,
-    private _toasterService: ToastrService
+    private _toasterService: ToastrService,
+    private _dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +66,7 @@ export class FoodLogPageComponent implements OnInit {
       });
   }
 
-  onAdd(foodItem: FoodItem) {
+  onAddFoodItem(foodItem: FoodItem): void {
     if (foodItem.foodLogId === '') {
       const foodLog = {
         id: '00000000-0000-0000-0000-000000000000',
@@ -93,7 +96,7 @@ export class FoodLogPageComponent implements OnInit {
         .pipe(take(1))
         .subscribe((result) => {
           this.foodItems = [...this.foodItems, result];
-          this._toasterService.success("Meal successfully added!");
+          this._toasterService.success('Meal successfully added!');
           this.chartData = this._chartService.calculateFoodChartData(
             this.foodItems
           );
@@ -101,7 +104,7 @@ export class FoodLogPageComponent implements OnInit {
     }
   }
 
-  onUpdate(foodItem: FoodItem) {
+  onUpdateFoodItem(foodItem: FoodItem): void {
     this._foodItemService
       .updateFoodItem(foodItem)
       .pipe(take(1))
@@ -110,14 +113,14 @@ export class FoodLogPageComponent implements OnInit {
           el.id === foodItem.id ? foodItem : el
         );
         this.foodItems = updatedItems;
-        this._toasterService.success("Meal successfully updated!");
+        this._toasterService.success('Meal successfully updated!');
         this.chartData = this._chartService.calculateFoodChartData(
           this.foodItems
         );
       });
   }
 
-  onDelete(id: string): void {
+  onDeleteFoodItem(id: string): void {
     this._foodItemService
       .deleteFoodItem(id)
       .pipe(take(1))
@@ -125,7 +128,36 @@ export class FoodLogPageComponent implements OnInit {
         this.foodItems = this.foodItems.filter(
           (foodItem) => foodItem.id !== id
         );
-        this._toasterService.success("Meal successfully deleted!");
+        this._toasterService.success('Meal successfully deleted!');
+        this.chartData = this._chartService.calculateFoodChartData(
+          this.foodItems
+        );
+      });
+  }
+
+  onDeleteFoodLog(id: string): void {
+    const dialogRef = this._dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        date: this.selectedDate,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        switchMap((confirm: boolean) => {
+          if (confirm) return this._foodLogService.deleteFoodLog(id);
+          return EMPTY;
+        }),
+        take(1)
+      )
+      .subscribe(() => {
+        const updatedFoodLogs = this.foodLogsSubject$.value.filter(
+          (log: FoodLog) => log.id !== id
+        );
+        this.foodLogsSubject$.next(updatedFoodLogs);
+        this.foodItems = [];
+        this._toasterService.success('Food Log successfully deleted!');
         this.chartData = this._chartService.calculateFoodChartData(
           this.foodItems
         );
