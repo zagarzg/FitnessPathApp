@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { take, switchMap } from 'rxjs/operators';
+import { DeleteConfirmationDialogComponent } from 'src/app/shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { WeightChartComponent } from '../../components/weight-chart/weight-chart.component';
 import { WeightLogListComponent } from '../../components/weight-log-list/weight-log-list.component';
 import { WeightLog } from '../../models/WeightLog';
@@ -25,7 +27,11 @@ export class WeightLogPageComponent implements OnInit {
   @ViewChild(WeightLogListComponent) listComponent!: WeightLogListComponent;
   @ViewChild(WeightChartComponent) chartComponent!: WeightChartComponent;
 
-  constructor(private _weightLogService: WeightLogService, private _toasterService: ToastrService) {}
+  constructor(
+    private _weightLogService: WeightLogService,
+    private _toasterService: ToastrService,
+    private _dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this._weightLogService
@@ -46,7 +52,7 @@ export class WeightLogPageComponent implements OnInit {
         this.weightLogsSubject$.next(updatedLogs);
         this.selectedDate = log.date;
         this.selectedWeightLog = log;
-        this._toasterService.success("Weight log successfully added!");
+        this._toasterService.success('Weight log successfully added!');
         this.chartComponent.monthChange(2);
       });
   }
@@ -61,7 +67,7 @@ export class WeightLogPageComponent implements OnInit {
         this.weightLogsSubject$.next(this.logs);
         this.selectedDate = log.date;
         this.selectedWeightLog = log;
-        this._toasterService.success("Weight log successfully updated!");
+        this._toasterService.success('Weight log successfully updated!');
         this.chartComponent.monthChange(2);
       });
   }
@@ -72,16 +78,28 @@ export class WeightLogPageComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    this._weightLogService
-      .deleteWeightLog(id)
-      .pipe(take(1))
+    const dialogRef = this._dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        date: this.selectedDate,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        switchMap((confirm: boolean) => {
+          if (confirm) return this._weightLogService.deleteWeightLog(id);
+          return EMPTY;
+        }),
+        take(1)
+      )
       .subscribe((_) => {
         const updatedLogs = this.weightLogsSubject$.value.filter(
           (obj) => obj.id !== id
         );
         this.weightLogsSubject$.next(updatedLogs);
         this.selectedWeightLog = undefined;
-        this._toasterService.success("Weight log successfully deleted!");
+        this._toasterService.success('Weight log successfully deleted!');
         this.chartComponent.monthChange(2);
       });
   }
