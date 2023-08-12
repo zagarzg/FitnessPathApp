@@ -37,8 +37,17 @@ body {
   border-color: var(--primary);
 }
 
+.btn-primary-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
 .color-primary {
   color: var(--primary);
+}
+
+.text-danger {
+  color: #ff2442;
 }
 
 ::-webkit-scrollbar {
