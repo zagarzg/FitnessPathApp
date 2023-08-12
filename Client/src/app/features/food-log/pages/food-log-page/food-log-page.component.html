@@ -13,9 +13,10 @@
             [foodLogs]="foodLogs"
             [foodItems]="foodItems"
             (selectedDayChangeEvent)="fetchFoodItems($event)"
-            (addFoodItemEvent)="onAdd($event)"
-            (updateFoodItemEvent)="onUpdate($event)"
-            (deleteFoodItemEvent)="onDelete($event)"
+            (addFoodItemEvent)="onAddFoodItem($event)"
+            (updateFoodItemEvent)="onUpdateFoodItem($event)"
+            (deleteFoodItemEvent)="onDeleteFoodItem($event)"
+            (deleteFoodLogEvent)="onDeleteFoodLog($event)"
           >
           </app-food-log-list>
           <app-food-chart [chartData]="chartData"></app-food-chart>

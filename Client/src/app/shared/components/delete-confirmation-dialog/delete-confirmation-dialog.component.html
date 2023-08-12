@@ -1,0 +1,65 @@
+<div class="relative flex flex-col w-full h-full">
+  <div class="absolute top-0 right-0 pt-4 pr-4 ng-star-inserted">
+    <button (click)="cancel()">
+      <mat-icon class="text-danger">clear</mat-icon>
+    </button>
+  </div>
+  <div
+    class="flex flex-col sm:flex-row flex-auto items-center sm:items-start p-8 pb-6 sm:pb-8"
+  >
+    <div
+      class="flex flex-0 mt-1.5 items-center justify-center w-10 h-10 sm:mr-4 rounded-full warning-icon dark:text-warn-50 dark:bg-warn-600 ng-star-inserted"
+    >
+      <mat-icon
+        role="img"
+        class="mat-icon notranslate text-current mat-icon-no-color"
+        aria-hidden="true"
+        data-mat-icon-type="svg"
+        data-mat-icon-name="exclamation-triangle"
+        data-mat-icon-namespace="heroicons_outline"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          aria-hidden="true"
+          fit=""
+          height="100%"
+          width="100%"
+          preserveAspectRatio="xMidYMid meet"
+          focusable="false"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          ></path></svg
+      ></mat-icon>
+    </div>
+    <!----><!---->
+    <div
+      class="flex flex-col items-center sm:items-start mt-4 sm:mt-0 sm:pr-8 space-y-1 text-center sm:text-left ng-star-inserted"
+    >
+      <div class="text-xl leading-6 font-medium ng-star-inserted">
+        Remove log for <em>{{ data.date | date : "longDate" }}</em>
+      </div>
+      <!----><!---->
+      <div class="text-secondary ng-star-inserted">
+        Are you sure you want to remove this log permanently?
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex items-center justify-center sm:justify-end px-6 space-x-3 bg-gray-50 dark:bg-black dark:bg-opacity-10 ng-star-inserted"
+  >
+    <button mat-stroked-button (click)="cancel()">Cancel</button>
+    <button
+      mat-raised-button
+      class="bg-danger text-white m-3"
+      (click)="delete()"
+    >
+      Delete
+    </button>
+  </div>
+</div>

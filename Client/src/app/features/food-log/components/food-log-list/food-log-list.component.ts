@@ -36,6 +36,7 @@ export class FoodLogListComponent implements OnChanges {
   @Output() addFoodItemEvent = new EventEmitter<FoodItem>();
   @Output() updateFoodItemEvent = new EventEmitter<FoodItem>();
   @Output() deleteFoodItemEvent = new EventEmitter<string>();
+  @Output() deleteFoodLogEvent = new EventEmitter<string>();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
 
   displayedColumns = ['name', 'carbs', 'protein', 'fat', 'calories', 'actions'];
@@ -99,6 +100,10 @@ export class FoodLogListComponent implements OnChanges {
 
   deleteFoodItem(id: string) {
     this.deleteFoodItemEvent.emit(id);
+  }
+
+  deleteFoodLog() {
+    this.deleteFoodLogEvent.emit(this.selectedFoodLog?.id);
   }
 
   dateClass() {

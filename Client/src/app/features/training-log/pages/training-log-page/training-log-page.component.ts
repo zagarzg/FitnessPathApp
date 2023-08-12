@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
+import { DeleteConfirmationDialogComponent } from 'src/app/shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
 import { Exercise } from '../../models/Exercise';
 import { TrainingLog } from '../../models/TrainingLog';
@@ -31,7 +33,8 @@ export class TrainingLogPageComponent implements OnInit {
     private _trainingLogService: TrainingLogService,
     private _exerciseService: ExerciseService,
     private _exerciseChoiceService: ExerciseChoiceService,
-    private _toasterService: ToastrService
+    private _toasterService: ToastrService,
+    private _dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +70,7 @@ export class TrainingLogPageComponent implements OnInit {
       });
   }
 
-  onAdd(exercise: Exercise) {
+  onAddExercise(exercise: Exercise) {
     if (exercise.trainingLogId === '') {
       const trainingLog = {
         id: '00000000-0000-0000-0000-000000000000',
@@ -99,13 +102,13 @@ export class TrainingLogPageComponent implements OnInit {
         .pipe(take(1))
         .subscribe((result) => {
           this.exercises = [...this.exercises, result];
-          this._toasterService.success("Exercise successfully created!");
+          this._toasterService.success('Exercise successfully created!');
           this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
         });
     }
   }
 
-  onUpdate(exercise: Exercise) {
+  onUpdateExercise(exercise: Exercise) {
     this._exerciseService
       .updateExercise(exercise)
       .pipe(take(1))
@@ -119,7 +122,7 @@ export class TrainingLogPageComponent implements OnInit {
       });
   }
 
-  onDelete(id: string): void {
+  onDeleteExercise(id: string): void {
     this._exerciseService
       .deleteExercise(id)
       .pipe(
@@ -127,7 +130,7 @@ export class TrainingLogPageComponent implements OnInit {
           this.exercises = this.exercises.filter(
             (exercise) => exercise.id !== id
           );
-          this._toasterService.success("Exercise successfully deleted!");
+          this._toasterService.success('Exercise successfully deleted!');
           this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
           if (this.exercises.length === 0) {
             return this._trainingLogService.deleteTrainingLog(
@@ -144,6 +147,34 @@ export class TrainingLogPageComponent implements OnInit {
         );
         this.selectedTrainingLogId = '';
         this.trainingLogsSubject$.next(updatedTrainingLogs);
+      });
+  }
+
+  onDeleteTrainingLog(id: string): void {
+    const dialogRef = this._dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        date: this.selectedDate,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        switchMap((confirm: boolean) => {
+          if (confirm) return this._trainingLogService.deleteTrainingLog(id);
+          return EMPTY;
+        }),
+        take(1)
+      )
+      .subscribe(() => {
+        const updatedTrainingLogs = this.trainingLogsSubject$.value.filter(
+          (log: TrainingLog) => log.id !== id
+        );
+        this.selectedTrainingLogId = '';
+        this.trainingLogsSubject$.next(updatedTrainingLogs);
+        this.exercises = [];
+        this._toasterService.success('Training Log successfully deleted!');
+        this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
       });
   }
 }
