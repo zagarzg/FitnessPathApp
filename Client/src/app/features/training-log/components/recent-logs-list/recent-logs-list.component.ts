@@ -112,6 +112,10 @@ export class RecentLogsListComponent implements OnChanges {
     );
   }
 
+  deleteTrainingLog() {
+    this.deleteTrainingLogEvent.emit(this.selectedTrainingLog!.id!);
+  }
+
   handleAnimations(isLoadingList: boolean) {
     this.isLoadingList = isLoadingList;
     this.changeDetector.detectChanges();

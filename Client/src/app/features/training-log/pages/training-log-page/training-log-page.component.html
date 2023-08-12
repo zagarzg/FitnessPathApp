@@ -14,9 +14,10 @@
           [trainingLogs]="trainingLogs"
           [exercises]="exercises"
           (selectedDayChangeEvent)="fetchExercises($event)"
-          (addExerciseEvent)="onAdd($event)"
-          (updateExerciseEvent)="onUpdate($event)"
-          (deleteExerciseEvent)="onDelete($event)"
+          (addExerciseEvent)="onAddExercise($event)"
+          (updateExerciseEvent)="onUpdateExercise($event)"
+          (deleteExerciseEvent)="onDeleteExercise($event)"
+          (deleteTrainingLogEvent)="onDeleteTrainingLog($event)"
         >
         </app-recent-logs-list>
         <app-training-chart
