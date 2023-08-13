@@ -43,11 +43,11 @@ body {
 }
 
 .color-primary {
-  color: var(--primary);
+  color: var(--primary) !important;
 }
 
 .text-danger {
-  color: #ff2442;
+  color: #ff2442 !important;
 }
 
 ::-webkit-scrollbar {
