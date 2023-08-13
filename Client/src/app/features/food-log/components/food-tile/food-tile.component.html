@@ -1,0 +1,71 @@
+<div class="flex w-96 filter-info rounded-2xl shadow m-2 border-2 b-primary">
+  <div class="flex items-center justify-between w-full">
+    <div class="flex flex-col ml-4 mt-2 mb-2">
+      <div class="flex justify-between items-center">
+        <div class="text-lg font-semibold leading-tight">
+          {{ foodItem.name }}
+        </div>
+        <div
+          class="text-md font-bold b-primary h-full ml-4 rounded-xl color-primary mt-1"
+        >
+          {{ foodItem.calories }} kcal
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <div class="flex mt-1">
+          <div
+            class="text-md text-secondary text-white px-2 carbs-label"
+            matTooltip="Carbs"
+          >
+            CARBS | {{ foodItem.carbs }}
+          </div>
+          <div
+            class="text-md text-secondary text-white px-2 protein-label"
+            matTooltip="Protein"
+          >
+            PROTEIN | {{ foodItem.protein }}
+          </div>
+          <div
+            class="text-md text-secondary text-white px-2 fat-label"
+            matTooltip="Fat"
+          >
+            FAT | {{ foodItem.fat }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      class="color-primary"
+      aria-label="Actions menu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item class="color-primary" (click)="foodItemUpdate()">
+        <mat-icon class="color-primary">mode_edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item class="text-danger" (click)="foodItemDelete()">
+        <mat-icon class="text-danger">delete_forever</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+    <!-- <div class="flex h-full">
+      <button
+        class="flex items-center text-xl color-primary h-full p-2"
+        (click)="foodItemUpdate()"
+      >
+        <mat-icon>mode_edit</mat-icon>
+      </button>
+      <button
+        class="flex items-center text-xl bg-danger text-white h-full p-2 delete-button"
+        (click)="foodItemDelete()"
+      >
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+    </div> -->
+  </div>
+</div>

@@ -1,0 +1,22 @@
+.exercise-tile {
+  animation: analogue forwards 3s ease-out 3;
+}
+
+.delete-button {
+  border-top-right-radius: 0.8rem;
+  border-bottom-right-radius: 0.8rem;
+}
+
+.carbs-label {
+  background-color: var(--primary);
+  border-radius: 5px 0 0 5px;
+}
+
+.protein-label {
+  background-color: rgba(0, 227, 150, 1);
+}
+
+.fat-label {
+  background-color: rgba(254, 176, 25, 1);
+  border-radius: 0 5px 5px 0;
+}

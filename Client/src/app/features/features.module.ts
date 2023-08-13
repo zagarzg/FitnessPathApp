@@ -18,6 +18,7 @@ import { FoodChartComponent } from './food-log/components/food-chart/food-chart.
 import { ExerciseChoiceService } from './training-log/services/exercise-choice.service';
 import { WeightLogService } from './weight-log/services/weight-log.service';
 import { ExerciseTileComponent } from './training-log/components/exercise-tile/exercise-tile.component';
+import { FoodTileComponent } from './food-log/components/food-tile/food-tile.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ExerciseTileComponent } from './training-log/components/exercise-tile/e
     FoodItemFormComponent,
     FoodChartComponent,
     ExerciseTileComponent,
+    FoodTileComponent,
   ],
   imports: [CommonModule, SharedModule],
   exports: [TrainingLogPageComponent],

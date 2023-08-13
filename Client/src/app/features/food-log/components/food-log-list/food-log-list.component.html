@@ -2,7 +2,7 @@
   <div
     class="xl:col-span-1 flex flex-col flex-auto bg-white drop-shadow-md rounded-2xl overflow-hidden"
   >
-    <div class="p-6">
+    <div class="p-6 card-header">
       <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">
         Recent Logs
       </div>
@@ -35,25 +35,21 @@
       </mat-card>
       <div class="flex flex-col mat-elevation-z8 w-full">
         <div
-          class="m-4 mt-8 text-lg font-medium tracking-tight leading-6 truncate border-solid border-b border-black"
+          class="color-primary m-4 mt-8 text-lg font-medium tracking-tight leading-6 truncate border-solid border-b b-primary"
         >
           Meals
         </div>
-        <mat-card
-          class="exercise-tile flex justify-between items-center"
-          *ngFor="let foodItem of foodItems"
-        >
-          <span>{{ foodItem.name }}</span>
-          <div>
-            <span class="chip primary">{{ foodItem.carbs }}C</span>
-            <span class="chip primary">{{ foodItem.protein }}P</span>
-            <span class="chip primary">{{ foodItem.fat }}F</span>
-            <span class="chip primary">{{ foodItem.calories }}Cal</span>
-            <button class="close-x" (click)="deleteFoodItem(foodItem.id)">
-              X
-            </button>
-          </div>
-        </mat-card>
+        <div class="food-container flex justify-center flex-wrap">
+          <app-food-tile
+            @addTile
+            @deleteTile
+            [@.disabled]="isLoadingList"
+            *ngFor="let foodItem of foodItems"
+            [foodItem]="foodItem"
+            (deleteFoodItemEvent)="deleteFoodItem($event)"
+            (updateFoodItemEvent)="updateFoodItem($event)"
+          ></app-food-tile>
+        </div>
         <span *ngIf="foodItems?.length == 0" class="m-3">
           No meals logged for this day
         </span>
