@@ -3,14 +3,19 @@
 }
 
 ::ng-deep .mat-calendar-header {
-  background-color: rgb(17, 24, 39);
+  background-color: var(--primary);
   color: white;
   padding: 2px 2px 0 0 !important;
 }
 
 ::ng-deep .mat-calendar-body-selected {
-  background-color: rgb(17, 24, 39);
+  background-color: var(--primary);
   color: white;
+}
+
+::ng-deep .logged-day {
+  box-shadow: inset 0 -5px 5px -5px var(--primary);
+  border-bottom: 3px solid var(--primary) !important;
 }
 
 .special-date {
@@ -18,11 +23,12 @@
   border-radius: 100%;
 }
 
-.exercise-tile {
-  padding: 0.5rem !important;
+.weight-tile {
+  width: fit-content;
+  padding: 1rem !important;
   margin: 5px 20px;
-  border: 1px solid #111827;
   position: relative;
+  font-size: xx-large;
 }
 
 .close-x {
@@ -52,4 +58,8 @@
 .chip.primary {
   background: #2f4058;
   color: whitesmoke;
+}
+
+.card-header {
+  border-bottom: 2px solid var(--primary);
 }

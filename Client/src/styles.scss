@@ -34,7 +34,7 @@ body {
 }
 
 .b-primary {
-  border-color: var(--primary);
+  border-color: var(--primary) !important;
 }
 
 .btn-primary-outline {
