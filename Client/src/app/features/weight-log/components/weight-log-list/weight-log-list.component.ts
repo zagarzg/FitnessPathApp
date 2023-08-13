@@ -108,7 +108,7 @@ export class WeightLogListComponent implements OnInit, OnChanges {
       const dayNumber: number = date.getDate();
 
       if (mappedLogs.includes(dayNumber)) {
-        return 'bg-green-300 rounded-full';
+        return 'logged-day rounded-full';
       } else {
         return '';
       }
