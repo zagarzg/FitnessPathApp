@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -13,6 +14,7 @@ import {
   MatCalendarCellCssClasses,
 } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { addAnimation, deleteAnimation } from 'src/app/shared/animations';
 import { FoodItem } from '../../models/FoodItem';
 import { FoodLog } from '../../models/FoodLog';
 import { FoodItemFormComponent } from '../food-item-form/food-item-form.component';
@@ -21,10 +23,12 @@ import { FoodItemFormComponent } from '../food-item-form/food-item-form.componen
   selector: 'app-food-log-list',
   templateUrl: './food-log-list.component.html',
   styleUrls: ['./food-log-list.component.scss'],
+  animations: [addAnimation, deleteAnimation],
 })
 export class FoodLogListComponent implements OnChanges {
   selectedFoodLog: FoodLog | undefined;
   selectedDate!: Date | null;
+  isLoadingList: boolean = false;
 
   @Input() foodLogs!: FoodLog[];
   @Input() foodItems!: FoodItem[];
@@ -41,7 +45,10 @@ export class FoodLogListComponent implements OnChanges {
 
   displayedColumns = ['name', 'carbs', 'protein', 'fat', 'calories', 'actions'];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    public changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     let logsChange = changes['foodLogs'];
@@ -51,6 +58,7 @@ export class FoodLogListComponent implements OnChanges {
   }
 
   selectDay() {
+    this.handleAnimations(true);
     this.selectedFoodLog = this.foodLogs.find(
       (log) =>
         new Date(log.date).getDate() === this.selectedDate?.getDate() &&
@@ -72,6 +80,7 @@ export class FoodLogListComponent implements OnChanges {
   }
 
   addFoodItem() {
+    this.handleAnimations(false);
     const dialogRef = this.dialog.open(FoodItemFormComponent, {
       width: '500px',
       data: {
@@ -84,7 +93,7 @@ export class FoodLogListComponent implements OnChanges {
     });
   }
 
-  updateFoodItem(foodItem: FoodItem) {
+  updateFoodItem(foodItem: any) {
     const dialogRef = this.dialog.open(FoodItemFormComponent, {
       width: '400px',
       data: {
@@ -98,12 +107,18 @@ export class FoodLogListComponent implements OnChanges {
     });
   }
 
-  deleteFoodItem(id: string) {
+  deleteFoodItem(id: any) {
+    this.handleAnimations(false);
     this.deleteFoodItemEvent.emit(id);
   }
 
   deleteFoodLog() {
     this.deleteFoodLogEvent.emit(this.selectedFoodLog?.id);
+  }
+
+  handleAnimations(isLoadingList: boolean) {
+    this.isLoadingList = isLoadingList;
+    this.changeDetector.detectChanges();
   }
 
   dateClass() {
@@ -123,7 +138,7 @@ export class FoodLogListComponent implements OnChanges {
       const dayNumber: number = date.getDate();
 
       if (mappedLogs.includes(dayNumber)) {
-        return 'bg-green-300 rounded-full';
+        return 'logged-day rounded-full';
       } else {
         return '';
       }

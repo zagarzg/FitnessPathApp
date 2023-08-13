@@ -35,7 +35,11 @@ export const deleteAnimation = trigger('deleteTile', [
     animate(
       '700ms',
       keyframes([
-        style({ opacity: 1, offset: 0, filter: 'blur(2px)' }),
+        style({
+          opacity: 1,
+          offset: 0,
+          filter: 'blur(2px)',
+        }),
         style({
           transform: 'translateX(30px)',
           filter: 'blur(2px)',
