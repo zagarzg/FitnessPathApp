@@ -1,4 +1,13 @@
-.delete-button {
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-button {
   border-top-right-radius: 0.8rem;
+}
+
+.delete-button {
   border-bottom-right-radius: 0.8rem;
 }

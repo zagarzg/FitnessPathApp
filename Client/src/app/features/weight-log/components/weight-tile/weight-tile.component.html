@@ -1,24 +1,23 @@
-<div class="flex filter-info rounded-2xl shadow m-4 border-2 b-primary">
-  <div class="flex items-center justify-between w-full">
-    <div class="flex flex-col ml-4 mt-2 mb-2">
-      <div class="text-lg font-semibold leading-tight">
+<div class="flex filter-info rounded-2xl shadow m-4 border-2 b-primary w-3/4">
+  <div class="flex items-center justify-center w-full">
+    <div class="flex items-center justify-between w-full ml-8">
+      <div class="color-primary text-5xl font-semibold leading-tight">
         {{ weightLog?.value }} kg
       </div>
-    </div>
-
-    <div class="flex h-full">
-      <button
-        class="flex items-center text-xl color-primary h-full p-2"
-        (click)="weightLogUpdate()"
-      >
-        <mat-icon>mode_edit</mat-icon>
-      </button>
-      <button
-        class="flex items-center text-xl bg-danger text-white h-full p-2 delete-button"
-        (click)="weightLogDelete()"
-      >
-        <mat-icon>delete_forever</mat-icon>
-      </button>
+      <div class="flex flex-col">
+        <button
+          class="flex items-center text-xl bg-primary text-white h-full p-2 update-button"
+          (click)="weightLogUpdate()"
+        >
+          <mat-icon>mode_edit</mat-icon>
+        </button>
+        <button
+          class="flex items-center text-xl bg-danger text-white h-full p-2 delete-button"
+          (click)="weightLogDelete()"
+        >
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>
