@@ -34,6 +34,12 @@ namespace FitnessPathApp.API.Controllers
 			return Ok(await _trainingLogService.Get(id, cancellationToken));
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> GetByDate([FromQuery] DateTime date, CancellationToken cancellationToken)
+		{
+			return Ok(await _trainingLogService.GetByDate(date, cancellationToken));
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] TrainingLog log, CancellationToken cancellationToken)
 		{
@@ -50,8 +56,8 @@ namespace FitnessPathApp.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
-			await _trainingLogService.Delete(id, cancellationToken);
-			return Ok();
+			//await _trainingLogService.Delete(id, cancellationToken);
+			return Ok(await _trainingLogService.Delete(id, cancellationToken));
 		}
 	}
 }

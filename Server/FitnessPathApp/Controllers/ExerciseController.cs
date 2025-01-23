@@ -44,8 +44,7 @@ namespace FitnessPathApp.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
-			await _exerciseService.Delete(id, cancellationToken);
-			return Ok();
+			return Ok(await _exerciseService.Delete(id, cancellationToken));
 		}
 	}
 }

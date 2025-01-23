@@ -1,3 +1,15 @@
 ::ng-deep .mat-dialog-container {
   padding: 0 !important;
 }
+
+::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.cancel-icon {
+  color: white;
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+}

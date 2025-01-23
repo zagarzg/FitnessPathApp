@@ -1,12 +1,17 @@
 <div class="flex flex-auto flex-wrap">
   <div class="flex flex-col w-full">
-    <div class="p-6 bg-gray-900">
-      <div
-        class="mr-4 text-white text-lg font-medium tracking-tight leading-6 truncate"
-      >
-        {{ updateMode ? "Update Food Intake" : "Add Food Intake" }}
+    <div class="flex items-center justify-between p-6 bg-primary">
+      <div>
+        <div
+          class="mr-4 text-white text-lg font-medium tracking-tight leading-6 truncate"
+        >
+          {{ updateMode ? "Update Food Intake" : "Add Food Intake" }}
+        </div>
+        <div class="text-white font-light">Provide nutrition details</div>
       </div>
-      <div class="text-white font-light">Provide nutrition details</div>
+      <button (click)="onDialogClose()">
+        <mat-icon class="cancel-icon">cancel</mat-icon>
+      </button>
     </div>
     <form
       class="p-6"
@@ -21,7 +26,7 @@
 
       <!-- SKU and Barcode -->
       <div class="flex">
-        <mat-form-field class="w-1/4 pr-2" appearance="outline">
+        <mat-form-field class="w-1/3" appearance="outline">
           <mat-label>Carbs</mat-label>
           <input
             matInput
@@ -30,7 +35,7 @@
             formControlName="carbs"
           />
         </mat-form-field>
-        <mat-form-field class="w-1/4 pl-2" appearance="outline">
+        <mat-form-field class="w-1/3 pl-4" appearance="outline">
           <mat-label>Protein</mat-label>
           <input
             matInput
@@ -39,7 +44,7 @@
             formControlName="protein"
           />
         </mat-form-field>
-        <mat-form-field class="w-1/4 pl-2" appearance="outline">
+        <mat-form-field class="w-1/3 pl-4" appearance="outline">
           <mat-label>Fat</mat-label>
           <input
             matInput
@@ -48,25 +53,25 @@
             formControlName="fat"
           />
         </mat-form-field>
-        <mat-form-field class="w-1/4 pl-2" appearance="outline">
-          <mat-label>Calories</mat-label>
-          <input
-            matInput
-            type="number"
-            placeholder="Calories"
-            formControlName="calories"
-          />
-        </mat-form-field>
       </div>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Calories</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="Calories"
+          formControlName="calories"
+        />
+      </mat-form-field>
       <button
         mat-raised-button
-        class="bg-gray-900 text-white w-full"
+        class="bg-primary text-white w-full"
         type="submit"
       >
         <mat-icon
           aria-hidden="false"
           aria-label="Example home icon"
-          [fontIcon]="updateMode == true ? 'edit' : 'add'"
+          [fontIcon]="updateMode ? 'edit' : 'add'"
         ></mat-icon>
         {{ updateMode ? "Update Food Intake" : "Add Food Intake" }}
       </button>

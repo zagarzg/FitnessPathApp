@@ -18,7 +18,8 @@ export class WeightLogFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       date: Date | null;
-      weightLogId: string | undefined;
+      weightLogId: string;
+      value: number | undefined;
     }
   ) {}
 
@@ -29,11 +30,17 @@ export class WeightLogFormComponent implements OnInit {
       value: ['', Validators.required],
     });
 
-    if (this.data.weightLogId?.length !== 0) {
+    if (this.data.weightLogId !== undefined) {
       this.updateMode = true;
       this.weightLogForm.patchValue({
         date: this.data.date,
         id: this.data.weightLogId,
+        value: this.data.value,
+      });
+    } else {
+      this.weightLogForm.patchValue({
+        date: this.data.date,
+        id: '00000000-0000-0000-0000-000000000000',
       });
     }
   }
@@ -42,5 +49,9 @@ export class WeightLogFormComponent implements OnInit {
     form.value.date = this.data.date;
     this.updateMode = false;
     this.dialogRef.close(form.value as WeightLog);
+  }
+
+  onDialogClose() {
+    this.dialogRef.close();
   }
 }

@@ -1,20 +1,25 @@
 <div class="flex flex-auto flex-wrap">
   <div class="flex flex-col w-full">
-    <div class="p-6 bg-gray-900">
-      <div
-        class="mr-4 text-white text-lg font-medium tracking-tight leading-6 truncate"
-      >
-        {{ updateMode ? "Update Log" : "Add Log" }}
+    <div class="flex items-center justify-between p-6 bg-primary">
+      <div>
+        <div
+          class="mr-4 text-white text-lg font-medium tracking-tight leading-6 truncate"
+        >
+          {{ updateMode ? "Update Log" : "Add Log" }}
+        </div>
+        <div class="text-white font-light">Provide weight change details</div>
       </div>
-      <div class="text-white font-light">Provide weight change details</div>
+      <button (click)="onDialogClose()">
+        <mat-icon class="cancel-icon">cancel</mat-icon>
+      </button>
     </div>
     <form
       class="p-6"
       [formGroup]="weightLogForm"
       (ngSubmit)="onSubmit(weightLogForm)"
     >
-      <div class="flex items-center justify-center">
-        <mat-form-field class="w-2/3 pl-2" appearance="outline">
+      <div class="flex-col items-center justify-center">
+        <mat-form-field class="w-full pl-2" appearance="outline">
           <mat-label>Weight</mat-label>
           <input
             matInput
@@ -25,14 +30,10 @@
         </mat-form-field>
         <button
           mat-raised-button
-          class="bg-gray-900 text-white w-full h-1/3 ml-2"
+          class="flex items-center justify-center bg-primary text-white w-full h-1/3 ml-2"
           type="submit"
         >
-          <mat-icon
-            aria-hidden="false"
-            aria-label="Example home icon"
-            [fontIcon]="updateMode == true ? 'edit' : 'add'"
-          ></mat-icon>
+          <mat-icon>{{ updateMode ? "edit" : "add" }}</mat-icon>
           {{ updateMode ? "Update Log" : "Add Log" }}
         </button>
       </div>

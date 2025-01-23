@@ -28,11 +28,11 @@ export class FoodItemFormComponent implements OnInit {
       foodLogId: ['', Validators.required],
     });
 
-    if (this.data.foodLogId) {
-      this.foodItemForm.patchValue({
-        foodLogId: this.data.foodLogId,
-      });
-    }
+    // if (this.data.foodLogId) {
+    //   this.foodItemForm.patchValue({
+    //     foodLogId: this.data.foodLogId,
+    //   });
+    // }
 
     if (this.data.foodItem) {
       this.updateMode = true;
@@ -42,11 +42,16 @@ export class FoodItemFormComponent implements OnInit {
         protein: this.data.foodItem.protein,
         fat: this.data.foodItem.fat,
         calories: this.data.foodItem.calories,
+        foodLogId: this.data.foodItem.foodLogId,
       });
     }
   }
 
   onSubmit(form: FormGroup) {
     this.dialogRef.close(form.value as FoodItem);
+  }
+
+  onDialogClose() {
+    this.dialogRef.close();
   }
 }

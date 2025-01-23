@@ -25,7 +25,7 @@ namespace FitnessPathApp.DomainLayer
             modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
-
+            //modelBuilder.Entity<WeightLog>().Property(entity => entity.Id).ValueGeneratedOnAdd();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }

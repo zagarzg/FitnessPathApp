@@ -37,8 +37,7 @@ namespace FitnessPathApp.API.Controllers
 		[HttpPut]
 		public async Task<IActionResult> Update([FromBody] WeightLog log, CancellationToken cancellationToken)
 		{
-			await _weightLogService.Update(log, cancellationToken);
-			return Ok();
+			return Ok(await _weightLogService.Update(log, cancellationToken));
 		}
 
 		[HttpDelete("{id}")]
