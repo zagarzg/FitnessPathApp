@@ -15,6 +15,12 @@ namespace FitnessPathApp.API.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetTrainingChartData([FromQuery] string exerciseSelected, [FromQuery] int monthSelected, [FromQuery] int yearSelected, [FromQuery] bool isMonthly, CancellationToken cancellationToken)
+        {
+            return Ok(await _chartService.GetTrainingChartData(exerciseSelected, monthSelected, yearSelected, isMonthly, cancellationToken));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetMonthlyChartDataByExerciseName([FromQuery] string exerciseName, [FromQuery] int monthSelected, [FromQuery] int yearSelected, CancellationToken cancellationToken)
         {
             return Ok(await _chartService.GetMonthlyDataByExerciseName(exerciseName, monthSelected, yearSelected, cancellationToken));
@@ -27,9 +33,9 @@ namespace FitnessPathApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMonthlyWeightChangeData([FromQuery] int monthSelected, [FromQuery] int yearSelected, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWeightChartData([FromQuery] int monthSelected, [FromQuery] int yearSelected, [FromQuery] bool isMonthly, CancellationToken cancellationToken)
         {
-            return Ok(await _chartService.GetMonthlyWeightChangeData(monthSelected, yearSelected, cancellationToken));
+            return Ok(await _chartService.GetWeightChartData(monthSelected, yearSelected, isMonthly, cancellationToken));
         }
 
         [HttpGet]

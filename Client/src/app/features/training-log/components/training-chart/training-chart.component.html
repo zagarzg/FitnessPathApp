@@ -14,31 +14,41 @@
       <mat-button-toggle-group
         name="fontStyle"
         aria-label="Font Style"
-        (change)="onTimeframeChange($event.value)"
+        #toggleGroup="matButtonToggleGroup"
+        (change)="
+          onFiltersChange({
+            monthSelected: monthSelectedRef.value,
+            yearSelected: yearSelectedRef.value,
+            exerciseSelected: exerciseSelectedRef.value,
+            isMonthly: toggleGroup.value
+          })
+        "
       >
-        <mat-button-toggle
-          value="Monthly"
-          [checked]="timeframeSelected == 'Monthly'"
+        <mat-button-toggle value="true" [checked]="toggleGroup.value == 'true'"
           >Monthly</mat-button-toggle
         >
         <mat-button-toggle
-          value="Yearly"
-          [checked]="timeframeSelected == 'Yearly'"
+          value="false"
+          [checked]="toggleGroup.value == 'false'"
           >Yearly</mat-button-toggle
         >
       </mat-button-toggle-group>
     </div>
     <div class="flex flex-col justify-between p-4">
       <div>
-        <mat-form-field
-          *ngIf="timeframeSelected == 'Monthly'"
-          class="w-24 p-3"
-          appearance="outline"
-        >
+        <mat-form-field class="w-24 p-3" appearance="outline">
           <mat-label>Month</mat-label>
           <mat-select
-            [(ngModel)]="monthSelected"
-            (selectionChange)="monthChange($event.value)"
+            [disabled]="toggleGroup.value == 'Monthly'"
+            #monthSelectedRef
+            (selectionChange)="
+              onFiltersChange({
+                monthSelected: monthSelectedRef.value,
+                yearSelected: yearSelectedRef.value,
+                exerciseSelected: exerciseSelectedRef.value,
+                isMonthly: toggleGroup.value
+              })
+            "
           >
             <mat-option *ngFor="let month of months" [value]="month">
               {{ month }}
@@ -48,8 +58,15 @@
         <mat-form-field class="w-36 p-3" appearance="outline">
           <mat-label>Year</mat-label>
           <mat-select
-            [(ngModel)]="yearSelected"
-            (selectionChange)="yearChange($event.value)"
+            #yearSelectedRef
+            (selectionChange)="
+              onFiltersChange({
+                monthSelected: monthSelectedRef.value,
+                yearSelected: yearSelectedRef.value,
+                exerciseSelected: exerciseSelectedRef.value,
+                isMonthly: toggleGroup.value
+              })
+            "
           >
             <mat-option *ngFor="let year of years" [value]="year">
               {{ year }}
@@ -59,8 +76,15 @@
         <mat-form-field appearance="outline">
           <mat-label>Exercise</mat-label>
           <mat-select
-            [(ngModel)]="selectedExercise"
-            (selectionChange)="exerciseChange($event.value)"
+            #exerciseSelectedRef
+            (selectionChange)="
+              onFiltersChange({
+                monthSelected: monthSelectedRef.value,
+                yearSelected: yearSelectedRef.value,
+                exerciseSelected: exerciseSelectedRef.value,
+                isMonthly: toggleGroup.value
+              })
+            "
           >
             <mat-option *ngFor="let exercise of exercises" [value]="exercise">
               {{ exercise }}
@@ -83,7 +107,7 @@
           >
             <span class="text-green-500">{{ progressPercentage }}%</span>
             {{
-              timeframeSelected == "Monthly"
+              toggleGroup.value == "Monthly"
                 ? "weight increase this month"
                 : "weight increase this year"
             }}
@@ -100,7 +124,7 @@
           >
             <span class="text-red-500">{{ progressPercentage }}%</span>
             {{
-              timeframeSelected == "Monthly"
+              toggleGroup.value == "Monthly"
                 ? "weight increase this month"
                 : "weight increase this year"
             }}
@@ -108,7 +132,15 @@
         >
       </div>
     </div>
-    <div id="chart" class="p-3">
+    <div
+      *ngIf="
+        monthSelectedRef.value &&
+        exerciseSelectedRef.value &&
+        yearSelectedRef.value
+      "
+      id="chart"
+      class="p-3"
+    >
       <ng-container *ngIf="(chartOptions | json) != '{}'">
         <apx-chart
           [series]="chartOptions.series"

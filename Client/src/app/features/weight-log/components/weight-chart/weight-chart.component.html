@@ -14,23 +14,42 @@
       <mat-button-toggle-group
         name="fontStyle"
         aria-label="Font Style"
-        (change)="onTimeframeChange($event.value)"
+        #toggleGroup="matButtonToggleGroup"
+        (change)="
+          onFiltersChange({
+            monthSelected: monthSelectedRef.value,
+            yearSelected: yearSelectedRef.value,
+            isMonthly: toggleGroup.value
+          })
+        "
       >
-        <mat-button-toggle value="Monthly">Monthly</mat-button-toggle>
-        <mat-button-toggle value="Yearly">Yearly</mat-button-toggle>
+        <mat-button-toggle
+          value="true"
+          [checked]="weightChartFilters.isMonthly === true"
+          >Monthly</mat-button-toggle
+        >
+        <mat-button-toggle
+          value="false"
+          [checked]="weightChartFilters.isMonthly === false"
+          >Yearly</mat-button-toggle
+        >
       </mat-button-toggle-group>
     </div>
-    <div class="flex flex-col justify-between">
+    <div class="flex flex-col justify-between pl-4">
       <div>
-        <mat-form-field
-          *ngIf="timeframeSelected == 'Monthly'"
-          class="w-24 p-3"
-          appearance="outline"
-        >
+        <mat-form-field class="w-24 p-3" appearance="outline">
           <mat-label>Month</mat-label>
           <mat-select
-            [(ngModel)]="monthSelected"
-            (selectionChange)="monthChange($event.value)"
+            [(value)]="weightChartFilters.monthSelected"
+            [disabled]="toggleGroup.value == 'false'"
+            #monthSelectedRef
+            (selectionChange)="
+              onFiltersChange({
+                monthSelected: monthSelectedRef.value,
+                yearSelected: yearSelectedRef.value,
+                isMonthly: toggleGroup.value
+              })
+            "
           >
             <mat-option *ngFor="let month of months" [value]="month">
               {{ month }}
@@ -40,8 +59,15 @@
         <mat-form-field class="w-36 p-3" appearance="outline">
           <mat-label>Year</mat-label>
           <mat-select
-            [(ngModel)]="yearSelected"
-            (selectionChange)="yearChange($event.value)"
+            [(value)]="weightChartFilters.yearSelected"
+            #yearSelectedRef
+            (selectionChange)="
+              onFiltersChange({
+                monthSelected: monthSelectedRef.value,
+                yearSelected: yearSelectedRef.value,
+                isMonthly: toggleGroup.value
+              })
+            "
           >
             <mat-option *ngFor="let year of years" [value]="year">
               {{ year }}
@@ -64,7 +90,7 @@
           >
             <span class="text-green-500">{{ progressPercentage }}%</span>
             {{
-              timeframeSelected == "Monthly"
+              weightChartFilters.isMonthly
                 ? "weight increase this month"
                 : "weight increase this year"
             }}
@@ -81,7 +107,7 @@
           >
             <span class="text-red-500">{{ progressPercentage }}%</span>
             {{
-              timeframeSelected == "Monthly"
+              toggleGroup.value == "Monthly"
                 ? "weight increase this month"
                 : "weight increase this year"
             }}

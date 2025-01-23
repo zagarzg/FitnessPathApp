@@ -1,6 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Router, RouterEvent } from '@angular/router';
-import { take } from 'rxjs/operators';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -14,10 +19,10 @@ import {
   ApexTitleSubtitle,
   ApexLegend,
 } from 'ng-apexcharts';
-import { TrainingLog } from '../../models/TrainingLog';
-import { ChartService } from '../../services/chart.service';
+import { TrainingChartFilters } from '../../services/chart.service';
+import { Observable } from 'rxjs';
 
-export type ChartOptions = {
+export interface ChartOptions {
   series: ApexAxisChartSeries | undefined;
   chart: ApexChart;
   xaxis: ApexXAxis;
@@ -29,11 +34,6 @@ export type ChartOptions = {
   grid: ApexGrid;
   legend: ApexLegend;
   title: ApexTitleSubtitle;
-};
-
-interface ChartData {
-  value: number;
-  date: Date;
 }
 
 @Component({
@@ -45,136 +45,36 @@ export class TrainingChartComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions | any> = {};
 
-  @Input() chartData!: TrainingLog[];
-  @Input() exercises!: string[];
+  @Input() chartData!: Observable<any>;
+  @Input() exercises!: string[] | null;
+
+  @Output() filtersChangeEvent = new EventEmitter<TrainingChartFilters>();
 
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  years: number[] = [2021, 2022, 2023];
-  selectedExercise: string = 'Bench Press';
-  monthSelected: number = new Date().getMonth() + 1;
-  yearSelected: number = new Date().getFullYear();
-  timeframeSelected: 'Monthly' | 'Yearly' = 'Monthly';
+  years: number[] = [2024, 2025];
   progressPercentage: number = 0;
 
-  constructor(private _chartService: ChartService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.exerciseChange(this.selectedExercise);
+    this.chartData.subscribe((chartData) => {
+      this.chartInit(chartData, 'Bench Press', 'Monthly');
+    });
   }
 
-  public exerciseChange(exerciseName: string) {
-    this.selectedExercise = exerciseName;
-
-    if (this.timeframeSelected == 'Yearly') {
-      this._chartService
-        .getYearlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.yearSelected
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    } else {
-      this._chartService
-        .getMonthlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.monthSelected,
-          this.yearSelected
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    }
+  onFiltersChange(trainingChartFilters: TrainingChartFilters) {
+    this.filtersChangeEvent.emit(trainingChartFilters);
   }
 
-  public monthChange(month: number) {
-    this._chartService
-      .getMonthlyChartDataByExerciseName(
-        this.selectedExercise,
-        month,
-        this.yearSelected
-      )
-      .pipe(take(1))
-      .subscribe((data: any) => {
-        this.progressPercentage = Math.round(data.progressPercentage);
-        if (data.data) this.chartInit(data as any);
-        else this.chartOptions = {};
-      });
-  }
-
-  public yearChange(year: number) {
-    this.yearSelected = year;
-
-    if (this.timeframeSelected == 'Monthly') {
-      this._chartService
-        .getMonthlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.monthSelected,
-          year
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    } else {
-      this._chartService
-        .getYearlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.yearSelected
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    }
-  }
-
-  public onTimeframeChange(value: any) {
-    this.timeframeSelected = value;
-
-    if (this.timeframeSelected == 'Yearly') {
-      this._chartService
-        .getYearlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.yearSelected
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    } else {
-      this._chartService
-        .getMonthlyChartDataByExerciseName(
-          this.selectedExercise,
-          this.monthSelected,
-          this.yearSelected
-        )
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    }
-  }
-
-  private chartInit(data: any) {
+  private chartInit(
+    data: any,
+    exerciseSelected: string,
+    timeframeSelected: string
+  ) {
     this.chartOptions = {
       series: [
         {
-          name: this.selectedExercise,
+          name: exerciseSelected,
           data: data.data,
         },
       ],
@@ -213,11 +113,11 @@ export class TrainingChartComponent implements OnInit {
       xaxis: {
         type: 'category',
         title: {
-          text: this.timeframeSelected == 'Yearly' ? 'Months' : 'Days of month',
+          text: timeframeSelected == 'Yearly' ? 'Months' : 'Days of month',
         },
         min: 1,
-        max: this.timeframeSelected == 'Yearly' ? 12 : 30,
-        tickAmount: this.timeframeSelected == 'Yearly' ? 11 : 29,
+        max: timeframeSelected == 'Yearly' ? 12 : 30,
+        tickAmount: timeframeSelected == 'Yearly' ? 11 : 29,
       },
       yaxis: {
         title: {

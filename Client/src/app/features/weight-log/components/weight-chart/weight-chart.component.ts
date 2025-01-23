@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -12,9 +19,8 @@ import {
   ApexYAxis,
   ChartComponent,
 } from 'ng-apexcharts';
-import { ChartService } from 'src/app/features/training-log/services/chart.service';
-import { WeightLog } from '../../models/WeightLog';
-import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { WeightChartFilters } from 'src/app/features/training-log/services/chart.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | undefined;
@@ -44,79 +50,33 @@ export class WeightChartComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions | any> = {};
 
-  @Input() chartData!: WeightLog[] | null;
+  @Input() chartData!: Observable<any>;
+  @Output() filtersChangeEvent = new EventEmitter<WeightChartFilters>();
 
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  years: number[] = [2021, 2022, 2023];
-  monthSelected: number = new Date().getMonth() + 1;
-  yearSelected: number = new Date().getFullYear();
-  timeframeSelected: 'Monthly' | 'Yearly' = 'Monthly';
+  years: number[] = [2024, 2025];
   progressPercentage: number = 0;
 
-  constructor(private _chartService: ChartService) {}
+  weightChartFilters: WeightChartFilters = {
+    isMonthly: true,
+    yearSelected: new Date().getFullYear(),
+    monthSelected: new Date().getMonth() + 1,
+  };
+
+  constructor() {}
 
   ngOnInit() {
-    this.monthChange(this.monthSelected);
+    this.chartData.subscribe((chartData) => {
+      this.chartInit(chartData, 'Monthly');
+      this.progressPercentage = Math.round(chartData.progressPercentage);
+    });
   }
 
-  public monthChange(month: number) {
-    this._chartService
-      .getMonthlyWeightChangeData(month, this.yearSelected)
-      .pipe(take(1))
-      .subscribe((data: any) => {
-        this.progressPercentage = Math.round(data.progressPercentage);
-        if (data.data) this.chartInit(data as any);
-        else this.chartOptions = {};
-      });
+  onFiltersChange(weightChartFilters: WeightChartFilters) {
+    this.filtersChangeEvent.emit(weightChartFilters);
   }
 
-  public yearChange(year: number) {
-    this.yearSelected = year;
-    if (this.timeframeSelected == 'Monthly') {
-      this._chartService
-        .getMonthlyWeightChangeData(this.monthSelected, year)
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    } else {
-      this._chartService
-        .getYearlyWeightChangeData(this.yearSelected)
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    }
-  }
-
-  public onTimeframeChange(value: any) {
-    this.timeframeSelected = value;
-    if (this.timeframeSelected == 'Yearly') {
-      this._chartService
-        .getYearlyWeightChangeData(this.yearSelected)
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    } else {
-      this._chartService
-        .getMonthlyWeightChangeData(this.monthSelected, this.yearSelected)
-        .pipe(take(1))
-        .subscribe((data: any) => {
-          this.progressPercentage = Math.round(data.progressPercentage);
-          if (data.data) this.chartInit(data as any);
-          else this.chartOptions = {};
-        });
-    }
-  }
-
-  private chartInit(data: any) {
+  private chartInit(data: any, timeframeSelected: string) {
     this.chartOptions = {
       series: [
         {
@@ -159,11 +119,11 @@ export class WeightChartComponent implements OnInit {
       xaxis: {
         type: 'category',
         title: {
-          text: this.timeframeSelected == 'Yearly' ? 'Months' : 'Days of month',
+          text: timeframeSelected == 'Yearly' ? 'Months' : 'Days of month',
         },
         min: 1,
-        max: this.timeframeSelected == 'Yearly' ? 12 : 30,
-        tickAmount: this.timeframeSelected == 'Yearly' ? 11 : 29,
+        max: timeframeSelected == 'Yearly' ? 12 : 30,
+        tickAmount: timeframeSelected == 'Yearly' ? 11 : 29,
       },
       yaxis: {
         title: {

@@ -2,6 +2,11 @@
   width: 100px !important;
 }
 
+.mat-button-toggle-checked {
+  color: white;
+  background-color: var(--primary);
+}
+
 .chart-header {
   border-bottom: 2px solid var(--primary);
 }
