@@ -91,6 +91,24 @@ namespace FitnessPathApp.BusinessLayer.Implementations
             return mappedLog;
         }
 
+        public async Task<TrainingLogDTO> GetByDate(DateTime date, CancellationToken cancellationToken)
+        {
+            var log = await _repository.Get(
+                include: source => source.Include(log => log.Exercises).ThenInclude(exercise => exercise.ExerciseChoice),
+                filter: dbLog => dbLog.Date.Year == date.Year && dbLog.Date.Month == date.Month && dbLog.Date.Day == date.Day,
+                cancellationToken: cancellationToken);
+
+            if (log == null)
+            {
+                throw new NotFoundException(new Guid());
+            }
+
+            var mappedLog = _mapper.Map<TrainingLogDTO>(log);
+
+            _logger.LogInformation($"Training succesfully fetched. Log id: {log.Id}");
+            return mappedLog;
+        }
+
         public async Task<IEnumerable<TrainingLogDTO>> GetAll(CancellationToken cancellationToken)
         {
             var logs = await _repository.GetAll(

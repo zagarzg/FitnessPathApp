@@ -12,6 +12,8 @@ namespace FitnessPathApp.BusinessLayer.Interfaces
         Task<IEnumerable<TrainingLogDTO>> GetAll(CancellationToken cancellationToken);
         Task<IEnumerable<TrainingLogDTO>> GetMonthlyTrainingLogs(int month, CancellationToken cancellationToken);
         Task<TrainingLogDTO> Get(Guid id, CancellationToken cancellationToken);
+        Task<TrainingLogDTO> GetByDate(DateTime date, CancellationToken cancellationToken);
+
         Task<TrainingLogDTO> Create(TrainingLog log, CancellationToken cancellationToken);
         Task<TrainingLogDTO> Update(TrainingLog log, CancellationToken cancellationToken);
         Task<Guid> Delete(Guid id, CancellationToken cancellationToken);
