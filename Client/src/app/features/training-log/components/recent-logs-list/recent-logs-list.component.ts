@@ -25,17 +25,14 @@ import { ExerciseFormComponent } from '../exercise-form/exercise-form.component'
   animations: [addAnimation, deleteAnimation],
 })
 export class RecentLogsListComponent implements OnChanges {
-  selectedTrainingLog: TrainingLog | undefined;
+  @Input() selectedTrainingLogId!: string | null;
   selectedDate!: Date | null;
   isLoadingList: boolean = false;
 
   @Input() trainingLogs!: TrainingLog[];
-  @Input() exercises!: Exercise[];
-  @Output() selectedDayChangeEvent = new EventEmitter<{
-    trainingLogId: string | null;
-    date: Date | null;
-  }>();
-  @Output() deleteTrainingLogEvent = new EventEmitter<string>();
+  @Input() exercises!: Exercise[] | null | undefined;
+  @Output() selectedDayChangeEvent = new EventEmitter<Date | null>();
+  @Output() deleteTrainingLogEvent = new EventEmitter<string | null>();
   @Output() addExerciseEvent = new EventEmitter<Exercise>();
   @Output() updateExerciseEvent = new EventEmitter<Exercise>();
   @Output() deleteExerciseEvent = new EventEmitter<string>();
@@ -55,33 +52,17 @@ export class RecentLogsListComponent implements OnChanges {
     }
   }
 
-  selectDay() {
+  selectDay(date: Date | null) {
     this.handleAnimations(true);
-    this.selectedTrainingLog = this.trainingLogs.find(
-      (log) =>
-        new Date(log.date).getDate() === this.selectedDate?.getDate() &&
-        new Date(log.date).getMonth() === this.selectedDate?.getMonth() &&
-        new Date(log.date).getFullYear() === this.selectedDate.getFullYear()
-    );
-
-    if (this.selectedTrainingLog) {
-      this.selectedDayChangeEvent.emit({
-        trainingLogId: this.selectedTrainingLog.id,
-        date: this.selectedDate,
-      });
-    } else {
-      this.selectedDayChangeEvent.emit({
-        trainingLogId: '',
-        date: this.selectedDate,
-      });
-    }
+    this.selectedDayChangeEvent.emit(date as Date | null);
+    console.log('Select day change: ', date);
   }
 
   addExercise() {
     this.handleAnimations(false);
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       data: {
-        trainingLogId: this.selectedTrainingLog?.id,
+        trainingLogId: this.selectedTrainingLogId,
       },
     });
 
@@ -94,7 +75,7 @@ export class RecentLogsListComponent implements OnChanges {
     const dialogRef = this.dialog.open(ExerciseFormComponent, {
       data: {
         exercise: exercise,
-        trainingLogId: this.selectedTrainingLog?.id,
+        trainingLogId: this.selectedTrainingLogId,
       },
     });
 
@@ -107,13 +88,13 @@ export class RecentLogsListComponent implements OnChanges {
   deleteExercise(id: any) {
     this.handleAnimations(false);
     this.deleteExerciseEvent.emit(id);
-    this.exercises = this.exercises.filter(
+    this.exercises = this.exercises?.filter(
       (exercise: Exercise) => exercise.id !== id
     );
   }
 
   deleteTrainingLog() {
-    this.deleteTrainingLogEvent.emit(this.selectedTrainingLog!.id!);
+    this.deleteTrainingLogEvent.emit(this.selectedTrainingLogId);
   }
 
   handleAnimations(isLoadingList: boolean) {

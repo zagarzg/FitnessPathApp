@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  URL: 'https://localhost:44310'
+  URL: 'https://localhost:44310',
+  USER_ID: 'cd6b8714-4806-4fe6-b28f-90185dbfbdd2',
 };
 
 /*

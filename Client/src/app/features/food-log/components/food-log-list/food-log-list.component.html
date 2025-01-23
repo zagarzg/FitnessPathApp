@@ -22,7 +22,7 @@
         <button
           *ngIf="selectedFoodLog != undefined"
           mat-stroked-button
-          class="border-red-500 text-red-500 w-80 ml-2 mr-2 mb-2"
+          class="flex justify-center border-red-500 text-red-500 w-80 ml-2 mr-2 mb-2"
           (click)="deleteFoodLog()"
         >
           <mat-icon
@@ -55,7 +55,7 @@
         </span>
         <button
           mat-raised-button
-          class="bg-primary text-white m-3"
+          class="bg-primary flex justify-center text-white m-3"
           (click)="addFoodItem()"
         >
           <mat-icon

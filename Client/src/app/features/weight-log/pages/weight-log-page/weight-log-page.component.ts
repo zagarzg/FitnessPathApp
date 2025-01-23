@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { take, switchMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import {
+  ChartService,
+  WeightChartFilters,
+} from 'src/app/features/training-log/services/chart.service';
 import { DeleteConfirmationDialogComponent } from 'src/app/shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { WeightChartComponent } from '../../components/weight-chart/weight-chart.component';
-import { WeightLogListComponent } from '../../components/weight-log-list/weight-log-list.component';
 import { WeightLog } from '../../models/WeightLog';
 import { WeightLogService } from '../../services/weight-log.service';
 
@@ -15,32 +17,25 @@ import { WeightLogService } from '../../services/weight-log.service';
   styleUrls: ['./weight-log-page.component.scss'],
 })
 export class WeightLogPageComponent implements OnInit {
-  private logs: WeightLog[] = [];
-  private weightLogsSubject$: BehaviorSubject<WeightLog[]> =
-    new BehaviorSubject<WeightLog[]>([]);
-  public weightLogs$: Observable<WeightLog[]> =
-    this.weightLogsSubject$.asObservable();
+  readonly weightLogs$ = this._weightLogService.weightLogs$;
+  readonly selectedWeightLogId$ = this._weightLogService.selectedWeightLogId$;
+  readonly weightChartData$ = this._chartService.weightChartData$;
 
   public selectedDate!: Date | null;
   public selectedWeightLog!: WeightLog | undefined;
 
-  @ViewChild(WeightLogListComponent) listComponent!: WeightLogListComponent;
-  @ViewChild(WeightChartComponent) chartComponent!: WeightChartComponent;
-
   constructor(
     private _weightLogService: WeightLogService,
+    private _chartService: ChartService,
     private _toasterService: ToastrService,
     private _dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this._weightLogService
-      .getAllWeightLogs()
-      .pipe(take(1))
-      .subscribe((logs) => {
-        this.logs = logs;
-        this.weightLogsSubject$.next(logs);
-      });
+    this._weightLogService.getAllWeightLogs().pipe(take(1)).subscribe();
+    this.weightLogs$
+      .pipe(switchMap(() => this._chartService.fetchWeightChartData()))
+      .subscribe();
   }
 
   onAdd(log: WeightLog) {
@@ -48,12 +43,8 @@ export class WeightLogPageComponent implements OnInit {
       .createWeightLog(log)
       .pipe(take(1))
       .subscribe((log) => {
-        const updatedLogs = [...this.weightLogsSubject$.value, log];
-        this.weightLogsSubject$.next(updatedLogs);
         this.selectedDate = log.date;
-        this.selectedWeightLog = log;
         this._toasterService.success('Weight log successfully added!');
-        this.chartComponent.monthChange(2);
       });
   }
 
@@ -61,14 +52,10 @@ export class WeightLogPageComponent implements OnInit {
     this._weightLogService
       .updateWeightLog(log)
       .pipe(take(1))
-      .subscribe((_) => {
-        const logIndex = this.logs.findIndex((obj) => obj.id == log.id);
-        this.logs[logIndex] = log;
-        this.weightLogsSubject$.next(this.logs);
+      .subscribe((updatedLog: any) => {
         this.selectedDate = log.date;
-        this.selectedWeightLog = log;
+        this.selectedWeightLog = updatedLog;
         this._toasterService.success('Weight log successfully updated!');
-        this.chartComponent.monthChange(2);
       });
   }
 
@@ -94,13 +81,15 @@ export class WeightLogPageComponent implements OnInit {
         take(1)
       )
       .subscribe((_) => {
-        const updatedLogs = this.weightLogsSubject$.value.filter(
-          (obj) => obj.id !== id
-        );
-        this.weightLogsSubject$.next(updatedLogs);
         this.selectedWeightLog = undefined;
         this._toasterService.success('Weight log successfully deleted!');
-        this.chartComponent.monthChange(2);
       });
+  }
+
+  onChartFiltersChange(weightChartFilters: WeightChartFilters) {
+    this._chartService
+      .fetchWeightChartData(weightChartFilters)
+      .pipe(take(1))
+      .subscribe();
   }
 }

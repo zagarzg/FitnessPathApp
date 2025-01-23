@@ -1,0 +1,17 @@
+::ng-deep .mat-dialog-container {
+  padding: 0 !important;
+}
+
+::ng-deep
+  .mat-form-field-appearance-outline.mat-focused
+  .mat-form-field-outline-thick {
+  color: var(--primary) !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: var(--primary) !important;
+}
+
+::ng-deep .mat-calendar-body-cell {
+  width: 2.6rem !important;
+}

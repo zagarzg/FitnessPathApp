@@ -16,11 +16,11 @@
           [dateClass]="dateClass()"
           [(selected)]="selectedDate"
           class="w-full"
-          (selectedChange)="selectDay()"
+          (selectedChange)="selectDay($event)"
         >
         </mat-calendar>
         <button
-          *ngIf="selectedTrainingLog != undefined"
+          *ngIf="selectedTrainingLogId !== null"
           mat-stroked-button
           class="border-red-500 text-red-500 w-80 ml-2 mt-2 mb-2"
           (click)="deleteTrainingLog()"
@@ -56,7 +56,7 @@
         </span>
         <button
           mat-raised-button
-          class="bg-primary text-white m-3"
+          class="bg-primary flex justify-center text-white m-3"
           (click)="addExercise()"
         >
           <mat-icon

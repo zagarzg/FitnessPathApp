@@ -1,12 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
-import { take, switchMap } from 'rxjs/operators';
+import {
+  take,
+  switchMap,
+  distinctUntilChanged,
+  catchError,
+} from 'rxjs/operators';
 import { DeleteConfirmationDialogComponent } from 'src/app/shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { TrainingChartComponent } from '../../components/training-chart/training-chart.component';
 import { Exercise } from '../../models/Exercise';
-import { TrainingLog } from '../../models/TrainingLog';
+import {
+  ChartService,
+  TrainingChartFilters,
+} from '../../services/chart.service';
 import { ExerciseChoiceService } from '../../services/exercise-choice.service';
 import { ExerciseService } from '../../services/exercise.service';
 import { TrainingLogService } from '../../services/training-log.service';
@@ -17,20 +24,20 @@ import { TrainingLogService } from '../../services/training-log.service';
   styleUrls: ['./training-log-page.component.scss'],
 })
 export class TrainingLogPageComponent implements OnInit {
-  private trainingLogsSubject$: BehaviorSubject<TrainingLog[]> =
-    new BehaviorSubject<TrainingLog[]>([]);
-  public trainingLogs$: Observable<TrainingLog[]> =
-    this.trainingLogsSubject$.asObservable();
+  readonly trainingLogs$ = this._trainingLogService.trainingLogs$;
+  readonly selectedTrainingLogId$ =
+    this._trainingLogService.selectedTrainingLogId$;
+  readonly exercises$ = this._exerciseService.exercises$;
+  readonly trainingChartData$ = this._chartService.trainingChartData$;
+  readonly exerciseChoices$ = this._exerciseChoiceService.exerciseChoices$;
 
-  public exercises!: Exercise[];
-  public exerciseNames!: string[];
-  public selectedDate!: Date | null;
-  public selectedTrainingLogId!: string | null;
-
-  @ViewChild(TrainingChartComponent) chartComponent!: TrainingChartComponent;
+  private readonly _selectedDate$ = new BehaviorSubject<Date | null>(
+    new Date()
+  );
 
   constructor(
     private _trainingLogService: TrainingLogService,
+    private _chartService: ChartService,
     private _exerciseService: ExerciseService,
     private _exerciseChoiceService: ExerciseChoiceService,
     private _toasterService: ToastrService,
@@ -38,73 +45,76 @@ export class TrainingLogPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._exerciseChoiceService
-      .getAllExerciseNames()
-      .pipe(take(1))
-      .subscribe((exerciseNames) => {
-        this.exerciseNames = exerciseNames;
-      });
-    this._trainingLogService
-      .getAllTrainingLogs()
-      .pipe(take(1))
-      .subscribe((logs) => {
-        this.trainingLogsSubject$.next(logs);
+    forkJoin([
+      this._exerciseChoiceService.getAllExerciseNames(),
+      this._trainingLogService.getAllTrainingLogDates(),
+    ])
+      .pipe(take(1), distinctUntilChanged())
+      .subscribe(([exerciseChoices, trainingLogs]) => {
+        console.log(trainingLogs);
       });
   }
 
-  fetchExercises(
-    selectDayObject: { trainingLogId: string | null; date: Date | null } | null
-  ): void {
-    this.selectedDate = selectDayObject!.date;
-
-    if (!selectDayObject!.trainingLogId) {
-      this.exercises = [];
-      return;
-    }
+  fetchExercises(date: Date | null) {
+    this._selectedDate$.next(date);
     this._trainingLogService
-      .getTrainingLog(selectDayObject!.trainingLogId)
-      .pipe(take(1))
-      .subscribe((res) => {
-        this.selectedTrainingLogId = res.id;
-        this.exercises = res.exercises;
+      .getTrainingLogByDate(date)
+      .pipe(
+        catchError(() => {
+          this._exerciseService.setExercises([]);
+          return EMPTY;
+        })
+      )
+      .subscribe((trainingLog) => {
+        if (trainingLog)
+          this._exerciseService.setExercises(trainingLog.exercises);
       });
   }
 
   onAddExercise(exercise: Exercise) {
+    console.log('Exercise: ', exercise);
     if (exercise.trainingLogId === '') {
       const trainingLog = {
         id: '00000000-0000-0000-0000-000000000000',
-        date: this.selectedDate!,
+        date: this._selectedDate$.value!,
         exercises: [],
         userId: '',
       };
       this._trainingLogService
         .createTrainingLog(trainingLog)
         .pipe(
-          switchMap((trainingLog): any => {
-            exercise.trainingLogId = trainingLog.id;
-            const updatedLogs = [
-              ...this.trainingLogsSubject$.value,
-              trainingLog,
-            ];
-            this.trainingLogsSubject$.next(updatedLogs);
-            this.selectedTrainingLogId = trainingLog.id;
-            return this._exerciseService.createExercise(exercise).pipe(take(1));
+          take(1),
+          switchMap((trainingLog) => {
+            return this._exerciseService.createExercise({
+              ...exercise,
+              trainingLogId: trainingLog.id,
+            });
+          }),
+          switchMap((exercise) => {
+            return this._chartService.fetchTrainingChartData({
+              monthSelected: trainingLog.date.getMonth() + 1,
+              yearSelected: trainingLog.date.getFullYear(),
+              exerciseSelected: exercise.exerciseChoice?.name!,
+              isMonthly: true,
+            });
           })
         )
-        .subscribe((result: any): any => {
-          this.exercises = [...this.exercises, result];
-          this.chartComponent.monthChange(trainingLog.date.getMonth() + 1);
-        });
+        .subscribe();
     } else {
       this._exerciseService
         .createExercise(exercise)
-        .pipe(take(1))
-        .subscribe((result) => {
-          this.exercises = [...this.exercises, result];
-          this._toasterService.success('Exercise successfully created!');
-          this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
-        });
+        .pipe(
+          take(1),
+          switchMap((exercise) => {
+            return this._chartService.fetchTrainingChartData({
+              monthSelected: this._selectedDate$.value!.getMonth() + 1,
+              yearSelected: this._selectedDate$.value!.getFullYear(),
+              exerciseSelected: exercise.exerciseChoice?.name!,
+              isMonthly: true,
+            });
+          })
+        )
+        .subscribe();
     }
   }
 
@@ -112,13 +122,14 @@ export class TrainingLogPageComponent implements OnInit {
     this._exerciseService
       .updateExercise(exercise)
       .pipe(take(1))
-      .subscribe((result) => {
-        const updatedItems = this.exercises.map((el) =>
-          el.id === exercise.id ? exercise : el
-        );
-        this.exercises = updatedItems;
+      .subscribe(() => {
         this._toasterService.success(`Exercise successfully updated!`);
-        this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
+        this._chartService.fetchTrainingChartData({
+          monthSelected: this._selectedDate$.value!.getMonth() + 1,
+          yearSelected: this._selectedDate$.value!.getFullYear(),
+          exerciseSelected: exercise.exerciseChoice?.name!,
+          isMonthly: true,
+        });
       });
   }
 
@@ -127,14 +138,11 @@ export class TrainingLogPageComponent implements OnInit {
       .deleteExercise(id)
       .pipe(
         switchMap(() => {
-          this.exercises = this.exercises.filter(
-            (exercise) => exercise.id !== id
-          );
           this._toasterService.success('Exercise successfully deleted!');
-          this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
-          if (this.exercises.length === 0) {
+
+          if (this._exerciseService.exercises.length === 0) {
             return this._trainingLogService.deleteTrainingLog(
-              this.selectedTrainingLogId!
+              this._trainingLogService.selectedTrainingLog!
             );
           } else {
             return EMPTY;
@@ -142,39 +150,41 @@ export class TrainingLogPageComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        const updatedTrainingLogs = this.trainingLogsSubject$.value.filter(
-          (log: TrainingLog) => log.id !== this.selectedTrainingLogId
-        );
-        this.selectedTrainingLogId = '';
-        this.trainingLogsSubject$.next(updatedTrainingLogs);
+        // this._chartService.fetchTrainingChartData({
+        //   monthSelected: this._selectedDate$.value!.getMonth() + 1,
+        //   yearSelected: this._selectedDate$.value!.getFullYear(),
+        //   exerciseSelected: exercise.exerciseChoice?.name!,
+        //   isMonthly: true,
+        // });
       });
   }
 
-  onDeleteTrainingLog(id: string): void {
+  onDeleteTrainingLog(id: string | null): void {
     const dialogRef = this._dialog.open(DeleteConfirmationDialogComponent, {
       data: {
-        date: this.selectedDate,
+        date: this._selectedDate$.value,
       },
     });
 
     dialogRef
       .afterClosed()
       .pipe(
+        take(1),
         switchMap((confirm: boolean) => {
-          if (confirm) return this._trainingLogService.deleteTrainingLog(id);
+          if (confirm && id)
+            return this._trainingLogService.deleteTrainingLog(id);
           return EMPTY;
-        }),
-        take(1)
+        })
       )
       .subscribe(() => {
-        const updatedTrainingLogs = this.trainingLogsSubject$.value.filter(
-          (log: TrainingLog) => log.id !== id
-        );
-        this.selectedTrainingLogId = '';
-        this.trainingLogsSubject$.next(updatedTrainingLogs);
-        this.exercises = [];
         this._toasterService.success('Training Log successfully deleted!');
-        this.chartComponent.monthChange(this.selectedDate!.getMonth() + 1);
       });
+  }
+
+  onChartFiltersChange(trainingChartFilters: TrainingChartFilters) {
+    this._chartService
+      .fetchTrainingChartData(trainingChartFilters)
+      .pipe(take(1))
+      .subscribe();
   }
 }

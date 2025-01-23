@@ -89,6 +89,7 @@ export class WeightLogListComponent implements OnInit, OnChanges {
 
   deleteWeightLog(id: string) {
     this.deleteWeightLogEvent.emit(id);
+    this.dateClass();
   }
 
   dateClass() {

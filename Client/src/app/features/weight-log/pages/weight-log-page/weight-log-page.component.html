@@ -19,7 +19,10 @@
         (deleteWeightLogEvent)="onDelete($event)"
       >
       </app-weight-log-list>
-      <app-weight-chart [chartData]="weightLogs"></app-weight-chart>
+      <app-weight-chart
+        [chartData]="weightChartData$"
+        (filtersChangeEvent)="onChartFiltersChange($event)"
+      ></app-weight-chart>
     </div>
   </ng-container>
 </div>
